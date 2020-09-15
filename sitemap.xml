@@ -9,10 +9,32 @@
   
   <url>
     <loc>/</loc>
+    <lastmod>2017-06-14T10:39:00+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/japanese/</loc>
+    <lastmod>2017-06-14T10:39:00+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/</loc>
+    <lastmod>2017-06-14T10:39:00+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/song-translations/</loc>
+    <lastmod>2017-06-14T10:39:00+05:30</lastmod>
   </url>
   
   <url>
     <loc>/tags/</loc>
+    <lastmod>2017-06-14T10:39:00+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/translations/ichiro-araki/anata-inai-yoru/</loc>
+    <lastmod>2017-06-14T10:39:00+05:30</lastmod>
   </url>
   
 </urlset>
