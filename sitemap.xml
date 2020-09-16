@@ -18,11 +18,6 @@
   </url>
   
   <url>
-    <loc>/posts/</loc>
-    <lastmod>2017-06-14T10:39:00+05:30</lastmod>
-  </url>
-  
-  <url>
     <loc>/tags/song-translations/</loc>
     <lastmod>2017-06-14T10:39:00+05:30</lastmod>
   </url>
@@ -33,7 +28,12 @@
   </url>
   
   <url>
-    <loc>/posts/translations/ichiro-araki/anata-inai-yoru/</loc>
+    <loc>/translations/</loc>
+    <lastmod>2017-06-14T10:39:00+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/translations/ichiro-araki/anata-inai-yoru/</loc>
     <lastmod>2017-06-14T10:39:00+05:30</lastmod>
   </url>
   
