@@ -7,10 +7,39 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>© Suraj Banakar</copyright>
-    <lastBuildDate>Wed, 14 Jun 2017 10:39:00 +0530</lastBuildDate>
+    <lastBuildDate>Mon, 30 Sep 2019 08:43:00 +0530</lastBuildDate>
     
 	<atom:link href="/tags/song-translations/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>「時の流れに身を任せ」 テレサテン (1986)</title>
+      <link>/translations/teresa-teng/toki-no-nagare/</link>
+      <pubDate>Mon, 30 Sep 2019 08:43:00 +0530</pubDate>
+      
+      <guid>/translations/teresa-teng/toki-no-nagare/</guid>
+      <description>Title of the song translates to Give yourself to the flow of time by Teresa Teng from her 1986 album of the same name</description>
+    </item>
+    
+    <item>
+      <title>「結婚しようよ」 吉田拓郎 (1972)</title>
+      <link>/translations/takuro-yoshida/kekkon-shiyo-yo/</link>
+      <pubDate>Fri, 06 Sep 2019 08:43:00 +0530</pubDate>
+      
+      <guid>/translations/takuro-yoshida/kekkon-shiyo-yo/</guid>
+      <description>Title of the song translates to Let&amp;rsquo;s Marry by Takuro Yoshida from his 1972 single of the same name
+僕の髪が肩までのびて 君と同じになったら 約束どおり町の教会で 結婚しようよ MMMM</description>
+    </item>
+    
+    <item>
+      <title>「都会」 小貫妙子 (1977)</title>
+      <link>/translations/taeko-ohnuki/tokai/</link>
+      <pubDate>Fri, 06 Sep 2019 08:43:00 +0530</pubDate>
+      
+      <guid>/translations/taeko-ohnuki/tokai/</guid>
+      <description>Title of the song translates to City by Taeko Ohnuki from his 1977 album Sunshower
+眠らない夜の街 nemura nai yoru no machi ざわめく光の洪水 zawa meki hikari no kozui 通り色どる女 toori iro doru onna 着飾る心と遊ぶ kikazaru kokoro no asobu</description>
+    </item>
     
     <item>
       <title>「あなたのいない夜」 荒木一郎 (1974)</title>
@@ -18,7 +47,7 @@
       <pubDate>Wed, 14 Jun 2017 10:39:00 +0530</pubDate>
       
       <guid>/translations/ichiro-araki/anata-inai-yoru/</guid>
-      <description>Title of the song translates to, Evening silence of your absence by Ichiro Araki from his 1974 Album 蹉跌 (Setback)</description>
+      <description>Title of the song translates to Evening silence of your absence by Ichiro Araki from his 1974 Album 蹉跌 (Setback)</description>
     </item>
     
   </channel>
