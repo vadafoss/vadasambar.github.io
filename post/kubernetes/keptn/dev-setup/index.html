@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Dev setup for Keptn I - In Search of Lost Time</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="vadasambar" /><meta name="description" content="Remote K8s cluster based dev setup for developing on Keptn" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
+
+
+<link rel="canonical" href="/post/kubernetes/keptn/dev-setup/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b5a744db6de49a86cadafb3b70f555ab443f83c307a483402259e94726b045ff.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Dev setup for Keptn I" />
+<meta property="og:description" content="Remote K8s cluster based dev setup for developing on Keptn" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/kubernetes/keptn/dev-setup/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-12-02T06:40:00+05:30" />
+<meta property="article:modified_time" content="2021-12-02T06:40:00+05:30" />
+
+<meta itemprop="name" content="Dev setup for Keptn I">
+<meta itemprop="description" content="Remote K8s cluster based dev setup for developing on Keptn"><meta itemprop="datePublished" content="2021-12-02T06:40:00+05:30" />
+<meta itemprop="dateModified" content="2021-12-02T06:40:00+05:30" />
+<meta itemprop="wordCount" content="596">
+<meta itemprop="keywords" content="kubernetes,keptn," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Dev setup for Keptn I"/>
+<meta name="twitter:description" content="Remote K8s cluster based dev setup for developing on Keptn"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">In Search of Lost Time</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/about">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">In Search of Lost Time</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Dev setup for Keptn I</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-12-02 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#problem">Problem:</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>Based on my Keptn slack thread: <a href="https://keptn.slack.com/archives/CGS63H8G6/p1634057060065400">https://keptn.slack.com/archives/CGS63H8G6/p1634057060065400</a></p>
+<p>I am sharing this here with a paraphrase to the original thread and some extra info. This is so that:</p>
+<ol>
+<li>The entire thing is available publicly (Keptn slack needs signing up)</li>
+<li>(hopefully) Gives the original thread more context and structure with some follow up information</li>
+</ol>
+<h3 id="problem">Problem:</h3>
+<p>Keptn local development setup can be heavy if you don&rsquo;t have a computer with good specifications. This can lead to bad development experience. The information about what a good dev machine should look like is mentioned in the <a href="https://tutorials.keptn.sh/tutorials/keptn-in-a-box-011/index.html?index=..%2F..index#1"><code>Keptn in a Box</code> tutorial</a></p>
+<blockquote>
+<p>For most usecases we recommend 4 Cores, 16 Gigs of RAM and 20 Gigs of diskspace. Our tests on aws have shown that the minimum required for running Keptn-in-a-Box with the default installation bundle is a t2.medium (2 vCPU and 4 Gib of RAM) and 10 Gigabytes of disk space. Nevertheless this won&rsquo;t leave much space for spinning other services or onboarding applications.</p>
+</blockquote>
+<blockquote>
+<p>For the 😎 ultimate experience you could get a t2.2xlarge with 8 Cores, 32 Gigs of RAM and 20 Gigs of diskspace.</p>
+</blockquote>
+<p>Please note that the above is not necessarily a tutorial for dev setup but more of a &lsquo;if you want to run Keptn with Dynatrace&rsquo; tutorial but it kind of gives us an idea of how much resources we might need to run Keptn.</p>
+<p>I tried running Keptn in my local k3d cluster but my <a href="https://www.amazon.in/Lenovo-510-15IKB-80SV00YCIH-15-6-inch-i5-7200U/dp/B071CR4439">Lenovo IdeaPad 510</a> couldn&rsquo;t handle running a Keptn cluster, my IDE (VSCode) and a web browser (Firefox) at the same time. My laptop would just freeze. So, I started a thread on the Keptn slack to ask about what others were using for their dev setup.</p>
+<blockquote>
+<p>Does anyone here run Kubernetes cluster in a cloud VM (GCP,AKS,AWS) VM for local development? What do you guys use for local development and how&rsquo;s the experience (can you mention the RAM/CPU of your machine if possible)?
+I am looking for cheaper options to run a Kubernetes cluster for local development. My personal machine is old (~8GB RAM, extendable to 12GB max).</p>
+<ol>
+<li>Buy a new machine with more RAM (~16GB or more)<br>
+<strong>pros</strong>: fast development (can use local docker registry), easy setup<br>
+<strong>cons</strong>: non-scalable (unless I add new machines)</li>
+<li>Run a K8s cluster offered as a service by the above cloud providers (GKE, EKS)<br>
+<strong>pros</strong>: quick, easy and scalable,<br>
+<strong>cons</strong>: high operating cost, can&rsquo;t use local registry</li>
+<li>Buy a CPU tower (i.e, a big fat desktop CPU) to setup a local K8s cluster<br>
+<strong>pros</strong>: fast development, better performance (than laptop), low operating cost<br>
+<strong>cons</strong>: high initial cost, setup, non-portable</li>
+<li>Try setting up a K8s cluster in a cloud VM (spot/preemptible instance to further reduce the cost)<br>
+<strong>pros</strong>: cheaper (than K8s as service), scalable<br>
+<strong>cons</strong>: security, setup, can&rsquo;t use local registry</li>
+</ol>
+<p>4 is the one I am leaning towards the most right now but I would like to hear what you folks are doing as well.</p>
+</blockquote>
+<p>Summarizing the responses from the thread:</p>
+<ul>
+<li><a href="https://ubuntu.com/tutorials/how-to-kubernetes-cluster-on-raspberry-pi#6-thats-it">If you are considering Raspberry Pi as an option</a> but turns out, <a href="https://keptn.slack.com/archives/CGS63H8G6/p1634062501066200?thread_ts=1634057060.065400&amp;cid=CGS63H8G6">Keptn doesn&rsquo;t play well with ARM based processors yet</a></li>
+<li>Managed K8s (AKS) can be an option. <a href="https://keptn.slack.com/archives/CGS63H8G6/p1634189772074600?thread_ts=1634057060.065400&amp;cid=CGS63H8G6">It costs around 500INR (~6.72USD or ~5.92Euros) per month if you run it only when you want to use it</a>.</li>
+<li><a href="https://keptn.slack.com/archives/CGS63H8G6/p1634106590066600?thread_ts=1634057060.065400&amp;cid=CGS63H8G6">If you are buying a CPU Tower, 16 GB memory is recommended (32 is better) and an Intel or AMD processor with 4 cores + Hyperthreading (should be advertised as 8 cors) would be good</a></li>
+<li><a href="https://keptn.slack.com/archives/CGS63H8G6/p1634106590066600?thread_ts=1634057060.065400&amp;cid=CGS63H8G6">If you are buying a Laptop, Keptn works fine on Asus Vivobook S510 UQ (32 GB memory, 8 core CPU)</a></li>
+</ul>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">vadasambar</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2021-12-02
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content">© Suraj Banakar 2017 <a rel='license' href='http://creativecommons.org/licenses/by-nc-sa/4.0/'' target='_blank'>CC BY-NC-SA 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/kubernetes/">kubernetes</a>
+          <a href="/tags/keptn/">keptn</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/translations/masa-takagi.md/hitori-bocchi-no-heya/">
+            <span class="next-text nav-default">「ひとりぼっちの部屋」 高木麻早 (1973)</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:surajrbanakar@gmail.com" class="iconfont icon-email" title="email" target="_blank"></a>
+      <a href="https://stackoverflow.com/users/6874596/vadasambar" class="iconfont icon-stack-overflow" title="stack-overflow" target="_blank"></a>
+      <a href="https://twitter.com/_vadasambar" class="iconfont icon-twitter" title="twitter" target="_blank"></a>
+      <a href="https://www.linkedin.com/in/suraj-banakar-97b4b4141/" class="iconfont icon-linkedin" title="linkedin" target="_blank"></a>
+      <a href="https://github.com/vadasambar" class="iconfont icon-github" title="github" target="_blank"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss" target="_blank"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2020 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>vadasambar</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-178170176-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,110 +1,151 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
     <loc>/</loc>
-    <lastmod>2020-09-22T10:18:00+05:30</lastmod>
+    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/tags/japanese/</loc>
-    <lastmod>2020-09-22T10:18:00+05:30</lastmod>
+    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/post/</loc>
+    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/tags/song-translations/</loc>
-    <lastmod>2020-09-22T10:18:00+05:30</lastmod>
+    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/tags/</loc>
-    <lastmod>2020-09-22T10:18:00+05:30</lastmod>
+    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>/translations/</loc>
-    <lastmod>2020-09-22T10:18:00+05:30</lastmod>
+    <loc>/post/translations/masa-takagi.md/hitori-bocchi-no-heya/</loc>
+    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>/translations/masa-takagi.md/hitori-bocchi-no-heya/</loc>
-    <lastmod>2020-09-22T10:18:00+05:30</lastmod>
+    <loc>/post/translations/yuumin.md/sukoshi-dake-kataomoi/</loc>
+    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>/translations/yuumin.md/sukoshi-dake-kataomoi/</loc>
-    <lastmod>2020-09-22T10:10:00+05:30</lastmod>
+    <loc>/post/translations/miyoshi-tessei/namida-o-fuite/</loc>
+    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>/translations/miyoshi-tessei/namida-o-fuite/</loc>
-    <lastmod>2020-09-22T09:42:00+05:30</lastmod>
+    <loc>/post/translations/eiichi-ohtaki/long-vacation/10-saraba-siberian-tetsudou/</loc>
+    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>/translations/eiichi-ohtaki/long-vacation/10-saraba-siberian-tetsudou/</loc>
-    <lastmod>2020-09-21T10:33:00+05:30</lastmod>
+    <loc>/post/translations/eiichi-ohtaki/long-vacation/9-fun-x4/</loc>
+    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>/translations/eiichi-ohtaki/long-vacation/9-fun-x4/</loc>
-    <lastmod>2020-09-21T10:27:00+05:30</lastmod>
+    <loc>/post/translations/eiichi-ohtaki/long-vacation/8-koi-suru-karen/</loc>
+    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>/translations/eiichi-ohtaki/long-vacation/8-koi-suru-karen/</loc>
-    <lastmod>2020-09-21T10:26:00+05:30</lastmod>
+    <loc>/post/translations/eiichi-ohtaki/long-vacation/7-speech-balloon/</loc>
+    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>/translations/eiichi-ohtaki/long-vacation/7-speech-balloon/</loc>
-    <lastmod>2020-09-18T10:55:00+05:30</lastmod>
+    <loc>/post/translations/eiichi-ohtaki/long-vacation/6-ame-no-wednesday/</loc>
+    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>/translations/eiichi-ohtaki/long-vacation/6-ame-no-wednesday/</loc>
-    <lastmod>2020-09-18T10:54:00+05:30</lastmod>
+    <loc>/post/translations/eiichi-ohtaki/long-vacation/5.waga-kokoro-pinball/</loc>
+    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>/translations/eiichi-ohtaki/long-vacation/5.waga-kokoro-pinball/</loc>
-    <lastmod>2020-09-18T10:49:00+05:30</lastmod>
+    <loc>/post/translations/eiichi-ohtaki/long-vacation/3-canary-islands/</loc>
+    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>/translations/eiichi-ohtaki/long-vacation/3-canary-islands/</loc>
-    <lastmod>2020-09-18T10:35:00+05:30</lastmod>
-  </url>
-  
-  <url>
-    <loc>/translations/eiichi-ohtaki/long-vacation/2-velvet-motel/</loc>
-    <lastmod>2020-09-18T10:30:00+05:30</lastmod>
+    <loc>/post/translations/eiichi-ohtaki/2-velvet-motel/</loc>
+    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/about/</loc>
-    <lastmod>2020-09-17T21:37:58+05:30</lastmod>
+    <lastmod>2020-09-23T22:54:38+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>/translations/teresa-teng/toki-no-nagare/</loc>
-    <lastmod>2019-09-30T08:43:00+05:30</lastmod>
+    <loc>/post/translations/teresa-teng/toki-no-nagare/</loc>
+    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>/translations/takuro-yoshida/kekkon-shiyo-yo/</loc>
-    <lastmod>2019-09-06T08:43:00+05:30</lastmod>
+    <loc>/post/translations/takuro-yoshida/kekkon-shiyo-yo/</loc>
+    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>/translations/taeko-ohnuki/tokai/</loc>
-    <lastmod>2019-09-06T08:43:00+05:30</lastmod>
+    <loc>/post/translations/taeko-ohnuki/tokai/</loc>
+    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>/translations/ichiro-araki/anata-inai-yoru/</loc>
-    <lastmod>2017-06-14T10:39:00+05:30</lastmod>
+    <loc>/post/translations/ichiro-araki/anata-inai-yoru/</loc>
+    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
 </urlset>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>kubernetes on In Search of Lost Time</title>
+    <link>/tags/kubernetes/</link>
+    <description>Recent content in kubernetes on In Search of Lost Time</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 02 Dec 2021 06:40:00 +0530</lastBuildDate><atom:link href="/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Dev setup for Keptn I</title>
+      <link>/post/kubernetes/keptn/dev-setup/</link>
+      <pubDate>Thu, 02 Dec 2021 06:40:00 +0530</pubDate>
+      
+      <guid>/post/kubernetes/keptn/dev-setup/</guid>
+      <description>Based on my Keptn slack thread: https://keptn.slack.com/archives/CGS63H8G6/p1634057060065400
+I am sharing this here with a paraphrase to the original thread and some extra info. This is so that:
+ The entire thing is available publicly (Keptn slack needs signing up) (hopefully) Gives the original thread more context and structure with some follow up information  Problem: Keptn local development setup can be heavy if you don&amp;rsquo;t have a computer with good specifications.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -5,15 +5,10 @@
     <link>/tags/</link>
     <description>Recent content in Tags on In Search of Lost Time</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <copyright>© Suraj Banakar 2017</copyright>
-    <lastBuildDate>Tue, 22 Sep 2020 10:18:00 +0530</lastBuildDate>
-    
-	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <language>en</language>
+    <lastBuildDate>Tue, 22 Sep 2020 10:18:00 +0530</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Japanese</title>
+      <title>japanese</title>
       <link>/tags/japanese/</link>
       <pubDate>Tue, 22 Sep 2020 10:18:00 +0530</pubDate>
       
@@ -22,7 +17,7 @@
     </item>
     
     <item>
-      <title>Song-translations</title>
+      <title>song-translations</title>
       <link>/tags/song-translations/</link>
       <pubDate>Tue, 22 Sep 2020 10:18:00 +0530</pubDate>
       
