@@ -6,7 +6,19 @@
     <description>Recent content in Posts on In Search of Lost Time</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 04 Mar 2022 11:55:00 +0530</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 01 Apr 2022 10:40:00 +0530</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Dev setup for Keptn II</title>
+      <link>/post/kubernetes/keptn/dev-setup2/</link>
+      <pubDate>Fri, 01 Apr 2022 10:40:00 +0530</pubDate>
+      
+      <guid>/post/kubernetes/keptn/dev-setup2/</guid>
+      <description>Part I: https://vadasambar.com/post/kubernetes/keptn/dev-setup/
+This post details:
+ Considering each option listed in Part I in more detail What I eventually ended up with. Hopefully 1 and 2 can give you some idea about what you can do for your local Keptn dev setup.  I have not included many pros and cons for each setup because most of them are covered in Part I.
+Solution 1. Buy a new machine This is a good solution if you are planning to buy a new machine or if are ready to buy a machine just for Keptn development.</description>
+    </item>
+    
     <item>
       <title>Dev setup for Keptn I</title>
       <link>/post/kubernetes/keptn/dev-setup/</link>
@@ -97,24 +109,6 @@ I am sharing this here with a paraphrase to the original thread and some extra i
       
       <guid>/post/translations/eiichi-ohtaki/long-vacation/5.waga-kokoro-pinball/</guid>
       <description>The title of the song translates to My Pinball Heart or My Heart is Pinball by Eiichi Ohtaki from his 1981 album A Long Vacation. The song is at No.5 on Side A of the album. Note: A Long Vacation is one of my favorite Japanese Albums. I wanted to translate this for a long time but never really got around it until mid of last month when I finally</description>
-    </item>
-    
-    <item>
-      <title>「Pap-Pi-Doo-Bi-Doo-Ba物語」 大滝詠一 (1981)</title>
-      <link>/post/translations/eiichi-ohtaki/long-vacation/4-pap-pi-doo/</link>
-      <pubDate>Fri, 18 Sep 2020 10:37:00 +0530</pubDate>
-      
-      <guid>/post/translations/eiichi-ohtaki/long-vacation/4-pap-pi-doo/</guid>
-      <description>The title of the song translates to Pap-Pi-Doo-Bi-Doo-Ba Story by Eiichi Ohtaki from his 1981 album A Long Vacation. The song is at No.4 on Side A of the album. Note: A Long Vacation is one of my favorite Japanese Albums. I wanted to translate this for a long time but never really got around it until mid of last month when I finally decided to buckle up and start</description>
-    </item>
-    
-    <item>
-      <title>「君は天然色」 大滝詠一 (1981)</title>
-      <link>/post/translations/eiichi-ohtaki/1-kimi-wa-tennenshoku/</link>
-      <pubDate>Fri, 18 Sep 2020 10:37:00 +0530</pubDate>
-      
-      <guid>/post/translations/eiichi-ohtaki/1-kimi-wa-tennenshoku/</guid>
-      <description>The title of the song translates to You are Technicolored (alludes to the finnicky nature of the woman/girl being referred in the song) by Eiichi Ohtaki from his 1981 album A Long Vacation. The song is at No.1 on Side A of the album. Note: A Long Vacation is one of my favorite Japanese Albums. I wanted to translate this for a long time but never really got around it</description>
     </item>
     
     <item>

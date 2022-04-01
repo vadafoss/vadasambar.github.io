@@ -6,7 +6,19 @@
     <description>Recent content in keptn on In Search of Lost Time</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 04 Mar 2022 11:55:00 +0530</lastBuildDate><atom:link href="/tags/keptn/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 01 Apr 2022 10:40:00 +0530</lastBuildDate><atom:link href="/tags/keptn/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Dev setup for Keptn II</title>
+      <link>/post/kubernetes/keptn/dev-setup2/</link>
+      <pubDate>Fri, 01 Apr 2022 10:40:00 +0530</pubDate>
+      
+      <guid>/post/kubernetes/keptn/dev-setup2/</guid>
+      <description>Part I: https://vadasambar.com/post/kubernetes/keptn/dev-setup/
+This post details:
+ Considering each option listed in Part I in more detail What I eventually ended up with. Hopefully 1 and 2 can give you some idea about what you can do for your local Keptn dev setup.  I have not included many pros and cons for each setup because most of them are covered in Part I.
+Solution 1. Buy a new machine This is a good solution if you are planning to buy a new machine or if are ready to buy a machine just for Keptn development.</description>
+    </item>
+    
     <item>
       <title>Dev setup for Keptn I</title>
       <link>/post/kubernetes/keptn/dev-setup/</link>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Using Telepresence V2 with remote Keptn cluster does not work when writing an integration - In Search of Lost Time</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="vadasambar" /><meta name="description" content="How do you do local development for a Keptn Integration if your laptop/PC cannot handle running a Keptn cluster locally with an IDE like VSCode and a web browser?" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
+
+
+<link rel="canonical" href="/post/kubernetes/keptn/telepresence-issue/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b5a744db6de49a86cadafb3b70f555ab443f83c307a483402259e94726b045ff.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Using Telepresence V2 with remote Keptn cluster does not work when writing an integration" />
+<meta property="og:description" content="How do you do local development for a Keptn Integration if your laptop/PC cannot handle running a Keptn cluster locally with an IDE like VSCode and a web browser?" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/kubernetes/keptn/telepresence-issue/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-03-04T11:55:00+05:30" />
+<meta property="article:modified_time" content="2022-03-04T11:55:00+05:30" />
+
+<meta itemprop="name" content="Using Telepresence V2 with remote Keptn cluster does not work when writing an integration">
+<meta itemprop="description" content="How do you do local development for a Keptn Integration if your laptop/PC cannot handle running a Keptn cluster locally with an IDE like VSCode and a web browser?"><meta itemprop="datePublished" content="2022-03-04T11:55:00+05:30" />
+<meta itemprop="dateModified" content="2022-03-04T11:55:00+05:30" />
+<meta itemprop="wordCount" content="580">
+<meta itemprop="keywords" content="kubernetes,keptn," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Using Telepresence V2 with remote Keptn cluster does not work when writing an integration"/>
+<meta name="twitter:description" content="How do you do local development for a Keptn Integration if your laptop/PC cannot handle running a Keptn cluster locally with an IDE like VSCode and a web browser?"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">In Search of Lost Time</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/about">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">In Search of Lost Time</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Using Telepresence V2 with remote Keptn cluster does not work when writing an integration</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2022-03-04 </span>
+        
+          <span class="more-meta"> 580 words </span>
+          <span class="more-meta"> 3 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#psa-using-telepresence-v2httpswwwtelepresenceiodocsv23quick-start-with-remote-keptn-cluster-does-not-work-when-writing-an-integration">PSA: Using <a href="https://www.telepresence.io/docs/v2.3/quick-start/">Telepresence V2</a> with remote Keptn cluster does not work when writing an integration.</a></li>
+            <li><a href="#problemcontext">Problem/Context</a></li>
+            <li><a href="#how-to-fix-it">How to fix it?</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>This port is based on my slack thread in Keptn community <a href="https://keptn.slack.com/archives/CGS5TA283/p1640366636183200">here.</a> I am writing it here so that it gets public visibility.</p>
+<h3 id="psa-using-telepresence-v2httpswwwtelepresenceiodocsv23quick-start-with-remote-keptn-cluster-does-not-work-when-writing-an-integration">PSA: Using <a href="https://www.telepresence.io/docs/v2.3/quick-start/">Telepresence V2</a> with remote Keptn cluster does not work when writing an integration.</h3>
+<h3 id="problemcontext">Problem/Context</h3>
+<p>How do you do local development for a Keptn Integration if your laptop/PC cannot handle running a Keptn cluster locally with an IDE like VSCode and a web browser? I recently wrote a blogpost on it <a href="https://vadasambar.com/post/kubernetes/keptn/dev-setup/">here</a>.
+At the time of writing this post, I was doing this by running a remote cluster on GKE (free trial) and trying to route the requests coming to my Keptn integration (Kubernetes <code>Deployment</code> running in the cluster) to the integration running on my local machine (how? you basically run your binary locally and Telepresence V2 makes your cluster think it is part of Kubernetes networking) but I haven&rsquo;t been able to do it because the tool that does this (Telepresence V2) does not play well with the <a href="https://github.com/keptn/keptn/blob/master/distributor/README.md"><code>distributor</code></a> sidecar.</p>
+<h4 id="why">Why?</h4>
+<ol>
+<li>I think this is because the <code>distributor</code> intercepts the events from the NATS queue and passes it on to the Deployment running in the cluster instead of routing it to the go server (i.e., the integration) running on my local machine. When I execute <code>telepresence intercept datadog-service -nkeptn</code> , Telepresence V2 injects a sidecar called traffic agent that intercepts the request and routes it to my local machine but it doesn&rsquo;t do that if I have distributor running as a sidecar.<br>
+<em>Current</em><br>
+distributor ➡️ Kubernetes <code>Deployment</code><br>
+<em>Expected</em><br>
+distributor ➡️ Telepresence traffic agent ➡️ local machine</li>
+</ol>
+<h3 id="how-to-fix-it">How to fix it?</h3>
+<p>This is a really roundabout solution to the problem (please let me know if you have a better solution) but here it is (TL;DR: you have to use Telepresence V2 with <a href="https://www.telepresence.io/docs/v1/reference/install/">Telepresence V1</a>)</p>
+<ol>
+<li>Use Telepresence V2 to make the cluster believe your local machine is part of the cluster using <code>telepresence connect</code> (this does not inject traffic agent sidecar). Note: You need to rename Telepresence V2 binary to something else to use it with Telepresence V1.</li>
+<li>Use Telepresence V1 to swap deployment like this:</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">telepresence --swap-deployment &lt;K8s-Deployment-name&gt; --docker-run --rm -it -v $(pwd):/&lt;dir-you-want-to-use-docker-container&gt; golang:1.16 &lt;- development image for running our code
+</code></pre></td></tr></table>
+</div>
+</div><p>e.g.,</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">telepresence --swap-deployment datadog-service --docker-run --rm -it -v $(pwd):/dds golang:1.16 
+</code></pre></td></tr></table>
+</div>
+</div><p>^ basically swaps the running datadog-service Kubernetes Deployment with the code running locally i.e., there is no traffic agent which handles routing like in V2 and hence distributor sends the events to the datadog-service Kubernetes Deployment which then routes the requests to my local machine. Note: I think we can use the default Docker image present in the integration repo and build only the first stage of the image (builder part) but I haven&rsquo;t tried it yet (I think this is a better approach than using a stock golang image)
+3. You should get a working docker container which copies and syncs all your local code in to the docker container i.e., any code change you make in your IDE is reflected in the docker container because we are using docker volumes. Every time you need to make a code change, you have to re-run go run main.go eventhandlers.go (&lt;- command to run your integration; I think we might be able to do live reload here but I haven&rsquo;t tried it out yet). So you can do,
+/<dir-you-want-to-use-docker-container># go run main.go eventhandlers.go
+2021/12/24 16:49:37 env=local: Running with local filesystem to fetch resources
+2021/12/24 16:49:37 Starting datadog-service&hellip;
+2021/12/24 16:49:37     on Port = 8080; Path=/</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">vadasambar</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2022-03-04
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content">© Suraj Banakar 2017 <a rel='license' href='http://creativecommons.org/licenses/by-nc-sa/4.0/'' target='_blank'>CC BY-NC-SA 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/kubernetes/">kubernetes</a>
+          <a href="/tags/keptn/">keptn</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/kubernetes/keptn/dev-setup/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Dev setup for Keptn I</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/translations/masa-takagi.md/hitori-bocchi-no-heya/">
+            <span class="next-text nav-default">「ひとりぼっちの部屋」 高木麻早 (1973)</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:surajrbanakar@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/6874596/vadasambar" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/_vadasambar" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.linkedin.com/in/suraj-banakar-97b4b4141/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/vadasambar" class="iconfont icon-github" title="github"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2020 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>vadasambar</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-178170176-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>
