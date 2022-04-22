@@ -6,7 +6,18 @@
     <description>Recent content in Posts on In Search of Lost Time</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 01 Apr 2022 10:40:00 +0530</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 22 Apr 2022 11:53:00 +0530</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to become a Keptn contributor</title>
+      <link>/post/kubernetes/keptn/how-to-become-a-keptn-contributor/</link>
+      <pubDate>Fri, 22 Apr 2022 11:53:00 +0530</pubDate>
+      
+      <guid>/post/kubernetes/keptn/how-to-become-a-keptn-contributor/</guid>
+      <description>Problem How do you start contributing code to Keptn?
+Solution You don&amp;rsquo;t have to do all of them. I have included everything I did.
+A: Understand what Keptn is all about  Go through the official website Join Keptn slack (&amp;lt;- to ask questions if you get stuck during Quickstart) Try out the Quickstart (if you are stuck ask for help in #help or #general) Go through the slide deck What is Keptn Go through Where does Keptn fit in the existing Cloud Native landscape Watch Overcoming (organizational) scalability issues in your Prometheus ecosystem - Jürgen Etzlstorfer Go through Keptn Full Tour on Prometheus or Keptn Full Tour on Dynatrace If you still don&amp;rsquo;t have a big-picture idea of what Keptn is, join Keptn slack.</description>
+    </item>
+    
     <item>
       <title>Dev setup for Keptn II</title>
       <link>/post/kubernetes/keptn/dev-setup2/</link>
