@@ -43,13 +43,13 @@
 <meta property="og:description" content="How do you do local development for a Keptn Integration if your laptop/PC cannot handle running a Keptn cluster locally with an IDE like VSCode and a web browser?" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/post/kubernetes/keptn/telepresence-issue/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2022-03-04T11:55:00+05:30" />
-<meta property="article:modified_time" content="2022-03-04T11:55:00+05:30" />
+<meta property="article:published_time" content="2022-05-27T11:34:00+05:30" />
+<meta property="article:modified_time" content="2022-05-27T11:35:17+05:30" />
 
 <meta itemprop="name" content="Using Telepresence V2 with remote Keptn cluster does not work when writing an integration">
-<meta itemprop="description" content="How do you do local development for a Keptn Integration if your laptop/PC cannot handle running a Keptn cluster locally with an IDE like VSCode and a web browser?"><meta itemprop="datePublished" content="2022-03-04T11:55:00+05:30" />
-<meta itemprop="dateModified" content="2022-03-04T11:55:00+05:30" />
-<meta itemprop="wordCount" content="580">
+<meta itemprop="description" content="How do you do local development for a Keptn Integration if your laptop/PC cannot handle running a Keptn cluster locally with an IDE like VSCode and a web browser?"><meta itemprop="datePublished" content="2022-05-27T11:34:00+05:30" />
+<meta itemprop="dateModified" content="2022-05-27T11:35:17+05:30" />
+<meta itemprop="wordCount" content="616">
 <meta itemprop="keywords" content="kubernetes,keptn," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Using Telepresence V2 with remote Keptn cluster does not work when writing an integration"/>
 <meta name="twitter:description" content="How do you do local development for a Keptn Integration if your laptop/PC cannot handle running a Keptn cluster locally with an IDE like VSCode and a web browser?"/>
@@ -128,9 +128,9 @@
       <h1 class="post-title">Using Telepresence V2 with remote Keptn cluster does not work when writing an integration</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 2022-03-04 </span>
+        <span class="post-time"> 2022-05-27 </span>
         
-          <span class="more-meta"> 580 words </span>
+          <span class="more-meta"> 616 words </span>
           <span class="more-meta"> 3 mins read </span>
         
       </div>
@@ -148,6 +148,7 @@
             <li><a href="#psa-using-telepresence-v2httpswwwtelepresenceiodocsv23quick-start-with-remote-keptn-cluster-does-not-work-when-writing-an-integration">PSA: Using <a href="https://www.telepresence.io/docs/v2.3/quick-start/">Telepresence V2</a> with remote Keptn cluster does not work when writing an integration.</a></li>
             <li><a href="#problemcontext">Problem/Context</a></li>
             <li><a href="#how-to-fix-it">How to fix it?</a></li>
+            <li><a href="#caveats">Caveats</a></li>
           </ul>
         </li>
       </ul>
@@ -173,7 +174,10 @@ distributor ➡️ Telepresence traffic agent ➡️ local machine</li>
 <h3 id="how-to-fix-it">How to fix it?</h3>
 <p>This is a really roundabout solution to the problem (please let me know if you have a better solution) but here it is (TL;DR: you have to use Telepresence V2 with <a href="https://www.telepresence.io/docs/v1/reference/install/">Telepresence V1</a>)</p>
 <ol>
-<li>Use Telepresence V2 to make the cluster believe your local machine is part of the cluster using <code>telepresence connect</code> (this does not inject traffic agent sidecar). Note: You need to rename Telepresence V2 binary to something else to use it with Telepresence V1.</li>
+<li>Use Telepresence V2 to make the cluster believe your local machine is part of the cluster using <code>telepresence connect</code> (this does not inject traffic agent sidecar).</li>
+</ol>
+<p><em>Note: You need to rename Telepresence V2 binary to something else to use it with Telepresence V1.</em></p>
+<ol start="2">
 <li>Use Telepresence V1 to swap deployment like this:</li>
 </ol>
 <div class="highlight"><div class="chroma">
@@ -193,12 +197,27 @@ distributor ➡️ Telepresence traffic agent ➡️ local machine</li>
 <pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">telepresence --swap-deployment datadog-service --docker-run --rm -it -v $(pwd):/dds golang:1.16 
 </code></pre></td></tr></table>
 </div>
-</div><p>^ basically swaps the running datadog-service Kubernetes Deployment with the code running locally i.e., there is no traffic agent which handles routing like in V2 and hence distributor sends the events to the datadog-service Kubernetes Deployment which then routes the requests to my local machine. Note: I think we can use the default Docker image present in the integration repo and build only the first stage of the image (builder part) but I haven&rsquo;t tried it yet (I think this is a better approach than using a stock golang image)
-3. You should get a working docker container which copies and syncs all your local code in to the docker container i.e., any code change you make in your IDE is reflected in the docker container because we are using docker volumes. Every time you need to make a code change, you have to re-run go run main.go eventhandlers.go (&lt;- command to run your integration; I think we might be able to do live reload here but I haven&rsquo;t tried it out yet). So you can do,
-/<dir-you-want-to-use-docker-container># go run main.go eventhandlers.go
+</div><p>There is no traffic agent which handles routing like in V2 and hence distributor sends the events to the <code>datadog-service</code> Kubernetes Deployment which then routes the requests to my local machine (Telepresence makes your Kubernetes Deployment think the local go server is a part of the Deployment).</p>
+<p><em>Note: I think we can use the default Docker image present in the integration repo and build only the first stage of the image (builder part) but I haven&rsquo;t tried it yet (I think this is a better approach than using a stock golang image)</em></p>
+<ol start="3">
+<li>You should get a working docker container which copies and syncs all your local code in to the docker container i.e., any code change you make in your IDE is reflected in the docker container because we are using docker volumes. Every time you need to make a code change, you have to re-run <code>go run main.go eventhandlers.go</code> (&lt;- command to run your integration; I think we might be able to do live reload here but I haven&rsquo;t tried it out yet). So you can do,</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">/&lt;dir-you-want-to-use-docker-container&gt;# go run main.go eventhandlers.go
 2021/12/24 16:49:37 env=local: Running with local filesystem to fetch resources
-2021/12/24 16:49:37 Starting datadog-service&hellip;
-2021/12/24 16:49:37     on Port = 8080; Path=/</p>
+2021/12/24 16:49:37 Starting datadog-service...
+2021/12/24 16:49:37     on Port = 8080; Path=/
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="caveats">Caveats</h3>
+<p>This method however has a big caveat which I discovered recently. If your keptn integration tries to send back an event, Keptn doesn&rsquo;t receive it at all (more details <a href="https://keptn.slack.com/archives/CFH319TPE/p1643696780925019?thread_ts=1643359148.497359&amp;cid=CFH319TPE">here</a>).</p>
 
     </div>
 
@@ -210,14 +229,14 @@ distributor ➡️ Telepresence traffic agent ➡️ local machine</li>
   <p class="copyright-item">
     <span class="item-title">LastMod</span>
     <span class="item-content">
-        2022-03-04
-        
+        2022-05-27
+        <a href="https://github.com/vadafoss/vadasambar.github.io/commit/8890ee511907b0ca65bd21f43778b18df6b0d00d" title="remove `draft:true` on `Using Telepresence V2 with remote Keptn...` blogpost">(8890ee5)</a>
     </span>
   </p>
   
   <p class="copyright-item">
     <span class="item-title">License</span>
-    <span class="item-content">© Suraj Banakar 2017 <a rel='license' href='http://creativecommons.org/licenses/by-nc-sa/4.0/'' target='_blank'>CC BY-NC-SA 4.0</a></span>
+    <span class="item-content">© Suraj Banakar 2022 <a rel='license' href='http://creativecommons.org/licenses/by-nc-sa/4.0/'' target='_blank'>CC BY-NC-SA 4.0</a></span>
   </p>
 </div>
 <footer class="post-footer">
@@ -226,13 +245,9 @@ distributor ➡️ Telepresence traffic agent ➡️ local machine</li>
           <a href="/tags/keptn/">keptn</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/post/kubernetes/keptn/dev-setup/">
-            <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">Dev setup for Keptn I</span>
-            <span class="prev-text nav-mobile">Prev</span>
-          </a>
-        <a class="next" href="/post/translations/masa-takagi.md/hitori-bocchi-no-heya/">
-            <span class="next-text nav-default">「ひとりぼっちの部屋」 高木麻早 (1973)</span>
+        
+        <a class="next" href="/post/kubernetes/keptn/how-to-become-a-keptn-contributor/">
+            <span class="next-text nav-default">How to become a Keptn contributor</span>
             <span class="next-text nav-mobile">Next</span>
             <i class="iconfont icon-right"></i>
           </a>

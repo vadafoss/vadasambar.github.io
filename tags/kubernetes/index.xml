@@ -6,7 +6,17 @@
     <description>Recent content in kubernetes on In Search of Lost Time</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 22 Apr 2022 11:53:00 +0530</lastBuildDate><atom:link href="/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 27 May 2022 11:34:00 +0530</lastBuildDate><atom:link href="/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Using Telepresence V2 with remote Keptn cluster does not work when writing an integration</title>
+      <link>/post/kubernetes/keptn/telepresence-issue/</link>
+      <pubDate>Fri, 27 May 2022 11:34:00 +0530</pubDate>
+      
+      <guid>/post/kubernetes/keptn/telepresence-issue/</guid>
+      <description>This port is based on my slack thread in Keptn community here. I am writing it here so that it gets public visibility.
+PSA: Using Telepresence V2 with remote Keptn cluster does not work when writing an integration. Problem/Context How do you do local development for a Keptn Integration if your laptop/PC cannot handle running a Keptn cluster locally with an IDE like VSCode and a web browser? I recently wrote a blogpost on it here.</description>
+    </item>
+    
     <item>
       <title>How to become a Keptn contributor</title>
       <link>/post/kubernetes/keptn/how-to-become-a-keptn-contributor/</link>
