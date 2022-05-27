@@ -49,7 +49,7 @@
 <meta itemprop="name" content="How to become a Keptn contributor">
 <meta itemprop="description" content="Details a step-by-step procedure to becoming a Keptn contributor"><meta itemprop="datePublished" content="2022-04-22T11:53:00+05:30" />
 <meta itemprop="dateModified" content="2022-04-29T11:22:44+05:30" />
-<meta itemprop="wordCount" content="1160">
+<meta itemprop="wordCount" content="1457">
 <meta itemprop="keywords" content="kubernetes,keptn," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="How to become a Keptn contributor"/>
 <meta name="twitter:description" content="Details a step-by-step procedure to becoming a Keptn contributor"/>
@@ -130,8 +130,8 @@
       <div class="post-meta">
         <span class="post-time"> 2022-04-22 </span>
         
-          <span class="more-meta"> 1160 words </span>
-          <span class="more-meta"> 6 mins read </span>
+          <span class="more-meta"> 1457 words </span>
+          <span class="more-meta"> 7 mins read </span>
         
       </div>
     </header>
@@ -143,6 +143,7 @@
   <ul>
     <li>
       <ul>
+        <li><a href="#introduction">Introduction</a></li>
         <li><a href="#problem">Problem</a></li>
         <li><a href="#solution">Solution</a></li>
         <li><a href="#a-understand-what-keptn-is-all-about">A: Understand what Keptn is all about</a></li>
@@ -164,8 +165,19 @@
   </div>
 </div>
     <div class="post-content">
-      <h2 id="problem">Problem</h2>
-<p>How do you start contributing code to Keptn?</p>
+      <h2 id="introduction">Introduction</h2>
+<p>You are somewhat familiar with Kubernetes and you came across Keptn. You want to contribute but you are someone who falls into one of the following categories:</p>
+<ol>
+<li>You haven&rsquo;t contributed to an open source project before</li>
+<li>The idea of going from zero to contributing to a big project like Keptn sounds overwhelming to you</li>
+<li>You would like someone who has done it tell you what exactly you need to do to get your first PR in</li>
+<li>You are a fan of TODO guides and would like a reference for making your own TODO guide for contributing to Keptn</li>
+</ol>
+<p>Or something else that I might have missed. This blogpost is an attempt at creating a TODO style guide for getting your first Keptn PR in.</p>
+<p>I have drawn many of the TODOs from my own journey of contributing to Keptn (<a href="https://github.com/keptn/keptn/pulls?q=is%3Apr+author%3Avadasambar+is%3Aclosed">PRs to Keptn core</a>, <a href="https://github.com/keptn-sandbox/datadog-service">Datadog integration for Keptn</a>). Many TODOs also come from community feedback on this guide (ref <a href="https://keptn.slack.com/archives/C0335QVJCAX/p1651212053665389">1</a>, <a href="https://keptn.slack.com/archives/C017T4KUAG3/p1650609277872899">2</a>).</p>
+<p>There is an ongoing discussion for <a href="https://keptn.slack.com/archives/C017T4KUAG3/p1650609277872899">putting this blogpost under Keptn docs</a>.</p>
+<h2 id="problem">Problem</h2>
+<p>How do you start contributing Go code to Keptn?</p>
 <h2 id="solution">Solution</h2>
 <p>You don&rsquo;t have to do all of them. I have included everything I did.</p>
 <h2 id="a-understand-what-keptn-is-all-about">A: Understand what Keptn is all about</h2>
@@ -250,7 +262,12 @@ ii. Now that you have understanding of the problem, try to come up with a soluti
 <h2 id="f-talk-about-your-pr-in-the-keptn-community-meeting-and-ask-for-reviews">F: Talk about your PR in the Keptn community meeting and ask for reviews</h2>
 <p><em>Note: Make sure the CI/CD tests pass before you ask someone for a review.</em></p>
 <ol>
-<li>Add it in the <a href="https://keptn.sh/community/meetings/">Keptn Developer Meeting notes</a> like this:</li>
+<li>Mark your PR as ready for review i.e., convert your draft PR in Github to a normal PR (creating a draft PR automatically assigns <code>@keptn/maintainers</code> as reviewers). Leave a comment saying <code>@keptn/maintainers I would like this PR to be reviewed</code> (<a href="https://github.com/keptn/keptn/pull/7285#issuecomment-1109403999">example</a>)</li>
+<li>If your PR is still not reviewed and you want it to get reviewed in a hurry, post a slack message asking for review in the relevant channel.</li>
+<li>If it&rsquo;s related to an integration, ask for a review in the <code>#keptn-integrations</code> channel</li>
+<li>If it&rsquo;s related to docs, ask for a review in the <code>#keptn-docs</code> channel</li>
+<li>If it&rsquo;s related to Keptn core (i.e., any code related change in <a href="https://github.com/keptn/keptn">https://github.com/keptn/keptn</a>) as for review in <code>#core-development</code></li>
+<li>If you still don&rsquo;t get reviews on your PR add it in the <a href="https://keptn.sh/community/meetings/">Keptn Developer Meeting notes</a> like this:</li>
 </ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
