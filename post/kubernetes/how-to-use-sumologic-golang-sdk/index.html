@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>How to use SumoLogic-Labs/sumologic-go-sdk to fetch metrics - In Search of Lost Time</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="vadasambar" /><meta name="description" content="How do you fetch metrics with SumoLogic-Labs/sumologic-go-sdk in a specific time range?" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
+
+
+<link rel="canonical" href="/post/kubernetes/how-to-use-sumologic-golang-sdk/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b5a744db6de49a86cadafb3b70f555ab443f83c307a483402259e94726b045ff.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="How to use SumoLogic-Labs/sumologic-go-sdk to fetch metrics" />
+<meta property="og:description" content="How do you fetch metrics with SumoLogic-Labs/sumologic-go-sdk in a specific time range?" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/kubernetes/how-to-use-sumologic-golang-sdk/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-06-17T12:21:00+05:30" />
+<meta property="article:modified_time" content="2022-06-17T12:21:28+05:30" />
+
+<meta itemprop="name" content="How to use SumoLogic-Labs/sumologic-go-sdk to fetch metrics">
+<meta itemprop="description" content="How do you fetch metrics with SumoLogic-Labs/sumologic-go-sdk in a specific time range?"><meta itemprop="datePublished" content="2022-06-17T12:21:00+05:30" />
+<meta itemprop="dateModified" content="2022-06-17T12:21:28+05:30" />
+<meta itemprop="wordCount" content="501">
+<meta itemprop="keywords" content="kubernetes,sumologic," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="How to use SumoLogic-Labs/sumologic-go-sdk to fetch metrics"/>
+<meta name="twitter:description" content="How do you fetch metrics with SumoLogic-Labs/sumologic-go-sdk in a specific time range?"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">In Search of Lost Time</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/about">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">In Search of Lost Time</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">How to use SumoLogic-Labs/sumologic-go-sdk to fetch metrics</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2022-06-17 </span>
+        
+          <span class="more-meta"> 501 words </span>
+          <span class="more-meta"> 3 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#problem">Problem</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#note">Note</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h3 id="problem">Problem</h3>
+<p>How do you fetch metrics for a specific time period from SumoLogic programmatically in your go code using SumoLogic-Labs/sumologic-go-sdk?</p>
+<h3 id="solution">Solution</h3>
+<p>If you are in a hurry, the code sits <a href="https://github.com/vadasambar/sumologic-go-sdk-poc">here</a>.
+The SDK sits <a href="https://github.com/SumoLogic-Labs/sumologic-go-sdk">here</a>.</p>
+<h4 id="1-find-the-correct-sumo-logic-api-endpoint">1. Find the correct Sumo Logic API endpoint</h4>
+<p>If the Sumo Logic you are using is in us1 region, your Sumo Logic API endpoint is: <code>https://api.sumologic.com/api</code><br>
+If it is not in us1 region your Sumo Logic API endpoint would be: <code>https://api.&lt;region-code&gt;.sumologic.com/api</code><br>
+You need to find out the region code for your Sumo Logic end point. Check <a href="https://help.sumologic.com/APIs/General-API-Information/Sumo-Logic-Endpoints-by-Deployment-and-Firewall-Security#how-can-i-determine-which-endpoint-i-should-use">this</a> on how to find it.</p>
+<h4 id="2-create-access-key-and-access-id-to-use-in-your-client">2. Create Access Key and Access Id to use in your client</h4>
+<p>Check <a href="https://help.sumologic.com/Manage/Security/Access-Keys#create-an-access-key%C2%A0on-preferences-page">this</a> on how to create it.</p>
+<h4 id="3-import-sdk-in-your-go-code">3. Import sdk in your go code</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;github.com/SumoLogic-Labs/sumologic-go-sdk/service/cip&#34;</span>
+	<span class="s">&#34;github.com/SumoLogic-Labs/sumologic-go-sdk/service/cip/types&#34;</span>
+<span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="4-initialize-the-client">4. Initialize the client</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go">	<span class="nx">sumoEndPt</span> <span class="o">:=</span> <span class="s">&#34;https://api.sumologic.com/api&#34;</span> <span class="c1">// I am in us1
+</span><span class="c1"></span>	<span class="nx">client</span> <span class="o">:=</span> <span class="nx">cip</span><span class="p">.</span><span class="nx">APIClient</span><span class="p">{</span>
+		<span class="nx">Cfg</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">cip</span><span class="p">.</span><span class="nx">Configuration</span><span class="p">{</span>
+			<span class="nx">Authentication</span><span class="p">:</span> <span class="nx">cip</span><span class="p">.</span><span class="nx">BasicAuth</span><span class="p">{</span>
+				<span class="nx">AccessId</span><span class="p">:</span>  <span class="nx">strings</span><span class="p">.</span><span class="nf">TrimSpace</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nf">Getenv</span><span class="p">(</span><span class="s">&#34;ACCESS_ID&#34;</span><span class="p">)),</span>
+				<span class="nx">AccessKey</span><span class="p">:</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">TrimSpace</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nf">Getenv</span><span class="p">(</span><span class="s">&#34;ACCESS_KEY&#34;</span><span class="p">)),</span>
+			<span class="p">},</span>
+			<span class="nx">BasePath</span><span class="p">:</span>   <span class="nx">sumoEndPt</span><span class="p">,</span>
+			<span class="nx">HTTPClient</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">{},</span>
+		<span class="p">},</span>
+	<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Export Access Key and Access Id as environment variables</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">export ACCESS_ID=&#34;&lt;access-id-here&gt;&#34; ACCESS_KEY=&#34;&lt;access-key-here&gt;&#34; 
+go run main.go
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="5-build-the-request">5. Build the request</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go">	<span class="nx">query</span> <span class="o">:=</span> <span class="s">&#34;metric=container_memory_working_set_bytes container=fluentd pod=my-sumo-sumologic-fluentd-metrics-0&#34;</span>
+	<span class="kd">var</span> <span class="nx">from</span> <span class="kt">int64</span> <span class="p">=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Unix</span><span class="p">()</span>
+
+	<span class="c1">// Sleep for some time
+</span><span class="c1"></span>	<span class="c1">// So that our `from` and `to` times
+</span><span class="c1"></span>	<span class="c1">// create a time range
+</span><span class="c1"></span>	<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span> <span class="o">*</span> <span class="mi">30</span><span class="p">)</span>
+	
+	<span class="kd">var</span> <span class="nx">to</span> <span class="kt">int64</span> <span class="p">=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Unix</span><span class="p">()</span>
+
+	<span class="c1">// Note: It takes some time until the metrics
+</span><span class="c1"></span>	<span class="c1">// start reflecting in the SumoLogic API results
+</span><span class="c1"></span>	<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span> <span class="o">*</span> <span class="mi">30</span><span class="p">)</span>
+
+	<span class="nx">req</span> <span class="o">:=</span> <span class="nx">types</span><span class="p">.</span><span class="nx">MetricsQueryRequest</span><span class="p">{</span>
+		<span class="nx">Queries</span><span class="p">:</span> <span class="p">[]</span><span class="nx">types</span><span class="p">.</span><span class="nx">MetricsQueryRow</span><span class="p">{</span>
+			<span class="nx">types</span><span class="p">.</span><span class="nx">MetricsQueryRow</span><span class="p">{</span>
+				<span class="nx">Query</span><span class="p">:</span>        <span class="nx">query</span><span class="p">,</span>
+				<span class="nx">RowId</span><span class="p">:</span>        <span class="s">&#34;A&#34;</span><span class="p">,</span>
+				<span class="c1">// Sumo Logic doesn&#39;t support `quantize` operator
+</span><span class="c1"></span>				<span class="c1">// in the query when using API
+</span><span class="c1"></span>				<span class="c1">// You have to specify it explicitly like this:
+</span><span class="c1"></span>				<span class="c1">// Equivalent to: query | quantize to 30s using avg
+</span><span class="c1"></span>				<span class="nx">Quantization</span><span class="p">:</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Duration</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span> <span class="o">*</span> <span class="mi">30</span><span class="p">).</span><span class="nf">Milliseconds</span><span class="p">(),</span>
+				<span class="nx">Rollup</span><span class="p">:</span>       <span class="s">&#34;Avg&#34;</span><span class="p">,</span>
+			<span class="p">},</span>
+		<span class="p">},</span>
+		<span class="nx">TimeRange</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">types</span><span class="p">.</span><span class="nx">ResolvableTimeRange</span><span class="p">{</span>
+			<span class="c1">// BeginBoundedTimeRange: for &lt;from-date&gt; -&gt; &lt;to-date&gt; type of time range
+</span><span class="c1"></span>			<span class="c1">// For other options, check https://api.sumologic.com/docs/#operation/runMetricsQueries
+</span><span class="c1"></span>			<span class="nx">Type_</span><span class="p">:</span> <span class="s">&#34;BeginBoundedTimeRange&#34;</span><span class="p">,</span> 
+			<span class="nx">From</span><span class="p">:</span> <span class="nx">types</span><span class="p">.</span><span class="nx">TimeRangeBoundary</span><span class="p">{</span>
+				<span class="c1">// For other options, check https://api.sumologic.com/docs/#operation/runMetricsQueries
+</span><span class="c1"></span>				<span class="nx">Type</span><span class="p">:</span>        <span class="s">&#34;EpochTimeRangeBoundary&#34;</span><span class="p">,</span>
+				<span class="nx">EpochMillis</span><span class="p">:</span> <span class="nx">from</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span>
+				<span class="nx">RangeName</span><span class="p">:</span>   <span class="s">&#34;from&#34;</span><span class="p">,</span>
+			<span class="p">},</span>
+			<span class="nx">To</span><span class="p">:</span> <span class="nx">types</span><span class="p">.</span><span class="nx">TimeRangeBoundary</span><span class="p">{</span>
+				<span class="nx">Type</span><span class="p">:</span>        <span class="s">&#34;EpochTimeRangeBoundary&#34;</span><span class="p">,</span>
+				<span class="nx">EpochMillis</span><span class="p">:</span> <span class="nx">to</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span>
+				<span class="nx">RangeName</span><span class="p">:</span>   <span class="s">&#34;to&#34;</span><span class="p">,</span>
+			<span class="p">},</span>
+			<span class="c1">// RangeName: &#34;today&#34;,
+</span><span class="c1"></span>		<span class="p">},</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>Most of the <a href="https://help.sumologic.com/Metrics/Metric-Queries-and-Alerts/07Metrics_Operators">Metrics Operators</a> are allowed in the query string except fillmissing, outlier, quantize and timeshift.</p>
+</blockquote>
+<p><a href="https://api.sumologic.com/docs/#operation/runMetricsQueries">https://api.sumologic.com/docs/#operation/runMetricsQueries</a></p>
+<h4 id="6-query-the-api-endpoint-for-metrics">6. Query the API endpoint for metrics</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go">	<span class="nx">mRes</span><span class="p">,</span> <span class="nx">hRes</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">RunMetricsQueries</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="c1">// you might want to use better error handling here
+</span><span class="c1"></span>	<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="6-get-the-results">6. Get the results</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Timestamp: %v\n&#34;</span><span class="p">,</span> <span class="nx">mRes</span><span class="p">.</span><span class="nx">QueryResult</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">TimeSeriesList</span><span class="p">.</span><span class="nx">TimeSeries</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">Points</span><span class="p">.</span><span class="nx">Timestamps</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Value: %v\n&#34;</span><span class="p">,</span> <span class="nx">mRes</span><span class="p">.</span><span class="nx">QueryResult</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">TimeSeriesList</span><span class="p">.</span><span class="nx">TimeSeries</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">Points</span><span class="p">.</span><span class="nx">Values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Result:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">Timestamp: 1654756680000
+Value: 1.691136e+08
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="note">Note</h3>
+<p>If you want to use <code>quantize</code> operator in your query, you will have to parse the query yourself and pass the correct value to the API. Check the code <a href="https://github.com/vadasambar/sumologic-go-sdk-poc">here</a> for example.</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">vadasambar</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2022-06-17
+        <a href="https://github.com/vadafoss/vadasambar.github.io/commit/b9a655b4a2652fcaee87f990f9e51d3594373eb8" title="update date in `how to use sumologic-go-sdk` blogpost">(b9a655b)</a>
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content">© Suraj Banakar 2022 <a rel='license' href='http://creativecommons.org/licenses/by-nc-sa/4.0/'' target='_blank'>CC BY-NC-SA 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/kubernetes/">kubernetes</a>
+          <a href="/tags/sumologic/">sumologic</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/kubernetes/keptn/telepresence-issue/">
+            <span class="next-text nav-default">Using Telepresence V2 with remote Keptn cluster does not work when writing an integration</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:surajrbanakar@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/6874596/vadasambar" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/_vadasambar" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.linkedin.com/in/suraj-banakar-97b4b4141/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/vadasambar" class="iconfont icon-github" title="github"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2020 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>vadasambar</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-178170176-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

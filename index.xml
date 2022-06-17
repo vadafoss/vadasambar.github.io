@@ -6,7 +6,19 @@
     <description>Recent content on In Search of Lost Time</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 27 May 2022 11:34:00 +0530</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 17 Jun 2022 12:21:00 +0530</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to use SumoLogic-Labs/sumologic-go-sdk to fetch metrics</title>
+      <link>/post/kubernetes/how-to-use-sumologic-golang-sdk/</link>
+      <pubDate>Fri, 17 Jun 2022 12:21:00 +0530</pubDate>
+      
+      <guid>/post/kubernetes/how-to-use-sumologic-golang-sdk/</guid>
+      <description>Problem How do you fetch metrics for a specific time period from SumoLogic programmatically in your go code using SumoLogic-Labs/sumologic-go-sdk?
+Solution If you are in a hurry, the code sits here. The SDK sits here.
+1. Find the correct Sumo Logic API endpoint If the Sumo Logic you are using is in us1 region, your Sumo Logic API endpoint is: https://api.sumologic.com/api
+If it is not in us1 region your Sumo Logic API endpoint would be: https://api.</description>
+    </item>
+    
     <item>
       <title>Using Telepresence V2 with remote Keptn cluster does not work when writing an integration</title>
       <link>/post/kubernetes/keptn/telepresence-issue/</link>

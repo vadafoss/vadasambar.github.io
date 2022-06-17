@@ -6,22 +6,31 @@
     <description>Recent content in Tags on In Search of Lost Time</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 27 May 2022 11:34:00 +0530</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 17 Jun 2022 12:21:00 +0530</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>kubernetes</title>
+      <link>/tags/kubernetes/</link>
+      <pubDate>Fri, 17 Jun 2022 12:21:00 +0530</pubDate>
+      
+      <guid>/tags/kubernetes/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>sumologic</title>
+      <link>/tags/sumologic/</link>
+      <pubDate>Fri, 17 Jun 2022 12:21:00 +0530</pubDate>
+      
+      <guid>/tags/sumologic/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>keptn</title>
       <link>/tags/keptn/</link>
       <pubDate>Fri, 27 May 2022 11:34:00 +0530</pubDate>
       
       <guid>/tags/keptn/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>kubernetes</title>
-      <link>/tags/kubernetes/</link>
-      <pubDate>Fri, 27 May 2022 11:34:00 +0530</pubDate>
-      
-      <guid>/tags/kubernetes/</guid>
       <description></description>
     </item>
     
