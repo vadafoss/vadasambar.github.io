@@ -49,7 +49,7 @@
 <meta itemprop="name" content="How to use SumoLogic-Labs/sumologic-go-sdk to fetch metrics">
 <meta itemprop="description" content="How do you fetch metrics with SumoLogic-Labs/sumologic-go-sdk in a specific time range?"><meta itemprop="datePublished" content="2022-06-17T12:21:00+05:30" />
 <meta itemprop="dateModified" content="2022-06-17T12:21:28+05:30" />
-<meta itemprop="wordCount" content="501">
+<meta itemprop="wordCount" content="497">
 <meta itemprop="keywords" content="kubernetes,sumologic," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="How to use SumoLogic-Labs/sumologic-go-sdk to fetch metrics"/>
 <meta name="twitter:description" content="How do you fetch metrics with SumoLogic-Labs/sumologic-go-sdk in a specific time range?"/>
@@ -130,7 +130,7 @@
       <div class="post-meta">
         <span class="post-time"> 2022-06-17 </span>
         
-          <span class="more-meta"> 501 words </span>
+          <span class="more-meta"> 497 words </span>
           <span class="more-meta"> 3 mins read </span>
         
       </div>
@@ -270,7 +270,6 @@ go run main.go
 </span><span class="lnt">42
 </span><span class="lnt">43
 </span><span class="lnt">44
-</span><span class="lnt">45
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go">	<span class="nx">query</span> <span class="o">:=</span> <span class="s">&#34;metric=container_memory_working_set_bytes container=fluentd pod=my-sumo-sumologic-fluentd-metrics-0&#34;</span>
@@ -315,8 +314,7 @@ go run main.go
 				<span class="nx">EpochMillis</span><span class="p">:</span> <span class="nx">to</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span>
 				<span class="nx">RangeName</span><span class="p">:</span>   <span class="s">&#34;to&#34;</span><span class="p">,</span>
 			<span class="p">},</span>
-			<span class="c1">// RangeName: &#34;today&#34;,
-</span><span class="c1"></span>		<span class="p">},</span>
+		<span class="p">},</span>
 
 </code></pre></td></tr></table>
 </div>
