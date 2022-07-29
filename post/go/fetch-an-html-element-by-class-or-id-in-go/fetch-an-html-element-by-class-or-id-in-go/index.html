@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>How to fetch an element by class or id using go&#39;s `html` package  - In Search of Lost Time</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="vadasambar" /><meta name="description" content="Supplements on the official docs around `html` package with gotchas" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
+
+
+<link rel="canonical" href="/post/go/fetch-an-html-element-by-class-or-id-in-go/fetch-an-html-element-by-class-or-id-in-go/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b5a744db6de49a86cadafb3b70f555ab443f83c307a483402259e94726b045ff.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="How to fetch an element by class or id using go&#39;s `html` package " />
+<meta property="og:description" content="Supplements on the official docs around `html` package with gotchas" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/go/fetch-an-html-element-by-class-or-id-in-go/fetch-an-html-element-by-class-or-id-in-go/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-07-29T11:07:00+05:30" />
+<meta property="article:modified_time" content="2022-07-29T11:16:03+05:30" />
+
+<meta itemprop="name" content="How to fetch an element by class or id using go&#39;s `html` package ">
+<meta itemprop="description" content="Supplements on the official docs around `html` package with gotchas"><meta itemprop="datePublished" content="2022-07-29T11:07:00+05:30" />
+<meta itemprop="dateModified" content="2022-07-29T11:16:03+05:30" />
+<meta itemprop="wordCount" content="867">
+<meta itemprop="keywords" content="go,html," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="How to fetch an element by class or id using go&#39;s `html` package "/>
+<meta name="twitter:description" content="Supplements on the official docs around `html` package with gotchas"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">In Search of Lost Time</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/about">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">In Search of Lost Time</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">How to fetch an element by class or id using go&#39;s `html` package </h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2022-07-29 </span>
+        
+          <span class="more-meta"> 867 words </span>
+          <span class="more-meta"> 5 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#problem">Problem</a></li>
+        <li><a href="#solution">Solution</a>
+          <ul>
+            <li><a href="#1-using-tokenizer">1. Using tokenizer</a></li>
+            <li><a href="#2-using-parser">2. Using parser</a></li>
+          </ul>
+        </li>
+        <li><a href="#gotchas">Gotchas</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="problem">Problem</h2>
+<p>How do you fetch an html element by class or id using go&rsquo;s <a href="https://pkg.go.dev/golang.org/x/net/html"><code>html</code></a> package?</p>
+<h2 id="solution">Solution</h2>
+<p>Let&rsquo;s say you want to fetch an element with the id <code>upcoming-episode</code> from <a href="https://mydramalist.com/705723-strange-lawyer-woo-young-woo">https://mydramalist.com/705723-strange-lawyer-woo-young-woo</a></p>
+<p>There are two ways to do this:</p>
+<h3 id="1-using-tokenizer">1. Using tokenizer</h3>
+<p>Tokenizer allows you to get the element you want while go is parsing the html.</p>
+<p>Here&rsquo;s how you can do it with the tokenizer</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;log&#34;</span>
+	<span class="s">&#34;net/http&#34;</span>
+
+	<span class="s">&#34;golang.org/x/net/html&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">const</span> <span class="nx">url</span> <span class="p">=</span> <span class="s">&#34;https://mydramalist.com/705723-strange-lawyer-woo-young-woo&#34;</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// get the html from the url
+</span><span class="c1"></span>	<span class="nx">resp</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">defer</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+
+    <span class="c1">// stop if the http request doesn&#39;t succeed with 200
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">StatusCode</span> <span class="o">!=</span> <span class="mi">200</span> <span class="p">{</span>
+		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalf</span><span class="p">(</span><span class="s">&#34;Status code error: %d %s&#34;</span><span class="p">,</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">StatusCode</span><span class="p">,</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">Status</span><span class="p">)</span>
+	<span class="p">}</span>
+
+    <span class="c1">// initialize the tokenizer
+</span><span class="c1"></span>	<span class="nx">h</span> <span class="o">:=</span> <span class="nx">html</span><span class="p">.</span><span class="nf">NewTokenizer</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
+
+	<span class="k">for</span> <span class="p">{</span>
+        <span class="c1">// stop if there are no further tokens to process
+</span><span class="c1"></span>		<span class="k">if</span> <span class="nx">h</span><span class="p">.</span><span class="nf">Next</span><span class="p">()</span> <span class="o">==</span> <span class="nx">html</span><span class="p">.</span><span class="nx">ErrorToken</span> <span class="p">{</span>
+			<span class="k">break</span>
+		<span class="p">}</span>
+
+        <span class="c1">// `h.Token() can be called only once after `h.Next()`
+</span><span class="c1"></span>        <span class="c1">// check this SO thread for more info: 
+</span><span class="c1"></span>        <span class="c1">// https://stackoverflow.com/q/73031647/6874596
+</span><span class="c1"></span>		<span class="nx">t</span> <span class="o">:=</span> <span class="nx">h</span><span class="p">.</span><span class="nf">Token</span><span class="p">()</span>
+		<span class="nx">attrs</span> <span class="o">:=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">Attr</span>
+
+		<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">attr</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">attrs</span> <span class="p">{</span>
+            <span class="c1">// attributes of an html element are stored as a map of key value pairs
+</span><span class="c1"></span>			<span class="k">if</span> <span class="nx">attr</span><span class="p">.</span><span class="nx">Key</span> <span class="o">==</span> <span class="s">&#34;id&#34;</span> <span class="o">&amp;&amp;</span> <span class="nx">attr</span><span class="p">.</span><span class="nx">Val</span> <span class="o">==</span> <span class="s">&#34;upcoming-episode&#34;</span> <span class="p">{</span>
+				<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;upcoming episode&#34;</span><span class="p">,</span> <span class="nx">t</span><span class="p">.</span><span class="nf">String</span><span class="p">())</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Above example is a modified version of the example shown in <a href="https://pkg.go.dev/golang.org/x/net/html">the official docs</a></p>
+<p>Output</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">$ go run main.go
+upcoming episode &lt;div <span class="nv">id</span><span class="o">=</span><span class="s2">&#34;upcoming-episode&#34;</span> <span class="nv">class</span><span class="o">=</span><span class="s2">&#34;box&#34;</span>&gt;
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="2-using-parser">2. Using parser</h3>
+<p>Parser parses the html into a tree first. You can then go through the tree to get the element you want.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;log&#34;</span>
+	<span class="s">&#34;net/http&#34;</span>
+
+	<span class="s">&#34;golang.org/x/net/html&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">const</span> <span class="nx">url</span> <span class="p">=</span> <span class="s">&#34;https://mydramalist.com/705723-strange-lawyer-woo-young-woo&#34;</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">resp</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">defer</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+
+	<span class="k">if</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">StatusCode</span> <span class="o">!=</span> <span class="mi">200</span> <span class="p">{</span>
+		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalf</span><span class="p">(</span><span class="s">&#34;Status code error: %d %s&#34;</span><span class="p">,</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">StatusCode</span><span class="p">,</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">Status</span><span class="p">)</span>
+	<span class="p">}</span>
+
+    <span class="c1">// returns the root node
+</span><span class="c1"></span>	<span class="nx">doc</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">html</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+    <span class="c1">// recursive function which starts from root node
+</span><span class="c1"></span>    <span class="c1">// and searches through the entire tree until we find the result
+</span><span class="c1"></span>    <span class="c1">// OR no node is left to search
+</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">f</span> <span class="kd">func</span><span class="p">(</span><span class="o">*</span><span class="nx">html</span><span class="p">.</span><span class="nx">Node</span><span class="p">)</span>
+	<span class="nx">f</span> <span class="p">=</span> <span class="kd">func</span><span class="p">(</span><span class="nx">n</span> <span class="o">*</span><span class="nx">html</span><span class="p">.</span><span class="nx">Node</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">attrs</span> <span class="o">:=</span> <span class="nx">n</span><span class="p">.</span><span class="nx">Attr</span>
+        <span class="c1">// loop over the node attributes (which are a map of key value pairs)
+</span><span class="c1"></span>        <span class="c1">// to see if the id matches `upcoming-episode`
+</span><span class="c1"></span>		<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">attr</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">attrs</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="nx">attr</span><span class="p">.</span><span class="nx">Key</span> <span class="o">==</span> <span class="s">&#34;id&#34;</span> <span class="o">&amp;&amp;</span> <span class="nx">attr</span><span class="p">.</span><span class="nx">Val</span> <span class="o">==</span> <span class="s">&#34;upcoming-episode&#34;</span> <span class="p">{</span>
+				<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;upcoming episode&#34;</span><span class="p">,</span> <span class="nx">n</span><span class="p">.</span><span class="nx">Attr</span><span class="p">,</span> <span class="nx">n</span><span class="p">.</span><span class="nx">Data</span><span class="p">)</span>
+                <span class="k">return</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+        <span class="c1">// loop over the children
+</span><span class="c1"></span>        <span class="c1">// read: start with the first child
+</span><span class="c1"></span>        <span class="c1">// go to the next sibling until there is no sibling
+</span><span class="c1"></span>		<span class="k">for</span> <span class="nx">c</span> <span class="o">:=</span> <span class="nx">n</span><span class="p">.</span><span class="nx">FirstChild</span><span class="p">;</span> <span class="nx">c</span> <span class="o">!=</span> <span class="kc">nil</span><span class="p">;</span> <span class="nx">c</span> <span class="p">=</span> <span class="nx">c</span><span class="p">.</span><span class="nx">NextSibling</span> <span class="p">{</span>
+			<span class="nf">f</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="nf">f</span><span class="p">(</span><span class="nx">doc</span><span class="p">)</span>
+<span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p>Above example is a modified version of the example shown in <a href="https://pkg.go.dev/golang.org/x/net/html#example-Parse">the official docs</a></p>
+<h2 id="gotchas">Gotchas</h2>
+<ol>
+<li>When you are using the tokenizer, you need to follow the right call sequence</li>
+</ol>
+<blockquote>
+<p>Tokenizer has a kind of funny interface, and you aren&rsquo;t allowed to call <code>Token()</code> more than once between calls to <code>Next()</code>. As the doc says:</p>
+<blockquote>
+<p>In EBNF notation, the valid call sequence per token is:<br>
+<code>Next {Raw} [ Token | Text | TagName {TagAttr} ]</code></p>
+</blockquote>
+<p>Which is to say: after calling Next() you may call Raw() zero or more times; then you can either:</p>
+<ul>
+<li>Call <code>Token()</code> once,</li>
+<li>Call <code>Text()</code> once,</li>
+<li>Call <code>TagName()</code> once followed by <code>TagAttr()</code> zero or more times (presumably, either not at all because you don&rsquo;t care about the attributes, or enough times to retrieve all of the attributes).</li>
+<li>Or do nothing (maybe you&rsquo;re skipping tokens).</li>
+</ul>
+<p>The results of calling things out of sequence are undefined, because the methods modify internal state — they&rsquo;re not pure accessors. In your first snippet you call <code>Token()</code> multiple times between calls to <code>Next()</code>, so the result is invalid. All of the attributes are consumed by the first call, and aren&rsquo;t returned by the later ones.</p>
+</blockquote>
+<p><a href="https://stackoverflow.com/a/73032012/6874596">https://stackoverflow.com/a/73032012/6874596</a></p>
+<ol start="2">
+<li>HTML response won&rsquo;t have all the html elements that you see in the browser</li>
+</ol>
+<p>If you haven&rsquo;t noticed it yet, the HTML Id <code>upcoming-episode</code> points to the following <code>div</code> in the browser:
+<img src="./fetch-an-html-element-by-class-or-id-in-go.png" alt="upcoming-episode"></p>
+<p>As you can see the <code>div</code> with the id <code>upcoming-episode</code> has many children under it but if you see the output of the tokenizer of parser program above, it doesn&rsquo;t show any children. This is because the children are created dynamically using Javascript.</p>
+<p>This is what the page looks like without Javascript (I temporarily disabled Javascript in my browser. Check <a href="https://nerdschalk.com/how-to-disable-javascript-in-firefox-on-pc-or-phone/">this</a> for how to do it):
+<img src="./fetch-an-html-element-by-class-or-id-in-go-2.png" alt="upcoming-episode-without-js"></p>
+<p>You might want to use a headless browser package like <a href="https://github.com/chromedp/chromedp">chromedp</a> to fetch the same response as the browser.</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">vadasambar</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2022-07-29
+        <a href="https://github.com/vadafoss/vadasambar.github.io/commit/9cb41b1ece6c16be66f73a045481932ee7dc6be2" title="add blogpost &#34;Fetch an html element using go&#39;s html package&#34;">(9cb41b1)</a>
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content">© Suraj Banakar 2022 <a rel='license' href='http://creativecommons.org/licenses/by-nc-sa/4.0/'' target='_blank'>CC BY-NC-SA 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go/">go</a>
+          <a href="/tags/html/">html</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/kubernetes/gotchas-for-static-provisioning-pv/">
+            <span class="next-text nav-default">Static provisioning gotchas for PV/PVCs</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:surajrbanakar@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/6874596/vadasambar" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/_vadasambar" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.linkedin.com/in/suraj-banakar-97b4b4141/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/vadasambar" class="iconfont icon-github" title="github"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2020 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>vadasambar</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-178170176-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>
