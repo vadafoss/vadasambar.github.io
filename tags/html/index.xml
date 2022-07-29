@@ -9,10 +9,10 @@
     <lastBuildDate>Fri, 29 Jul 2022 11:07:00 +0530</lastBuildDate><atom:link href="/tags/html/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>How to fetch an element by class or id using go&#39;s `html` package </title>
-      <link>/post/go/fetch-an-html-element-by-class-or-id-in-go/fetch-an-html-element-by-class-or-id-in-go/</link>
+      <link>/post/go/fetch-an-html-element-by-class-or-id-in-go/</link>
       <pubDate>Fri, 29 Jul 2022 11:07:00 +0530</pubDate>
       
-      <guid>/post/go/fetch-an-html-element-by-class-or-id-in-go/fetch-an-html-element-by-class-or-id-in-go/</guid>
+      <guid>/post/go/fetch-an-html-element-by-class-or-id-in-go/</guid>
       <description>Problem How do you fetch an html element by class or id using go&amp;rsquo;s html package?
 Solution Let&amp;rsquo;s say you want to fetch an element with the id upcoming-episode from https://mydramalist.com/705723-strange-lawyer-woo-young-woo
 There are two ways to do this:

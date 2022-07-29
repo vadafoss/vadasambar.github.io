@@ -26,7 +26,7 @@
 <meta name="generator" content="Hugo 0.92.0 with theme even" />
 
 
-<link rel="canonical" href="/post/go/fetch-an-html-element-by-class-or-id-in-go/fetch-an-html-element-by-class-or-id-in-go/" />
+<link rel="canonical" href="/post/go/fetch-an-html-element-by-class-or-id-in-go/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -42,13 +42,13 @@
 <meta property="og:title" content="How to fetch an element by class or id using go&#39;s `html` package " />
 <meta property="og:description" content="Supplements on the official docs around `html` package with gotchas" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/post/go/fetch-an-html-element-by-class-or-id-in-go/fetch-an-html-element-by-class-or-id-in-go/" /><meta property="article:section" content="post" />
+<meta property="og:url" content="/post/go/fetch-an-html-element-by-class-or-id-in-go/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2022-07-29T11:07:00+05:30" />
-<meta property="article:modified_time" content="2022-07-29T11:16:03+05:30" />
+<meta property="article:modified_time" content="2022-07-29T11:28:05+05:30" />
 
 <meta itemprop="name" content="How to fetch an element by class or id using go&#39;s `html` package ">
 <meta itemprop="description" content="Supplements on the official docs around `html` package with gotchas"><meta itemprop="datePublished" content="2022-07-29T11:07:00+05:30" />
-<meta itemprop="dateModified" content="2022-07-29T11:16:03+05:30" />
+<meta itemprop="dateModified" content="2022-07-29T11:28:05+05:30" />
 <meta itemprop="wordCount" content="867">
 <meta itemprop="keywords" content="go,html," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="How to fetch an element by class or id using go&#39;s `html` package "/>
@@ -427,10 +427,10 @@ upcoming episode &lt;div <span class="nv">id</span><span class="o">=</span><span
 <li>HTML response won&rsquo;t have all the html elements that you see in the browser</li>
 </ol>
 <p>If you haven&rsquo;t noticed it yet, the HTML Id <code>upcoming-episode</code> points to the following <code>div</code> in the browser:
-<img src="./fetch-an-html-element-by-class-or-id-in-go.png" alt="upcoming-episode"></p>
+<img src="./images/fetch-an-html-element-by-class-or-id-in-go.png" alt="upcoming-episode"></p>
 <p>As you can see the <code>div</code> with the id <code>upcoming-episode</code> has many children under it but if you see the output of the tokenizer of parser program above, it doesn&rsquo;t show any children. This is because the children are created dynamically using Javascript.</p>
 <p>This is what the page looks like without Javascript (I temporarily disabled Javascript in my browser. Check <a href="https://nerdschalk.com/how-to-disable-javascript-in-firefox-on-pc-or-phone/">this</a> for how to do it):
-<img src="./fetch-an-html-element-by-class-or-id-in-go-2.png" alt="upcoming-episode-without-js"></p>
+<img src="./images/fetch-an-html-element-by-class-or-id-in-go-2.png" alt="upcoming-episode-without-js"></p>
 <p>You might want to use a headless browser package like <a href="https://github.com/chromedp/chromedp">chromedp</a> to fetch the same response as the browser.</p>
 
     </div>
@@ -444,7 +444,7 @@ upcoming episode &lt;div <span class="nv">id</span><span class="o">=</span><span
     <span class="item-title">LastMod</span>
     <span class="item-content">
         2022-07-29
-        <a href="https://github.com/vadafoss/vadasambar.github.io/commit/9cb41b1ece6c16be66f73a045481932ee7dc6be2" title="add blogpost &#34;Fetch an html element using go&#39;s html package&#34;">(9cb41b1)</a>
+        <a href="https://github.com/vadafoss/vadasambar.github.io/commit/af4ebd566f222fd8ca1a7f693fe0b7231fdcbac0" title="re-structure file/folder structure for `How to fetch an element...` - to fix images not being displayed in the resulting html - based on https://github.com/gohugoio/hugo/issues/1240">(af4ebd5)</a>
     </span>
   </p>
   
