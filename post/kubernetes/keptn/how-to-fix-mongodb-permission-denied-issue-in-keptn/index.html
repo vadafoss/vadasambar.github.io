@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>How to fix mongodb permission `Permission denied` issue in Keptn - In Search of Lost Time</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="vadasambar" /><meta name="description" content="This blogpost explains how to fix mkdir: cannot create directory &#39;/bitnami/mongodb/data&#39;: Permission denied error in mongodb pods when installing Keptn" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
+
+
+<link rel="canonical" href="/post/kubernetes/keptn/how-to-fix-mongodb-permission-denied-issue-in-keptn/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b5a744db6de49a86cadafb3b70f555ab443f83c307a483402259e94726b045ff.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="How to fix mongodb permission `Permission denied` issue in Keptn" />
+<meta property="og:description" content="This blogpost explains how to fix mkdir: cannot create directory &#39;/bitnami/mongodb/data&#39;: Permission denied error in mongodb pods when installing Keptn" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/kubernetes/keptn/how-to-fix-mongodb-permission-denied-issue-in-keptn/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-09-09T11:51:00+05:30" />
+<meta property="article:modified_time" content="2022-09-09T11:51:00+05:30" />
+
+<meta itemprop="name" content="How to fix mongodb permission `Permission denied` issue in Keptn">
+<meta itemprop="description" content="This blogpost explains how to fix mkdir: cannot create directory &#39;/bitnami/mongodb/data&#39;: Permission denied error in mongodb pods when installing Keptn"><meta itemprop="datePublished" content="2022-09-09T11:51:00+05:30" />
+<meta itemprop="dateModified" content="2022-09-09T11:51:00+05:30" />
+<meta itemprop="wordCount" content="805">
+<meta itemprop="keywords" content="kubernetes,keptn," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="How to fix mongodb permission `Permission denied` issue in Keptn"/>
+<meta name="twitter:description" content="This blogpost explains how to fix mkdir: cannot create directory &#39;/bitnami/mongodb/data&#39;: Permission denied error in mongodb pods when installing Keptn"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">In Search of Lost Time</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/about">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">In Search of Lost Time</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">How to fix mongodb permission `Permission denied` issue in Keptn</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2022-09-09 </span>
+        
+          <span class="more-meta"> 805 words </span>
+          <span class="more-meta"> 4 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#problem">Problem</a></li>
+        <li><a href="#why-does-this-happen">Why does this happen?</a></li>
+        <li><a href="#solution">Solution</a>
+          <ul>
+            <li><a href="#set-volumepermissionsenabledtrue">Set <code>volumePermissions.enabled=true</code></a></li>
+            <li><a href="#upgrade-keptn-helm-chart">Upgrade Keptn helm chart</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>This blogpost paraphrases <a href="https://keptn.slack.com/archives/CNRCGFU3U/p1656914018998819">my Keptn slack thread around the same issue</a> so that:</p>
+<ol>
+<li>It&rsquo;s easier to understand</li>
+<li>It&rsquo;s available in public (searchable through Google)</li>
+</ol>
+<h2 id="problem">Problem</h2>
+<p>How do you fix an error like this in the mongodb pod(s) when installing Keptn</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">mongodb 05:51:53.11 
+mongodb 05:51:53.11 INFO  ==&gt; ** Starting MongoDB setup **
+mongodb 05:51:53.12 INFO  ==&gt; Validating settings in MONGODB_* env vars...
+mkdir: cannot create directory &#39;/bitnami/mongodb/data&#39;: Permission denied
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">suraj@suraj:~$ kubectl get po 
+NAME                                     READY   STATUS             RESTARTS        AGE
+api-gateway-nginx-b47f6d57c-v885m        1/1     Running            0               6m1s
+api-service-6457b97dd-gpc6w              2/2     Running            3 (3m50s ago)   6m1s
+approval-service-6f9cfc9f99-r66zv        2/2     Running            0               6m1s
+bridge-db68fc84c-pjcvf                   1/1     Running            0               6m1s
+configuration-service-5869576875-gtbx4   1/1     Running            0               6m
+keptn-mongo-74bf4c476f-klfdh             0/1     CrashLoopBackOff   5 (109s ago)    6m1s
+keptn-nats-0                             2/2     Running            0               6m1s
+lighthouse-service-845f699b8c-5dt54      2/2     Running            0               6m1s
+mongodb-datastore-5bd7f977d9-82955       2/2     Running            3 (3m53s ago)   6m1s
+remediation-service-8577f49d8c-zpbd4     2/2     Running            0               6m1s
+secret-service-85f68fd54-gjrpn           1/1     Running            0               6m
+shipyard-controller-76f494c5c8-r5q5j     0/1     Running            5 (46s ago)     6m1s
+statistics-service-78d9848787-qb95m      2/2     Running            3 (4m12s ago)   6m1s
+webhook-service-7d8fc7cc74-dfgmv         2/2     Running            0               6m1s
+</code></pre></td></tr></table>
+</div>
+</div><p>And you&rsquo;d see the following events for <code>keptn-mongo-xxx</code> pod:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">Events:
+  Type     Reason     Age                   From               Message
+  ----     ------     ----                  ----               -------
+  Normal   Scheduled  9m20s                 default-scheduler  Successfully assigned keptn/keptn-mongo-74bf4c476f-klfdh to datadog-demo-m02
+  Normal   Pulling    9m19s                 kubelet            Pulling image &#34;docker.io/bitnami/mongodb:4.4.13-debian-10-r52&#34;
+  Normal   Pulled     8m5s                  kubelet            Successfully pulled image &#34;docker.io/bitnami/mongodb:4.4.13-debian-10-r52&#34; in 1m14.356743512s
+  Normal   Created    7m24s (x4 over 8m5s)  kubelet            Created container mongodb
+  Normal   Pulled     7m24s (x3 over 8m4s)  kubelet            Container image &#34;docker.io/bitnami/mongodb:4.4.13-debian-10-r52&#34; already present on machine
+  Normal   Started    7m23s (x4 over 8m5s)  kubelet            Started container mongodb
+  Warning  BackOff    4m8s (x29 over 8m3s)  kubelet            Back-off restarting failed container
+</code></pre></td></tr></table>
+</div>
+</div><p>Keptn uses mongodb for datastore. If the <code>keptn-mongo-xxx</code> pod goes into <code>CrashLoopBackOff</code> it prevents other dependent pods (like shipyard-controller above) from coming up. The problem happened with me for Keptn version 0.15.0 but it can happen for any other Keptn version (<a href="https://keptn.slack.com/archives/CNRCGFU3U/p1645283174489159">example</a>) as well.</p>
+<h2 id="why-does-this-happen">Why does this happen?</h2>
+<p>We use bitnami image (check the pod logs above) for mongodb. Here&rsquo;s a longer version of the logs above to put things in context:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">suraj@suraj:~$ kubectl logs  keptn-mongo-74bf4c476f-klfdh
+mongodb 05:51:53.10 
+mongodb 05:51:53.10 Welcome to the Bitnami mongodb container
+mongodb 05:51:53.10 Subscribe to project updates by watching https://github.com/bitnami/bitnami-docker-mongodb
+mongodb 05:51:53.10 Submit issues and feature requests at https://github.com/bitnami/bitnami-docker-mongodb/issues
+mongodb 05:51:53.11 
+mongodb 05:51:53.11 INFO  ==&gt; ** Starting MongoDB setup **
+mongodb 05:51:53.12 INFO  ==&gt; Validating settings in MONGODB_* env vars...
+mkdir: cannot create directory &#39;/bitnami/mongodb/data&#39;: Permission denied
+</code></pre></td></tr></table>
+</div>
+</div><p>At the time of writing this blogpost, Keptn helm chart is dependent on bitnami&rsquo;s mongodb helm chart:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">mongodb</span><span class="w">
+</span><span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="m">12.1.31</span><span class="w">
+</span><span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l">https://charts.bitnami.com/bitnami</span><span class="w">
+</span><span class="w">    </span><span class="nt">condition</span><span class="p">:</span><span class="w"> </span><span class="l">mongo.enabled</span><span class="w">
+</span><span class="w">    </span><span class="nt">alias</span><span class="p">:</span><span class="w"> </span><span class="l">mongo</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/keptn/keptn/blob/22b396734a3f5a48fccedcd26e78471d8de72b48/installer/manifests/keptn/Chart.yaml#L42-L46">https://github.com/keptn/keptn/blob/22b396734a3f5a48fccedcd26e78471d8de72b48/installer/manifests/keptn/Chart.yaml#L42-L46</a></p>
+<blockquote>
+<p>Bitnami charts are configured to use, by default, a Kubernetes SecurityContext to automatically modify the ownership of the attached volumes. However, this feature does not work if:</p>
+<ul>
+<li>Your Kubernetes distribution has no support for SecurityContexts.</li>
+<li>The Storage Class used to provision the Persistent Volumes has no support to modify the volumes' filesystem.</li>
+</ul>
+</blockquote>
+<p><a href="https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues/">https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues/</a></p>
+<p>Bitnami also provides a solution to this problem:</p>
+<blockquote>
+<p>Upgrade the chart release enabling the initContainer that adapts the permissions:<br>
+<code>helm upgrade MY-RELEASE bitnami/mongodb --set volumePermissions.enabled=true</code></p>
+</blockquote>
+<h2 id="solution">Solution</h2>
+<h3 id="set-volumepermissionsenabledtrue">Set <code>volumePermissions.enabled=true</code></h3>
+<p>In context of Keptn, there are two ways in which you can install Keptn at the time of writing this blogpost:</p>
+<ol>
+<li>Using Keptn CLI</li>
+<li>Using Keptn Helm chart</li>
+</ol>
+<p><em>Note: Support for installing Keptn via CLI <a href="https://github.com/keptn/keptn/pull/8302">has been removed</a> starting <a href="https://github.com/keptn/keptn/releases/tag/0.18.0">0.18.0 version of Keptn</a></em></p>
+<p>Irrespective of what you use both do the same thing i.e., Keptn CLI also installs Keptn helm chart under the hood with the right Helm values. You can check what values were used for installing your Keptn helm chart:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">suraj@suraj:~$ helm get values keptn
+USER-SUPPLIED VALUES:
+continuous-delivery:
+  enabled: true
+control-plane:
+  apiGatewayNginx:
+    type: ClusterIP
+  bridge:
+    installationType: QUALITY_GATES,CONTINUOUS_OPERATIONS,CONTINUOUS_DELIVERY
+  enabled: true
+</code></pre></td></tr></table>
+</div>
+</div><p><em>Aside: Keptn has supported installing Keptn via Helm <a href="https://github.com/keptn/keptn/blob/ac601b5ba5684b7b882ee0d408b506d5f31baaf2/cli/cmd/install.go#L140-L145">since as far back as 0.7.0 version</a></em></p>
+<p>Copy everything below <code>USER-SUPPLIED VALUES:</code> and paste it in a file <code>new-values.yaml</code>. Add <code>volumePermissions.enabled=true</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># new-values.yaml</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="c"># existing values</span><span class="w">
+</span><span class="w"></span><span class="nt">continuous-delivery</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w"></span><span class="nt">control-plane</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">apiGatewayNginx</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterIP</span><span class="w">
+</span><span class="w">  </span><span class="nt">bridge</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">installationType</span><span class="p">:</span><span class="w"> </span><span class="l">QUALITY_GATES,CONTINUOUS_OPERATIONS,CONTINUOUS_DELIVERY</span><span class="w">
+</span><span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">  </span><span class="nt">mongo</span><span class="p">:</span><span class="w"> </span><span class="c"># new value (if your Keptn version is &lt; 0.17.0 and &gt;= 11.0)</span><span class="w">
+</span><span class="w">    </span><span class="nt">volumePermissions</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> 
+</span><span class="w">  
+</span><span class="w">
+</span><span class="w"></span><span class="c"># new value (if your Keptn version is &gt;= 0.17.0)</span><span class="w">
+</span><span class="w"></span><span class="nt">mongo</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">volumePermissions</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> 
+</span><span class="w"></span><span class="c"># </span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>Please note that bitnami/mongodb <a href="https://github.com/keptn/keptn/blob/22b396734a3f5a48fccedcd26e78471d8de72b48/installer/manifests/keptn/Chart.yaml#L46">is aliased to mongo</a></p>
+<h3 id="upgrade-keptn-helm-chart">Upgrade Keptn helm chart</h3>
+<p>You can find your current Keptn version using</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">suraj@suraj:~/sandbox$ helm ls -nkeptn
+NAME           	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART                 	APP VERSION
+...   
+keptn          	keptn    	1       	2022-09-08 23:41:37.503597202 +0530 IST	deployed	keptn-0.18.1          	0.18.1 
+</code></pre></td></tr></table>
+</div>
+</div><p>0.18.1 in <code>keptn-0.18.1</code> is our current chart version.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">helm upgrade keptn keptn/keptn -f installer/manifests/keptn/current-values.yaml --version &lt;your-current-keptn-version&gt; -nkeptn 
+</code></pre></td></tr></table>
+</div>
+</div><p>This should fix the issue. If you still face this issue, reach out on <a href="https://slack.keptn.sh/">Keptn slack</a> in <code>#help</code> or <code>#general</code> channel or at <code>#keptn</code> channel in <a href="http://slack.cncf.io/">CNCF Slack workspace</a>.</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">vadasambar</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2022-09-09
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content">© Suraj Banakar 2022 <a rel='license' href='http://creativecommons.org/licenses/by-nc-sa/4.0/'' target='_blank'>CC BY-NC-SA 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/kubernetes/">kubernetes</a>
+          <a href="/tags/keptn/">keptn</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/go/fetch-an-html-element-by-class-or-id-in-go/">
+            <span class="next-text nav-default">How to fetch an element by class or id using go&#39;s `html` package </span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:surajrbanakar@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/6874596/vadasambar" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/_vadasambar" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.linkedin.com/in/suraj-banakar-97b4b4141/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/vadasambar" class="iconfont icon-github" title="github"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2020 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>vadasambar</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-178170176-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

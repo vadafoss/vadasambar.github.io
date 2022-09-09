@@ -122,6 +122,27 @@
           <section id="posts" class="posts">
     <article class="post">
   <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/kubernetes/keptn/how-to-fix-mongodb-permission-denied-issue-in-keptn/">How to fix mongodb permission `Permission denied` issue in Keptn</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2022-09-09 </span>
+      
+        <span class="more-meta"> 805 words </span>
+        <span class="more-meta"> 4 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      This blogpost explains how to fix <code>mkdir: cannot create directory '/bitnami/mongodb/data': Permission denied</code> error in mongodb pods when installing Keptn
+    </div>
+    <div class="read-more">
+      <a href="/post/kubernetes/keptn/how-to-fix-mongodb-permission-denied-issue-in-keptn/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/post/go/fetch-an-html-element-by-class-or-id-in-go/">How to fetch an element by class or id using go&#39;s `html` package </a></h1>
     <div class="post-meta">
       <span class="post-time"> 2022-07-29 </span>
@@ -133,12 +154,7 @@
   
   <div class="post-content">
     <div class="post-summary">
-      Problem How do you fetch an html element by class or id using go&rsquo;s html package?
-Solution Let&rsquo;s say you want to fetch an element with the id upcoming-episode from https://mydramalist.com/705723-strange-lawyer-woo-young-woo
-There are two ways to do this:
-1. Using tokenizer Tokenizer allows you to get the element you want while go is parsing the html.
-Here&rsquo;s how you can do it with the tokenizer
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49  package main import ( &#34;fmt&#34; &#34;log&#34; &#34;net/http&#34; &#34;golang.
+      Supplements the official docs around <code>html</code> package with gotchas
     </div>
     <div class="read-more">
       <a href="/post/go/fetch-an-html-element-by-class-or-id-in-go/" class="read-more-link">Read more...</a>
@@ -159,9 +175,7 @@ Here&rsquo;s how you can do it with the tokenizer
   
   <div class="post-content">
     <div class="post-summary">
-      This is a group of short to-the-point notes as comments in the code. For comprehensive documentation, look at the official docs.
-Notes:
- Manually linking the PV and PVC like this means even if the PVC is deleted PV won&rsquo;t be deleted automatically. You&rsquo;ve to delete the PV manually.  1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31  apiVersion:v1kind:PersistentVolumemetadata:# even if the PV name is different from the PVC name, as long as the storage size # and the PV storage class match with the PVC, kubernetes will link them togethername:&#39;suraj-bankar2&#39;spec:accessModes:[&#39;ReadWriteOnce&#39;]capacity:# storage here needs to match with the storage field in the PVC# if that doesn&#39;t happen, Kubernetes won&#39;t bind this PV to the `suraj-bankar` PVCstorage:100MipersistentVolumeReclaimPolicy:Delete# our PV needs to have the same storage class # (or the default storage class should be `standard`).
+      I write about some gotchas around static provisioning in PV/PVCs
     </div>
     <div class="read-more">
       <a href="/post/kubernetes/gotchas-for-static-provisioning-pv/" class="read-more-link">Read more...</a>
@@ -182,10 +196,7 @@ Notes:
   
   <div class="post-content">
     <div class="post-summary">
-      Problem How do you fetch metrics for a specific time period from SumoLogic programmatically in your go code using SumoLogic-Labs/sumologic-go-sdk?
-Solution If you are in a hurry, the code sits here. The SDK sits here.
-1. Find the correct Sumo Logic API endpoint If the Sumo Logic you are using is in us1 region, your Sumo Logic API endpoint is: https://api.sumologic.com/api
-If it is not in us1 region your Sumo Logic API endpoint would be: https://api.
+      How do you fetch metrics with SumoLogic-Labs/sumologic-go-sdk in a specific time range?
     </div>
     <div class="read-more">
       <a href="/post/kubernetes/how-to-use-sumologic-golang-sdk/" class="read-more-link">Read more...</a>
@@ -206,33 +217,10 @@ If it is not in us1 region your Sumo Logic API endpoint would be: https://api.
   
   <div class="post-content">
     <div class="post-summary">
-      This port is based on my slack thread in Keptn community here. I am writing it here so that it gets public visibility.
-PSA: Using Telepresence V2 with remote Keptn cluster does not work when writing an integration. Problem/Context How do you do local development for a Keptn Integration if your laptop/PC cannot handle running a Keptn cluster locally with an IDE like VSCode and a web browser? I recently wrote a blogpost on it here.
+      How do you do local development for a Keptn Integration if your laptop/PC cannot handle running a Keptn cluster locally with an IDE like VSCode and a web browser?
     </div>
     <div class="read-more">
       <a href="/post/kubernetes/keptn/telepresence-issue/" class="read-more-link">Read more...</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/kubernetes/keptn/how-to-become-a-keptn-contributor/">How to become a Keptn contributor</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2022-04-22 </span>
-      
-        <span class="more-meta"> 1457 words </span>
-        <span class="more-meta"> 7 mins read </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      Introduction You are somewhat familiar with Kubernetes and you came across Keptn. You want to contribute but you are someone who falls into one of the following categories:
- You haven&rsquo;t contributed to an open source project before The idea of going from zero to contributing to a big project like Keptn sounds overwhelming to you You would like someone who has done it tell you what exactly you need to do to get your first PR in You are a fan of TODO guides and would like a reference for making your own TODO guide for contributing to Keptn  Or something else that I might have missed.
-    </div>
-    <div class="read-more">
-      <a href="/post/kubernetes/keptn/how-to-become-a-keptn-contributor/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>

@@ -13,10 +13,7 @@
       <pubDate>Fri, 17 Jun 2022 12:21:00 +0530</pubDate>
       
       <guid>/post/kubernetes/how-to-use-sumologic-golang-sdk/</guid>
-      <description>Problem How do you fetch metrics for a specific time period from SumoLogic programmatically in your go code using SumoLogic-Labs/sumologic-go-sdk?
-Solution If you are in a hurry, the code sits here. The SDK sits here.
-1. Find the correct Sumo Logic API endpoint If the Sumo Logic you are using is in us1 region, your Sumo Logic API endpoint is: https://api.sumologic.com/api
-If it is not in us1 region your Sumo Logic API endpoint would be: https://api.</description>
+      <description>How do you fetch metrics with SumoLogic-Labs/sumologic-go-sdk in a specific time range?</description>
     </item>
     
   </channel>
