@@ -2,218 +2,239 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>/post/kubernetes/keptn/how-to-fix-mongodb-permission-denied-issue-in-keptn/</loc>
-    <lastmod>2022-09-09T11:51:00+05:30</lastmod>
+    <loc>/tags/cncf/</loc>
+    <lastmod>2022-10-07T11:48:11+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/</loc>
-    <lastmod>2022-09-09T11:51:00+05:30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/keptn/</loc>
-    <lastmod>2022-09-09T11:51:00+05:30</lastmod>
+    <lastmod>2022-10-07T11:48:11+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/tags/kubernetes/</loc>
-    <lastmod>2022-09-09T11:51:00+05:30</lastmod>
+    <lastmod>2022-10-07T11:48:11+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/post/kubernetes/openfeature/notes-to-supplant-understanding-of-openfeature/</loc>
+    <lastmod>2022-10-07T11:48:11+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/openfeature/</loc>
+    <lastmod>2022-10-07T11:48:11+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2022-09-09T11:51:00+05:30</lastmod>
+    <lastmod>2022-10-07T11:48:11+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/tags/</loc>
-    <lastmod>2022-09-09T11:51:00+05:30</lastmod>
+    <lastmod>2022-10-07T11:48:11+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/post/kubernetes/keptn/how-to-fix-mongodb-permission-denied-issue-in-keptn/</loc>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/keptn/</loc>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/tags/go/</loc>
-    <lastmod>2022-07-29T11:28:05+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/post/go/fetch-an-html-element-by-class-or-id-in-go/</loc>
-    <lastmod>2022-07-29T11:28:05+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/tags/html/</loc>
-    <lastmod>2022-07-29T11:28:05+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/tags/pv/</loc>
-    <lastmod>2022-06-24T11:27:53+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/tags/pvcs/</loc>
-    <lastmod>2022-06-24T11:27:53+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/post/kubernetes/gotchas-for-static-provisioning-pv/</loc>
-    <lastmod>2022-06-24T11:27:53+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/post/kubernetes/how-to-use-sumologic-golang-sdk/</loc>
-    <lastmod>2022-06-17T12:25:02+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/tags/sumologic/</loc>
-    <lastmod>2022-06-17T12:25:02+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/post/kubernetes/keptn/telepresence-issue/</loc>
-    <lastmod>2022-05-27T11:35:17+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/post/kubernetes/keptn/how-to-become-a-keptn-contributor/</loc>
-    <lastmod>2022-05-27T11:16:57+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/post/kubernetes/keptn/dev-setup2/</loc>
-    <lastmod>2022-04-01T10:57:50+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/post/kubernetes/keptn/dev-setup/</loc>
-    <lastmod>2022-04-01T10:57:50+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/tags/japanese/</loc>
-    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/tags/song-translations/</loc>
-    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/post/translations/masa-takagi.md/hitori-bocchi-no-heya/</loc>
-    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/post/translations/yuumin.md/sukoshi-dake-kataomoi/</loc>
-    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/post/translations/miyoshi-tessei/namida-o-fuite/</loc>
-    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/post/translations/eiichi-ohtaki/long-vacation/10-saraba-siberian-tetsudou/</loc>
-    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/post/translations/eiichi-ohtaki/long-vacation/9-fun-x4/</loc>
-    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/post/translations/eiichi-ohtaki/long-vacation/8-koi-suru-karen/</loc>
-    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/post/translations/eiichi-ohtaki/long-vacation/7-speech-balloon/</loc>
-    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/post/translations/eiichi-ohtaki/long-vacation/6-ame-no-wednesday/</loc>
-    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/post/translations/eiichi-ohtaki/long-vacation/5.waga-kokoro-pinball/</loc>
-    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/post/translations/eiichi-ohtaki/long-vacation/3-canary-islands/</loc>
-    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/post/translations/eiichi-ohtaki/2-velvet-motel/</loc>
-    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -227,28 +248,34 @@
   
   <url>
     <loc>/post/translations/teresa-teng/toki-no-nagare/</loc>
-    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/post/translations/takuro-yoshida/kekkon-shiyo-yo/</loc>
-    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/post/translations/taeko-ohnuki/tokai/</loc>
-    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/post/translations/ichiro-araki/anata-inai-yoru/</loc>
-    <lastmod>2021-11-19T20:01:10+05:30</lastmod>
+    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/post/misc/how-to-find-project-id-and-issue-type-in-jira-without-elevated-any-special-permissions/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>

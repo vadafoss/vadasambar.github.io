@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>「Velvet Motel」 大滝詠一 (1981) - In Search of Lost Time</title>
+  <title>Notes to supplant understanding OpenFeature - In Search of Lost Time</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="vadasambar" /><meta name="description" content="&amp;lsquo;Velvet Motel&amp;rsquo; is a song by Eiichi Ohtaki from his 1981 album A Long Vacation" /><meta name="keywords" content="Hugo, theme, even" />
+<meta name="author" content="vadasambar" /><meta name="description" content="I share some notes I took while going through the docs of OpenFeature" /><meta name="keywords" content="Hugo, theme, even" />
 
 
 
@@ -26,7 +26,7 @@
 <meta name="generator" content="Hugo 0.92.0 with theme even" />
 
 
-<link rel="canonical" href="/post/translations/eiichi-ohtaki/2-velvet-motel/" />
+<link rel="canonical" href="/post/kubernetes/openfeature/notes-to-supplant-understanding-of-openfeature/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -39,20 +39,20 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
-<meta property="og:title" content="「Velvet Motel」 大滝詠一 (1981)" />
-<meta property="og:description" content="&lsquo;Velvet Motel&rsquo; is a song by Eiichi Ohtaki from his 1981 album A Long Vacation" />
+<meta property="og:title" content="Notes to supplant understanding OpenFeature" />
+<meta property="og:description" content="I share some notes I took while going through the docs of OpenFeature" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/post/translations/eiichi-ohtaki/2-velvet-motel/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2020-09-18T10:30:00+05:30" />
-<meta property="article:modified_time" content="2022-09-09T12:00:35+05:30" />
+<meta property="og:url" content="/post/kubernetes/openfeature/notes-to-supplant-understanding-of-openfeature/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-10-07T11:27:00+05:30" />
+<meta property="article:modified_time" content="2022-10-07T11:48:11+05:30" />
 
-<meta itemprop="name" content="「Velvet Motel」 大滝詠一 (1981)">
-<meta itemprop="description" content="&lsquo;Velvet Motel&rsquo; is a song by Eiichi Ohtaki from his 1981 album A Long Vacation"><meta itemprop="datePublished" content="2020-09-18T10:30:00+05:30" />
-<meta itemprop="dateModified" content="2022-09-09T12:00:35+05:30" />
-<meta itemprop="wordCount" content="451">
-<meta itemprop="keywords" content="japanese,song-translations," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="「Velvet Motel」 大滝詠一 (1981)"/>
-<meta name="twitter:description" content="&lsquo;Velvet Motel&rsquo; is a song by Eiichi Ohtaki from his 1981 album A Long Vacation"/>
+<meta itemprop="name" content="Notes to supplant understanding OpenFeature">
+<meta itemprop="description" content="I share some notes I took while going through the docs of OpenFeature"><meta itemprop="datePublished" content="2022-10-07T11:27:00+05:30" />
+<meta itemprop="dateModified" content="2022-10-07T11:48:11+05:30" />
+<meta itemprop="wordCount" content="229">
+<meta itemprop="keywords" content="kubernetes,openfeature,cncf," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Notes to supplant understanding OpenFeature"/>
+<meta name="twitter:description" content="I share some notes I took while going through the docs of OpenFeature"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -125,13 +125,13 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">「Velvet Motel」 大滝詠一 (1981)</h1>
+      <h1 class="post-title">Notes to supplant understanding OpenFeature</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 2020-09-18 </span>
+        <span class="post-time"> 2022-10-07 </span>
         
-          <span class="more-meta"> 451 words </span>
-          <span class="more-meta"> 1 min read </span>
+          <span class="more-meta"> 229 words </span>
+          <span class="more-meta"> 2 mins read </span>
         
       </div>
     </header>
@@ -139,55 +139,43 @@
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">Contents</h2>
   <div class="post-toc-content always-active">
-    <nav id="TableOfContents"></nav>
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#problem">Problem</a></li>
+        <li><a href="#options">Options</a></li>
+        <li><a href="#references">References</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
   </div>
 </div>
     <div class="post-content">
-      <p><em>Velvet Motel</em> is a song by <a href="https://en.wikipedia.org/wiki/Eiichi_Ohtaki">Eiichi Ohtaki</a> from his 1981 album <a href="https://en.wikipedia.org/wiki/A_Long_Vacation">A Long Vacation</a>. The song is at No.2 on Side A of the album.</p>
-<p>Note: <em>A Long Vacation</em> is one of my favorite Japanese Albums. I wanted to translate this for a long time but never really got around it until mid of last month when I finally decided to buckle up and start translating it right from the first song. While doing that, I came across several song translations posted as comments by a user called <a href="https://www.youtube.com/channel/UCmTlLGbj44OS8Xp67KsSCaA">JustYumeChan</a> on many of the songs. I have just copied the song translation they posted as a comment on <a href="https://www.youtube.com/watch?v=lmrKgWdtxDA">this</a> without any change. I just wanted to link the comment but since you can&rsquo;t link to a Youtube comment, I had to copy the translation and post it here.</p>
-<p>Green Light 仄かに<br>
-雨に光るアスファルト<br>
-Tail Lamp 数える<br>
-お前の無表情</p>
-<p>空っぽな瞳をしてる<br>
-俺たちが悲しい<br>
-壁に傾いてる<br>
-風景画ひとつ</p>
-<p>Lay down お前を 口説く気さえ忘れて<br>
-Lonely night Lonely night<br>
-一度は愛しあえた<br>
-ふたりが石のように黙る<br>
-Lying 嘘でも いいから微笑んで…</p>
-<p>Velvet Motel の<br>
-中庭から脱け出して<br>
-Blue Pool 小雨に<br>
-打たれて泳いだ</p>
-<p>空っぽな瞳をしてる<br>
-俺たちが悲しい<br>
-まるで人のいない<br>
-風景画みたい</p>
-<p>Lay down 今夜は ソファーで寝てあげるよ<br>
-Lonely night Lonely night<br>
-Lonely night Lonely night<br>
-Lonely night</p>
-<p><strong>Translation</strong></p>
-<p>Wet asphalt glitters in faint green light<br>
-You are counting tail lamps, your face is blank<br>
-Our eyes are empty, we feel sadness<br>
-A single landscape painting is leaned against the wall</p>
-<p>I lay down, I forget about even wanting to make a pass at you<br>
-Lonely night, lonely night</p>
-<p>We who once loved each other are now silent as stones<br>
-Lying, I smile because lies are also fine&hellip;</p>
-<p>I passed through the courtyard of velvet motel<br>
-And then swam in the blue pool, being hit by light rain</p>
-<p>Our eyes are empty, we feel sadness<br>
-It&rsquo;s like a painting of a landscape without people</p>
-<p>This night I&rsquo;ll sleep on the sofa<br>
-Lonely night, lonely night<br>
-Lonely night, lonely night<br>
-Lonely night</p>
-<p>Source: from <a href="https://www.youtube.com/watch?v=lmrKgWdtxDA">this</a> video by <a href="https://www.youtube.com/channel/UCmTlLGbj44OS8Xp67KsSCaA">JustYumeChan</a></p>
+      <h2 id="problem">Problem</h2>
+<ol>
+<li>How do you change and set feature flags dynamically?</li>
+</ol>
+<h2 id="options">Options</h2>
+<ol>
+<li>Store all the flag values in database fronted by a server with a REST API. Create a common client that everyone can use. Whenever a feature flag needs to be changed, the underlying data that REST API points to can be changed.</li>
+</ol>
+<p>[(z) application] &ndash;&gt; [(a) Client] &mdash;&gt; [(b) Server/REST API] &mdash;&gt; [(c) Database]</p>
+<p>(a) can be client in any language (an option to choose which language would be nice)
+(b) can be a REST API server (an option to choose how this is implemented would be nice)
+(c) can be any kind of database (an option to choose the database backend would be nice)</p>
+<p>It&rsquo;d be nice to have hooks to do something before and after the flag is evaluated.</p>
+<p>(a) can be further divided into:
+(i). Part which is specific to implementation of (b)
+(ii). Part which is independent of (b)
+(i), (b) and (c) together constitute a provider</p>
+<p>The interface between (z) and (ii) is the evaluation API. Evaluation context is the additional global data you can put in for every call between (z) and (ii). You can set it when you initialize (a). Hooks is the mechanism for tweaking this evaluation context before the evaluation (i.e., (z) calls (a)) happens among other things. e.g., you can perform extra validation using hooks.</p>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://docs.openfeature.dev/docs/reference/intro/">https://docs.openfeature.dev/docs/reference/intro/</a></li>
+<li><a href="https://docs.openfeature.dev/docs/category/concepts">https://docs.openfeature.dev/docs/category/concepts</a></li>
+</ul>
 
     </div>
 
@@ -199,8 +187,8 @@ Lonely night</p>
   <p class="copyright-item">
     <span class="item-title">LastMod</span>
     <span class="item-content">
-        2022-09-09
-        <a href="https://github.com/vadafoss/vadasambar.github.io/commit/d8fb8368873f739bfe8a7b70e854dba650171e3c" title="add new blogpost &#39;How to fix mongodb permission...&#39; - replace `description` -&gt; `summary` - because I want to show the text in `summary` as blogpost summary">(d8fb836)</a>
+        2022-10-07
+        <a href="https://github.com/vadafoss/vadasambar.github.io/commit/76c4882c03b5df9d5b54d0326b75a9b3dfe5de7f" title="add blogpost &#34;Notes to supplant understanding OpenFeature&#34;">(76c4882)</a>
     </span>
   </p>
   
@@ -211,17 +199,14 @@ Lonely night</p>
 </div>
 <footer class="post-footer">
       <div class="post-tags">
-          <a href="/tags/japanese/">japanese</a>
-          <a href="/tags/song-translations/">song-translations</a>
+          <a href="/tags/kubernetes/">kubernetes</a>
+          <a href="/tags/openfeature/">openfeature</a>
+          <a href="/tags/cncf/">cncf</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/post/translations/eiichi-ohtaki/long-vacation/3-canary-islands/">
-            <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">「カナリア諸島にて」 大滝詠一 (1981)</span>
-            <span class="prev-text nav-mobile">Prev</span>
-          </a>
-        <a class="next" href="/post/translations/teresa-teng/toki-no-nagare/">
-            <span class="next-text nav-default">「時の流れに身を任せ」 テレサテン (1986)</span>
+        
+        <a class="next" href="/post/kubernetes/keptn/how-to-fix-mongodb-permission-denied-issue-in-keptn/">
+            <span class="next-text nav-default">How to fix mongodb permission `Permission denied` issue in Keptn</span>
             <span class="next-text nav-mobile">Next</span>
             <i class="iconfont icon-right"></i>
           </a>

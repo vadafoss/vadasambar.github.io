@@ -6,7 +6,16 @@
     <description>Recent content on In Search of Lost Time</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 09 Sep 2022 11:51:00 +0530</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 07 Oct 2022 11:27:00 +0530</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Notes to supplant understanding OpenFeature</title>
+      <link>/post/kubernetes/openfeature/notes-to-supplant-understanding-of-openfeature/</link>
+      <pubDate>Fri, 07 Oct 2022 11:27:00 +0530</pubDate>
+      
+      <guid>/post/kubernetes/openfeature/notes-to-supplant-understanding-of-openfeature/</guid>
+      <description>I share some notes I took while going through the docs of OpenFeature</description>
+    </item>
+    
     <item>
       <title>How to fix mongodb permission `Permission denied` issue in Keptn</title>
       <link>/post/kubernetes/keptn/how-to-fix-mongodb-permission-denied-issue-in-keptn/</link>
@@ -221,6 +230,15 @@
       
       <guid>/post/translations/ichiro-araki/anata-inai-yoru/</guid>
       <description>Title of the song translates to &amp;lsquo;Evening silence of your absence&amp;rsquo; by Ichiro Araki from his 1974 album 蹉跌 (Setback)</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/post/misc/how-to-find-project-id-and-issue-type-in-jira-without-elevated-any-special-permissions/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/post/misc/how-to-find-project-id-and-issue-type-in-jira-without-elevated-any-special-permissions/</guid>
+      <description></description>
     </item>
     
   </channel>
