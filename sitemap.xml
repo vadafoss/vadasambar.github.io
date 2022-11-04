@@ -274,10 +274,4 @@
     <priority>0.5</priority>
   </url>
   
-  <url>
-    <loc>/post/misc/how-to-find-project-id-and-issue-type-in-jira-without-elevated-any-special-permissions/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
 </urlset>
