@@ -6,7 +6,18 @@
     <description>Recent content on In Search of Lost Time</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 07 Oct 2022 11:27:00 +0530</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 04 Nov 2022 11:35:00 +0530</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to find Project ID and Issue Type ID in Jira without any special permissions</title>
+      <link>/post/misc/how-to-find-project-id-and-issue-type-id-in-jira-without-elevated-any-special-permissions/</link>
+      <pubDate>Fri, 04 Nov 2022 11:35:00 +0530</pubDate>
+      
+      <guid>/post/misc/how-to-find-project-id-and-issue-type-id-in-jira-without-elevated-any-special-permissions/</guid>
+      <description>Problem How do you find Project ID and Issue Type ID in Jira when you don&amp;rsquo;t have any special permissions?
+Solution Note: This works for Jira Cloud. I haven&amp;rsquo;t tested it with Jira Server.
+1. Go to https://&amp;lt;your-jira-name&amp;gt;.atlassian.net/secure/CreateIssue.jspa (example: https://banakarsuraj.atlassian.net/secure/CreateIssue.jspa) You should see a screen like this: 2. Right click and select Inspect 3. Find the Ids 3.1. For Project Id Search for #project-options HTML Id in the Inspect Element tab Double click on Recent projects and you should see it expand like this: Copy the highlighted part between the white spaces.</description>
+    </item>
+    
     <item>
       <title>Notes to supplant understanding OpenFeature</title>
       <link>/post/kubernetes/openfeature/notes-to-supplant-understanding-of-openfeature/</link>

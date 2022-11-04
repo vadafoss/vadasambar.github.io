@@ -2,14 +2,49 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>/tags/cncf/</loc>
-    <lastmod>2022-10-07T11:56:33+05:30</lastmod>
+    <loc>/post/misc/how-to-find-project-id-and-issue-type-id-in-jira-without-elevated-any-special-permissions/</loc>
+    <lastmod>2022-11-04T11:34:02+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/</loc>
+    <lastmod>2022-11-04T11:34:02+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/jira/</loc>
+    <lastmod>2022-11-04T11:34:02+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/misc/</loc>
+    <lastmod>2022-11-04T11:34:02+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/post/</loc>
+    <lastmod>2022-11-04T11:34:02+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2022-11-04T11:34:02+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/cncf/</loc>
     <lastmod>2022-10-07T11:56:33+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -31,20 +66,6 @@
   
   <url>
     <loc>/tags/openfeature/</loc>
-    <lastmod>2022-10-07T11:56:33+05:30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>/post/</loc>
-    <lastmod>2022-10-07T11:56:33+05:30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
     <lastmod>2022-10-07T11:56:33+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
