@@ -44,12 +44,12 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/post/go/converting-yaml-to-json-without-struct/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2022-11-29T11:52:00+05:30" />
-<meta property="article:modified_time" content="2022-11-29T12:00:37+05:30" />
+<meta property="article:modified_time" content="2022-11-29T12:11:49+05:30" />
 
 <meta itemprop="name" content="How to convert yaml to json using map[string]interface{}">
 <meta itemprop="description" content="&hellip;"><meta itemprop="datePublished" content="2022-11-29T11:52:00+05:30" />
-<meta itemprop="dateModified" content="2022-11-29T12:00:37+05:30" />
-<meta itemprop="wordCount" content="248">
+<meta itemprop="dateModified" content="2022-11-29T12:11:49+05:30" />
+<meta itemprop="wordCount" content="256">
 <meta itemprop="keywords" content="go,yaml,json," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="How to convert yaml to json using map[string]interface{}"/>
 <meta name="twitter:description" content="&hellip;"/>
@@ -130,7 +130,7 @@
       <div class="post-meta">
         <span class="post-time"> 2022-11-29 </span>
         
-          <span class="more-meta"> 248 words </span>
+          <span class="more-meta"> 256 words </span>
           <span class="more-meta"> 2 mins read </span>
         
       </div>
@@ -270,7 +270,7 @@
 </div>
 </div><p>A slightly modified example on Go playground: <a href="https://play.golang.com/p/4iCzr8UmEHT">https://play.golang.com/p/4iCzr8UmEHT</a></p>
 <h2 id="gotchas">Gotchas</h2>
-<p>Make sure you use <code>&quot;gopkg.in/yaml.v3&quot;</code> and not <code>&quot;gopkg.in/yaml.v2&quot;</code> because <code>&quot;gopkg.in/yaml.v2&quot;</code> Unmarshals the sub-maps to <code>map[interface]interface{}</code> instead of <code>map[string]interface{}</code></p>
+<p>Make sure you use <code>&quot;gopkg.in/yaml.v3&quot;</code> and not <code>&quot;gopkg.in/yaml.v2&quot;</code> because <code>&quot;gopkg.in/yaml.v2&quot;</code> Unmarshals the sub-maps to <code>map[interface]interface{}</code> instead of <code>map[string]interface{}</code> and <code>json.Marshal</code> fails because it doesn&rsquo;t understand <code>map[interface]interface{}</code></p>
 
     </div>
 
@@ -283,7 +283,7 @@
     <span class="item-title">LastMod</span>
     <span class="item-content">
         2022-11-29
-        <a href="https://github.com/vadafoss/vadasambar.github.io/commit/364d98158b078921e01e44c026d97ecf7e6cd10b" title="fix title and formatting for `How to convert yaml to json using map[string]interface{}`">(364d981)</a>
+        <a href="https://github.com/vadafoss/vadasambar.github.io/commit/b1f44aea64a32ae52865cbfe95bf44c38a69b485" title="add to the gotcha in `How to convert yaml to json using map[string]interface{}`">(b1f44ae)</a>
     </span>
   </p>
   
