@@ -6,7 +6,16 @@
     <description>Recent content in kubernetes on In Search of Lost Time</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 07 Oct 2022 11:27:00 +0530</lastBuildDate><atom:link href="/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 10 Jan 2023 11:11:00 +0530</lastBuildDate><atom:link href="/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Notes around my failed idea of `Patching Kubernetes nodes with fixes without restarting the nodes`</title>
+      <link>/post/kubernetes/notes-for-executing-script-on-all-nodes/</link>
+      <pubDate>Tue, 10 Jan 2023 11:11:00 +0530</pubDate>
+      
+      <guid>/post/kubernetes/notes-for-executing-script-on-all-nodes/</guid>
+      <description>Codename &lt;code&gt;suraj2&lt;/code&gt;</description>
+    </item>
+    
     <item>
       <title>Notes to supplement understanding OpenFeature</title>
       <link>/post/kubernetes/openfeature/notes-to-supplement-understanding-of-openfeature/</link>
@@ -77,15 +86,6 @@
       
       <guid>/post/kubernetes/keptn/dev-setup/</guid>
       <description>Remote K8s cluster based dev setup for developing on Keptn</description>
-    </item>
-    
-    <item>
-      <title>Notes around my failed idea of `Patching Kubernetes nodes with fixes without restarting the nodes`</title>
-      <link>/post/kubernetes/notes-for-executing-script-on-all-nodes/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/post/kubernetes/notes-for-executing-script-on-all-nodes/</guid>
-      <description>Codename &lt;code&gt;suraj2&lt;/code&gt;</description>
     </item>
     
   </channel>
