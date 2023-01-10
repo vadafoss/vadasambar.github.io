@@ -10,7 +10,7 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2023-01-10T11:15:32+05:30</lastmod>
+    <lastmod>2023-01-10T11:24:21+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -31,14 +31,14 @@
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2023-01-10T11:15:32+05:30</lastmod>
+    <lastmod>2023-01-10T11:24:21+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/tags/</loc>
-    <lastmod>2023-01-10T11:15:32+05:30</lastmod>
+    <lastmod>2023-01-10T11:24:21+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -52,7 +52,7 @@
   
   <url>
     <loc>/tags/kubernetes/</loc>
-    <lastmod>2023-01-10T11:15:32+05:30</lastmod>
+    <lastmod>2023-01-10T11:24:21+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -296,8 +296,8 @@
   </url>
   
   <url>
-    <loc>/post/kubernetes/notes-for-executing-script-on-all-nodes/notes-for-executing-script-on-all-nodes/</loc>
-    <lastmod>2023-01-10T11:15:32+05:30</lastmod>
+    <loc>/post/kubernetes/notes-for-executing-script-on-all-nodes/</loc>
+    <lastmod>2023-01-10T11:24:21+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
