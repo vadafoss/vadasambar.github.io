@@ -6,16 +6,7 @@
     <description>Recent content on In Search of Lost Time</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 29 Nov 2022 11:52:00 +0530</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>How to convert yaml to json using map[string]interface{}</title>
-      <link>/post/go/converting-yaml-to-json-without-struct/</link>
-      <pubDate>Tue, 29 Nov 2022 11:52:00 +0530</pubDate>
-      
-      <guid>/post/go/converting-yaml-to-json-without-struct/</guid>
-      <description>&amp;hellip;</description>
-    </item>
-    
+    <lastBuildDate>Fri, 04 Nov 2022 11:35:00 +0530</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>How to find Project ID and Issue Type ID in Jira without any special permissions</title>
       <link>/post/misc/how-to-find-project-id-and-issue-type-id-in-jira-without-elevated-any-special-permissions/</link>
@@ -250,6 +241,15 @@ Solution Note: This works for Jira Cloud. I haven&amp;rsquo;t tested it with Jir
       
       <guid>/post/translations/ichiro-araki/anata-inai-yoru/</guid>
       <description>Title of the song translates to &amp;lsquo;Evening silence of your absence&amp;rsquo; by Ichiro Araki from his 1974 album 蹉跌 (Setback)</description>
+    </item>
+    
+    <item>
+      <title>Notes around my failed idea of `Patching Kubernetes nodes with fixes without restarting the nodes`</title>
+      <link>/post/kubernetes/notes-for-executing-script-on-all-nodes/notes-for-executing-script-on-all-nodes/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/post/kubernetes/notes-for-executing-script-on-all-nodes/notes-for-executing-script-on-all-nodes/</guid>
+      <description>Codename &lt;code&gt;suraj2&lt;/code&gt;</description>
     </item>
     
   </channel>

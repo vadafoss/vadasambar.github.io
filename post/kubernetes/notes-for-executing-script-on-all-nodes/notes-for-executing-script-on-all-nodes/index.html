@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Notes around my failed idea of `Patching Kubernetes nodes with fixes without restarting the nodes` - In Search of Lost Time</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="vadasambar" /><meta name="description" content="Codename suraj2" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
+
+
+<link rel="canonical" href="/post/kubernetes/notes-for-executing-script-on-all-nodes/notes-for-executing-script-on-all-nodes/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b5a744db6de49a86cadafb3b70f555ab443f83c307a483402259e94726b045ff.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Notes around my failed idea of `Patching Kubernetes nodes with fixes without restarting the nodes`" />
+<meta property="og:description" content="Codename suraj2" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/kubernetes/notes-for-executing-script-on-all-nodes/notes-for-executing-script-on-all-nodes/" /><meta property="article:section" content="post" />
+
+<meta property="article:modified_time" content="2023-01-10T11:15:32+05:30" />
+
+<meta itemprop="name" content="Notes around my failed idea of `Patching Kubernetes nodes with fixes without restarting the nodes`">
+<meta itemprop="description" content="Codename suraj2">
+<meta itemprop="dateModified" content="2023-01-10T11:15:32+05:30" />
+<meta itemprop="wordCount" content="1690">
+<meta itemprop="keywords" content="kubernetes," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Notes around my failed idea of `Patching Kubernetes nodes with fixes without restarting the nodes`"/>
+<meta name="twitter:description" content="Codename suraj2"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">In Search of Lost Time</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/about">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">In Search of Lost Time</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Notes around my failed idea of `Patching Kubernetes nodes with fixes without restarting the nodes`</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+          <span class="more-meta"> 1690 words </span>
+          <span class="more-meta"> 8 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#problem">Problem</a></li>
+            <li><a href="#possible-solution-1-can-any-existing-tool-be-used-for-implementing-the-solution">Possible Solution 1: <code>Can any existing tool be used for implementing the solution?</code></a></li>
+            <li><a href="#possible-solution-2-cli-and-webhook">Possible Solution 2: <code>CLI and Webhook</code></a></li>
+            <li><a href="#possible-solution-2-wouldnt-a-controller-be-a-good-replacement-for-the-cli-and-the-webhook">Possible Solution 2: <code>Wouldn't a controller be a good replacement for the CLI and the webhook?</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#conclusion">Conclusion</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>This is an info dump for the failed idea codenamed <code>suraj2</code>.</p>
+<h3 id="problem">Problem</h3>
+<ul>
+<li>When a problem is encountered across nodes in a cluster, usually we need to update the AMI or AWS Launch Template so that new nodes start using the fix. This takes time because you have to wait until new nodes are up i.e., until your old nodes are replaced with new ones which contain the fix (let&rsquo;s call this process <em>node rotation</em>)</li>
+<li>If you don&rsquo;t want to wait until node rotation, one way to get around it is to manually tweak the node (i.e., login to the nodes manually and fix the problem by say upgrading the problematic package, restarting kubelet with a new param etc.,) but
+<ul>
+<li>nodes are ephemeral in Kubernetes which means nodes with your manual changes might go down soon and new ones would come up which won&rsquo;t have that change</li>
+<li>count of nodes might be too large to do it all manually. Not to mention high number of nodes mean higher possibility of some old node going down and a new one coming up</li>
+</ul>
+</li>
+</ul>
+<p>How do you execute a script on all the current running nodes and new nodes which might come up in the future safely without having to wait for node rotation?</p>
+<h3 id="possible-solution-1-can-any-existing-tool-be-used-for-implementing-the-solution">Possible Solution 1: <code>Can any existing tool be used for implementing the solution?</code></h3>
+<ul>
+<li><a href="https://github.com/mohatb/kubectl-exec">https://github.com/mohatb/kubectl-exec</a> supports executing commands on a node using <code>nsenter</code></li>
+<li><a href="https://github.com/kvaps/kubectl-node-shell">https://github.com/kvaps/kubectl-node-shell</a> similar but more stars</li>
+</ul>
+<p>I don&rsquo;t understand how either of them work completely but from what I understood, in both the cases, a pod with elevated privileges hooks onto what seems like host namespaces and executes the relevant commands.</p>
+<p>Reading <a href="https://alexei-led.github.io/post/k8s_node_shell/">https://alexei-led.github.io/post/k8s_node_shell/</a></p>
+<blockquote>
+<p>It is possible to use any Docker image with shell on board as a “host shell” container. There is one limitation, you should be aware of - it’s not possible to join mount namespace of target container (or host).</p>
+</blockquote>
+<blockquote>
+<p>This helper script create a privileged nsenter pod in a host’s process and network namespaces, running nsenter with &ndash;all flag, joining all namespaces and cgroups and running a default shell as a superuser (with su - command).</p>
+</blockquote>
+<blockquote>
+<pre><code>    -a, --all
+       Enter all namespaces of the target process by the default /proc/[pid]/ns/* namespace paths. The default paths to the target process namespaces
+       may be overwritten by namespace specific options (e.g., --all --mount=[path]).
+</code></pre>
+</blockquote>
+<p><a href="https://man7.org/linux/man-pages/man1/nsenter.1.html">https://man7.org/linux/man-pages/man1/nsenter.1.html</a> . I am not sure how <code>--all</code> here equates to the host namespace.</p>
+<blockquote>
+<p>A Linux system starts out with a single namespace of each type, used by all processes. Processes can create additional namespaces and join different namespaces.</p>
+</blockquote>
+<p><a href="https://en.wikipedia.org/wiki/Linux_namespaces">https://en.wikipedia.org/wiki/Linux_namespaces</a></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">suraj@suraj:~/sandbox$ nsenter --all
+nsenter: no target PID specified for --all
+
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">suraj@suraj:~/sandbox$ sudo nsenter --all --target=1
+root@suraj:/# pwd
+/
+root@suraj:/# ls
+bin  boot  cdrom  dev  etc  home  lib  lib32  lib64  libx32  lost+found  media  mnt  opt  proc  root  run  sbin  snap  srv  swapfile  sys  tmp  usr  var
+root@suraj:/# ls home/suraj/
+bin  Desktop  Documents  Downloads  go  Music  Pictures  Public  sandbox  snap  Templates  Videos
+root@suraj:/# 
+
+</code></pre></td></tr></table>
+</div>
+</div><p>Looks like it works but I don&rsquo;t understand exactly how/why.</p>
+<p><code>kubectl node-shell</code> does it <a href="https://github.com/kvaps/kubectl-node-shell/blob/e4e79eefc56be52813e115bf9f17c896d65e6e22/kubectl-node_shell#L10">slightly differently</a> like this</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">suraj@suraj:~/sandbox$ sudo nsenter --target=1 --mount --uts --pid --ipc --net -- bash 
+root@suraj:/# 
+
+</code></pre></td></tr></table>
+</div>
+</div><p><code>kubectl exec</code> <a href="https://github.com/mohatb/kubectl-exec/blob/891aaee60868e79074a59521b49fe8e5a97dc99c/kubectl-exec#L81">does it slightly differently too</a>. It is almost the same as <code>kubectl node-shell</code> but spawns a login shell instead.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">suraj@suraj:~/sandbox$ sudo nsenter --target=1 --mount --uts --pid --ipc --net -- bash 
+root@suraj:/# ls /home/suraj/
+bin  Desktop  Documents  Downloads  go  Music  Pictures  Public  sandbox  snap  Templates  Videos
+root@suraj:/# 
+
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="what-i-dont-understand">What I don&rsquo;t understand</h4>
+<ol>
+<li>Can multiple processes have PID=1 i.e., if there are two processes in different cgroups/namespaces, can both of them have PID set as 1?<br>
+Yes, if the cgroups also uses process namespaces. Check 2 for more info.</li>
+<li>What is the difference between namespaces and cgroups?</li>
+</ol>
+<p>Looking at <a href="https://stackoverflow.com/questions/34820558/difference-between-cgroups-and-namespaces">https://stackoverflow.com/questions/34820558/difference-between-cgroups-and-namespaces</a></p>
+<blockquote>
+<p>While not technically part of the cgroups work, a related feature of the Linux kernel is namespace isolation, where groups of processes are separated such that they cannot &ldquo;see&rdquo; resources in other groups. For example, a PID namespace provides a separate enumeration of <a href="https://en.wikipedia.org/wiki/Process_identifier">process identifiers</a> within each namespace. Also available are mount, user, UTS, network and SysV IPC namespaces.</p>
+<p>The PID namespace provides isolation for the allocation of <a href="https://en.wikipedia.org/wiki/Process_identifier">process identifiers</a> (PIDs), lists of processes and their details. While the new namespace is isolated from other siblings, processes in its &ldquo;parent&rdquo; namespace still see all processes in child namespaces—albeit with different PID numbers.<a href="https://en.wikipedia.org/wiki/Cgroups#cite_note-lwn-pid-26">[26]</a></p>
+</blockquote>
+<p><a href="https://en.wikipedia.org/wiki/Cgroups#Namespace_isolation">https://en.wikipedia.org/wiki/Cgroups#Namespace_isolation</a></p>
+<p><img src="./images/image3.png" alt="image3"></p>
+<p><a href="https://fr.slideshare.net/jpetazzo/anatomy-of-a-container-namespaces-cgroups-some-filesystem-magic-linuxcon">https://fr.slideshare.net/jpetazzo/anatomy-of-a-container-namespaces-cgroups-some-filesystem-magic-linuxcon</a></p>
+<p>It seems like docker/other container runtimes running on K8s use both cgroups and namespaces. Everything in the OS runs under some root namespace(s).<br>
+4. If I do <code>nsenter --target=1</code>, why does it go to host system namespace instead of attaching itself to the current container namespace?
+<code>kubectl node-shell</code> uses <code>hostPID</code>: <code>true</code> <a href="https://github.com/kvaps/kubectl-node-shell/blob/e4e79eefc56be52813e115bf9f17c896d65e6e22/kubectl-node_shell#L107">in the pod</a>. It also uses <code>hostNetwork</code>: <code>true</code> <a href="https://github.com/kvaps/kubectl-node-shell/blob/e4e79eefc56be52813e115bf9f17c896d65e6e22/kubectl-node_shell#L108">in the pod</a></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">suraj@suraj:~/sandbox$ kubectl explain pod.spec.hostPID
+KIND:     Pod
+VERSION:  v1
+
+FIELD:    hostPID &lt;boolean&gt;
+
+DESCRIPTION:
+     Use the host&#39;s pid namespace. Optional: Default to false.
+
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">suraj@suraj:~/sandbox$ kubectl explain pod.spec.hostNetwork
+KIND:     Pod
+VERSION:  v1
+
+FIELD:    hostNetwork &lt;boolean&gt;
+
+DESCRIPTION:
+     Host networking requested for this pod. Use the host&#39;s network namespace.
+     If this option is set, the ports that will be used must be specified.
+     Default to false.
+</code></pre></td></tr></table>
+</div>
+</div><p>This image makes much more sense now:
+<img src="./images/image4.png" alt="image4"></p>
+<ol start="6">
+<li>It seems like I can execute commands with leveraged permissions from the pod on the node and do whatever I want on the node. What is the need for putting things in the AMI then?<br>
+I guess it&rsquo;s stability? Baking things into the AMI mean if I want to do anything in the node, it would be run as a part of AMI build process and I would know if there&rsquo;s any problem with them (using say HashiCorp&rsquo;s <a href="https://www.packer.io/"><code>packer</code></a>). Whereas, in case of executing the same thing on a running node runs a risk of destabilizing the node (in worse cases, making the node unusable).</li>
+<li>Why is <code>--all</code> equivalent to <code>--mount  --uts --pid --ipc --net</code> ?
+All indicates, all types of namespaces. Hence former and latter are one and the same</li>
+</ol>
+<blockquote>
+<p>-a, &ndash;all
+Enter all namespaces of the target process by the default
+/proc/[pid]/ns/* namespace paths. The default paths to the
+target process namespaces may be overwritten by namespace
+specific options (e.g., &ndash;all &ndash;mount=[path]).</p>
+</blockquote>
+<p><a href="https://man7.org/linux/man-pages/man1/nsenter.1.html">https://man7.org/linux/man-pages/man1/nsenter.1.html</a></p>
+<h3 id="possible-solution-2-cli-and-webhook">Possible Solution 2: <code>CLI and Webhook</code></h3>
+<ul>
+<li>Listen to node creation event as a webhook in Kubernetes</li>
+<li>Anything that is specified as a script in a ConfigMap would be executed on the node before it gets created as a resource in Kubernetes</li>
+<li>The solution would allow targeting only specific nodes based on the label selector</li>
+<li>If the script fails, the webhook would support rolling back the change if the user provides a rollback script</li>
+</ul>
+<p><img src="./images/image1.png" alt="image1"></p>
+<p><a href="https://excalidraw.com/#json=XnM_i5_IRZxGCs6aQA40G,qzS-E6BMx_qvFv2wezKWSg">https://excalidraw.com/#json=XnM_i5_IRZxGCs6aQA40G,qzS-E6BMx_qvFv2wezKWSg</a></p>
+<h4 id="cli">CLI</h4>
+<p>We want to execute a particular script on all running nodes. Since this would be a one-time activity, CLI tool can be the preferred choice. This is very similar to how Ansible does things, only except in Kubernetes world.</p>
+<h4 id="webhook">Webhook</h4>
+<p>This is to take care of the case where after we have executed the CLI tool, we might see some new nodes come up. In that case, we would have to execute the script again. Webhook ensures we don&rsquo;t need to do that.</p>
+<h4 id="thoughts">Thoughts</h4>
+<ul>
+<li>This solution is very similar to Ansible except it is Kubernetes aware</li>
+<li>It also makes node vulnerable to attacks since the user can write anything in their script.</li>
+<li>Tweaking something in the ConfigMap on the cluster could be potentially easier than tweaking the AMI build which would need more stringent approval process (and PR review) or tweaking the AWS Launch Template (you&rsquo;d need permissions to tweak the launch template. At best there&rsquo;s only one launch template for all the nodes but at worst there are multiple. Also, you&rsquo;d have to figure the name of the launch template)</li>
+<li>This solution, if it works well, allows administrators to provide quick fixes to the node until a new AMI is rolled out. It reduces downtime and protects the SLA.</li>
+</ul>
+<h4 id="what-happens-if-the-script-fails">What happens if the script fails?</h4>
+<ul>
+<li>The webhook will try to execute a rollback script</li>
+<li>If both the scripts fail, the webhook will create</li>
+</ul>
+<h3 id="possible-solution-2-wouldnt-a-controller-be-a-good-replacement-for-the-cli-and-the-webhook">Possible Solution 2: <code>Wouldn't a controller be a good replacement for the CLI and the webhook?</code></h3>
+<p>The controller can login to the current running nodes, execute the script. If the script succeeds, all good. If it doesn&rsquo;t, it stops executing the script, cordons and drains the node. If a new node comes up, the controller can do the same there as well. It doesn&rsquo;t need to care about if the pods are running on the node or node. It just does its job and exits.</p>
+<p>The controller can support a <code>RolloutScript</code> and <code>RollbackScript</code> resource (to undo the change in case <code>RolloutScript</code> does something bad). If in case the <code>RolloutScript</code> errors, the controller will stop, execute the <code>RollbackScript</code> and won&rsquo;t execute the script on any other nodes. By default <code>RolloutScript</code> would execute on only one node. After the user confirms everything is good, they have to edit the <code>RolloutScript</code> resource and set <code>promoteTo: all</code> to execute the script on all the nodes or <code>promoteToLabelSelector: &lt;node-labels-to-promote-to-here&gt;</code>.</p>
+<p>Something like this:</p>
+<p><img src="./images/image2.png" alt="image2"></p>
+<p><a href="https://excalidraw.com/#json=tFEKt30nPr_5gbuYPT0RD,q8ZzLcm3hcp0eyTxuL0p9Q">https://excalidraw.com/#json=tFEKt30nPr_5gbuYPT0RD,q8ZzLcm3hcp0eyTxuL0p9Q</a></p>
+<h2 id="conclusion">Conclusion</h2>
+<p>I think whatever I want to do with Webhook, CLI or Controller can be done with a <code>DaemonSet</code> which runs pods in privileged mode like <code>kubectl node-shell</code> plugin.</p>
+<p>DaemonSet can be run only on selected nodes:</p>
+<blockquote>
+<p>If you specify a .spec.template.spec.nodeSelector, then the DaemonSet controller will create Pods on nodes which match that <a href="https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/">node selector</a>. Likewise if you specify a .spec.template.spec.affinity, then DaemonSet controller will create Pods on nodes which match that <a href="https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/">node affinity</a>. If you do not specify either, then the DaemonSet controller will create Pods on all nodes.</p>
+</blockquote>
+<p><a href="https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/#running-pods-on-select-nodes">https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/#running-pods-on-select-nodes</a></p>
+<p>The real value my controller would add is looking at the DaemonSet, see if the pod executed the script successfully and if it did, reflect that status in the CR, expand the targets for the DaemonSet. If it didn&rsquo;t, based on <code>onFailure</code> policy, re-run the DaemonSet with exponential backoff or give up.</p>
+<p>I don&rsquo;t see creating such a controller/CLI/webhook as valuable enough. Hence, I am giving up on this idea.</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">vadasambar</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2023-01-10
+        <a href="https://github.com/vadafoss/vadasambar.github.io/commit/56c5adcd03ecde75028570fbabcfdbc4e88ece10" title="use backticks instead of single quotes in the title - for Notes around my failed idea of `Patching Kubernetes nodes with fixes without restarting the nodes`">(56c5adc)</a>
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content">© Suraj Banakar 2022 <a rel='license' href='http://creativecommons.org/licenses/by-nc-sa/4.0/'' target='_blank'>CC BY-NC-SA 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/kubernetes/">kubernetes</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/translations/ichiro-araki/anata-inai-yoru/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">「あなたのいない夜」 荒木一郎 (1974)</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:surajrbanakar@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/6874596/vadasambar" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/_vadasambar" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.linkedin.com/in/suraj-banakar-97b4b4141/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/vadasambar" class="iconfont icon-github" title="github"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2020 - 
+    2023<span class="heart"><i class="iconfont icon-heart"></i></span><span>vadasambar</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-178170176-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>
