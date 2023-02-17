@@ -2,35 +2,84 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>/tags/ca/</loc>
+    <lastmod>2023-02-17T23:25:22+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/client-go/</loc>
+    <lastmod>2023-02-17T23:25:22+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/cluster-autoscaler/</loc>
+    <lastmod>2023-02-17T23:25:22+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/go/</loc>
+    <lastmod>2023-02-17T23:25:22+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>/</loc>
-    <lastmod>2023-01-10T11:26:14+05:30</lastmod>
+    <lastmod>2023-02-17T23:25:22+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/tags/kubernetes/</loc>
-    <lastmod>2023-01-10T11:26:14+05:30</lastmod>
+    <lastmod>2023-02-17T23:25:22+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>/post/kubernetes/notes-for-executing-script-on-all-nodes/</loc>
-    <lastmod>2023-01-10T11:26:14+05:30</lastmod>
+    <loc>/tags/listers/</loc>
+    <lastmod>2023-02-17T23:25:22+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2023-01-10T11:26:14+05:30</lastmod>
+    <lastmod>2023-02-17T23:25:22+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/reflectors/</loc>
+    <lastmod>2023-02-17T23:25:22+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>/tags/</loc>
+    <lastmod>2023-02-17T23:25:22+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/post/kubernetes/understanding-listers-and-reflectors-in-client-go/</loc>
+    <lastmod>2023-02-17T23:25:22+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/post/kubernetes/notes-for-executing-script-on-all-nodes/</loc>
     <lastmod>2023-01-10T11:26:14+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -87,13 +136,6 @@
   
   <url>
     <loc>/tags/keptn/</loc>
-    <lastmod>2022-09-09T12:00:35+05:30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/go/</loc>
     <lastmod>2022-09-09T12:00:35+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

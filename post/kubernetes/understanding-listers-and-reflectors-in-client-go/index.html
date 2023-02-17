@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Understanding client-go listers and reflectors in the context of cluster-autoscaler - In Search of Lost Time</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="vadasambar" /><meta name="description" content="What are listers and reflectors in client-go? I am going to talk about the above problem in the context of cluster-autoscaler." /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
+
+
+<link rel="canonical" href="/post/kubernetes/understanding-listers-and-reflectors-in-client-go/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b5a744db6de49a86cadafb3b70f555ab443f83c307a483402259e94726b045ff.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Understanding client-go listers and reflectors in the context of cluster-autoscaler" />
+<meta property="og:description" content="What are listers and reflectors in client-go? I am going to talk about the above problem in the context of cluster-autoscaler." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/kubernetes/understanding-listers-and-reflectors-in-client-go/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2023-02-17T23:22:00+05:30" />
+<meta property="article:modified_time" content="2023-02-17T23:25:22+05:30" />
+
+<meta itemprop="name" content="Understanding client-go listers and reflectors in the context of cluster-autoscaler">
+<meta itemprop="description" content="What are listers and reflectors in client-go? I am going to talk about the above problem in the context of cluster-autoscaler."><meta itemprop="datePublished" content="2023-02-17T23:22:00+05:30" />
+<meta itemprop="dateModified" content="2023-02-17T23:25:22+05:30" />
+<meta itemprop="wordCount" content="3062">
+<meta itemprop="keywords" content="kubernetes,client-go,go,listers,reflectors,cluster-autoscaler,ca," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Understanding client-go listers and reflectors in the context of cluster-autoscaler"/>
+<meta name="twitter:description" content="What are listers and reflectors in client-go? I am going to talk about the above problem in the context of cluster-autoscaler."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">In Search of Lost Time</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/about">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">In Search of Lost Time</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Understanding client-go listers and reflectors in the context of cluster-autoscaler</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2023-02-17 </span>
+        
+          <span class="more-meta"> 3062 words </span>
+          <span class="more-meta"> 15 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#problem">Problem</a></li>
+        <li><a href="#pre-requisites">Pre-requisites</a></li>
+        <li><a href="#background">Background</a></li>
+        <li><a href="#what-really-is-a-lister-anyway">What really is a Lister anyway?</a></li>
+        <li><a href="#to-recap">To recap,</a></li>
+        <li><a href="#conclusion">Conclusion</a></li>
+        <li><a href="#feedback">Feedback</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="problem">Problem</h2>
+<p>What are listers and reflectors in client-go?</p>
+<p>I am going to talk about the above problem in the context of cluster-autoscaler.</p>
+<h2 id="pre-requisites">Pre-requisites</h2>
+<p>This blogpost assumes you understand and have used:</p>
+<ol>
+<li>client-go (what should I do if I don&rsquo;t? Check <a href="https://kubernetes.io/docs/reference/using-api/client-libraries/">the official docs</a>)</li>
+<li>Kubernetes (what should I do if I don&rsquo;t? Check <a href="https://kubernetes.io/docs/home/">the official docs</a>)</li>
+<li>cluster-autoscaler (what should I do if I don&rsquo;t? Check <a href="https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md#table-of-contents">the official docs</a>)</li>
+</ol>
+<h2 id="background">Background</h2>
+<p>Let&rsquo;s try to understand them in the context of cluster-autoscaler (<strong>CA for short</strong>). Think of CA as a <a href="https://github.com/kubernetes/autoscaler/blob/2f1c895b2a15a34729611e0a37e112357bb7c863/cluster-autoscaler/main.go#L460-L479">loop that runs a function every 10 seconds</a>. This function queries <a href="https://github.com/kubernetes/autoscaler/blob/7e6762535b0e46f24c5a4a3c5495dda772604920/cluster-autoscaler/core/static_autoscaler.go#L434">pods</a>, <a href="https://github.com/kubernetes/autoscaler/blob/7e6762535b0e46f24c5a4a3c5495dda772604920/cluster-autoscaler/core/static_autoscaler.go#L861">nodes</a> and many other resources (<a href="https://github.com/kubernetes/autoscaler/blob/4373c467fe6f0a3b1a8beb9bc79e0ae1ee560445/cluster-autoscaler/core/scaledown/actuation/actuator.go#L260">1</a>,<a href="https://github.com/kubernetes/autoscaler/blob/7e6762535b0e46f24c5a4a3c5495dda772604920/cluster-autoscaler/core/static_autoscaler.go#L304">2</a>,<a href="https://github.com/kubernetes/autoscaler/blob/6b7c2911c277918881bd1b41de950188c93e29f7/cluster-autoscaler/core/scaledown/planner/controller.go#L38">3</a>) using <code>Listers</code> to reduce the load on the Kubernetes api-server.</p>
+<h2 id="what-really-is-a-lister-anyway">What really is a Lister anyway?</h2>
+<p><code>Lister</code> allows the you to <code>list</code> and <code>get</code> Kubernetes resources of a particular Kind (e.g., Pods)<br>
+Well, why can&rsquo;t we just use client-go to list and get resources (say pods) <a href="https://github.com/kubernetes/client-go/blob/84ad8a7920b49787b7c09d20563279a24f4002bf/examples/in-cluster-client-configuration/main.go#L53">like this</a> or <a href="https://github.com/kubernetes/client-go/blob/84ad8a7920b49787b7c09d20563279a24f4002bf/examples/in-cluster-client-configuration/main.go#L62">like this</a>? What&rsquo;s wrong with that? Let&rsquo;s take a closer look at client-go for that:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// File: client-go/examples/in-cluster-client-configuration/main.go
+</span><span class="c1"></span><span class="mi">51</span><span class="p">:</span> 		<span class="c1">// get pods in all the namespaces by omitting namespace
+</span><span class="c1"></span><span class="mi">52</span><span class="p">:</span> 		<span class="c1">// Or specify namespace to get pods in particular namespace
+</span><span class="c1"></span><span class="mi">53</span><span class="p">:</span> 		<span class="nx">pods</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">clientset</span><span class="p">.</span><span class="nf">CoreV1</span><span class="p">().</span><span class="nf">Pods</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">).</span><span class="nf">List</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">(),</span> <span class="nx">metav1</span><span class="p">.</span><span class="nx">ListOptions</span><span class="p">{})</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/kubernetes/client-go/blob/84ad8a7920b49787b7c09d20563279a24f4002bf/examples/in-cluster-client-configuration/main.go#L51-L53">source</a></p>
+<p>Here&rsquo;s the code for <code>List</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// File: client-go/kubernetes/typed/core/v1/pod.go
+</span><span class="c1"></span><span class="mi">087</span><span class="p">:</span> <span class="c1">// List takes label and field selectors, and returns the list of Pods that match those selectors.
+</span><span class="c1"></span><span class="mi">088</span><span class="p">:</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">pods</span><span class="p">)</span> <span class="nf">List</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">opts</span> <span class="nx">metav1</span><span class="p">.</span><span class="nx">ListOptions</span><span class="p">)</span> <span class="p">(</span><span class="nx">result</span> <span class="o">*</span><span class="nx">v1</span><span class="p">.</span><span class="nx">PodList</span><span class="p">,</span> <span class="nx">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+<span class="mi">089</span><span class="p">:</span> 	<span class="kd">var</span> <span class="nx">timeout</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span>
+<span class="mi">090</span><span class="p">:</span> 	<span class="k">if</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">TimeoutSeconds</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+<span class="mi">091</span><span class="p">:</span> 		<span class="nx">timeout</span> <span class="p">=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Duration</span><span class="p">(</span><span class="o">*</span><span class="nx">opts</span><span class="p">.</span><span class="nx">TimeoutSeconds</span><span class="p">)</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span>
+<span class="mi">092</span><span class="p">:</span> 	<span class="p">}</span>
+<span class="mi">093</span><span class="p">:</span> 	<span class="nx">result</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">v1</span><span class="p">.</span><span class="nx">PodList</span><span class="p">{}</span>
+<span class="mi">094</span><span class="p">:</span> 	<span class="nx">err</span> <span class="p">=</span> <span class="nx">c</span><span class="p">.</span><span class="nx">client</span><span class="p">.</span><span class="nf">Get</span><span class="p">().</span>
+<span class="mi">095</span><span class="p">:</span> 		<span class="nf">Namespace</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">ns</span><span class="p">).</span>
+<span class="mi">096</span><span class="p">:</span> 		<span class="nf">Resource</span><span class="p">(</span><span class="s">&#34;pods&#34;</span><span class="p">).</span>
+<span class="mi">097</span><span class="p">:</span> 		<span class="nf">VersionedParams</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">opts</span><span class="p">,</span> <span class="nx">scheme</span><span class="p">.</span><span class="nx">ParameterCodec</span><span class="p">).</span>
+<span class="mi">098</span><span class="p">:</span> 		<span class="nf">Timeout</span><span class="p">(</span><span class="nx">timeout</span><span class="p">).</span>
+<span class="mi">099</span><span class="p">:</span> 		<span class="nf">Do</span><span class="p">(</span><span class="nx">ctx</span><span class="p">).</span> <span class="c1">// &lt;- Notice this
+</span><span class="c1"></span><span class="mi">100</span><span class="p">:</span> 		<span class="nf">Into</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span>
+<span class="mi">101</span><span class="p">:</span> 	<span class="k">return</span>
+<span class="mi">102</span><span class="p">:</span> <span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/kubernetes/client-go/blob/2d8ed52d608184cdbe05be2398e824c11699fd92/kubernetes/typed/core/v1/pod.go#L87-L102">source</a></p>
+<p>Here&rsquo;s the code for <code>Do()</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// File: client-go/rest/request.go
+</span><span class="c1"></span><span class="mi">1014</span><span class="p">:</span> <span class="c1">// Do formats and executes the request. Returns a Result object for easy response
+</span><span class="c1"></span><span class="mi">1015</span><span class="p">:</span> <span class="c1">// processing.
+</span><span class="c1"></span><span class="mi">1016</span><span class="p">:</span> <span class="c1">//
+</span><span class="c1"></span><span class="mi">1017</span><span class="p">:</span> <span class="c1">// Error type:
+</span><span class="c1"></span><span class="mi">1018</span><span class="p">:</span> <span class="c1">//   - If the server responds with a status: *errors.StatusError or *errors.UnexpectedObjectError
+</span><span class="c1"></span><span class="mi">1019</span><span class="p">:</span> <span class="c1">//   - http.Client.Do errors are returned directly.
+</span><span class="c1"></span><span class="mi">1020</span><span class="p">:</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">r</span> <span class="o">*</span><span class="nx">Request</span><span class="p">)</span> <span class="nf">Do</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="nx">Result</span> <span class="p">{</span>
+<span class="mi">1021</span><span class="p">:</span> 	<span class="kd">var</span> <span class="nx">result</span> <span class="nx">Result</span>
+<span class="mi">1022</span><span class="p">:</span> 	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">req</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span> <span class="nx">resp</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span> <span class="p">{</span>
+<span class="mi">1023</span><span class="p">:</span> 		<span class="nx">result</span> <span class="p">=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">transformResponse</span><span class="p">(</span><span class="nx">resp</span><span class="p">,</span> <span class="nx">req</span><span class="p">)</span>
+<span class="mi">1024</span><span class="p">:</span> 	<span class="p">})</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/kubernetes/client-go/blob/e2f402cda3678950731c33fd3ec6e9bbfce41a4d/rest/request.go#L1014-L1024">source</a></p>
+<p>As you see, <code>Do</code> makes an http request to the api-server. This is important. Everytime you want to list pods, you have to make a request to the api-server. Every list response will have many pods in it which were there in the last list response too. This duplication is just putting extra load on the api-server. Is there a way to reduce that load when listing pods? Yes, listers is one of the ways to do it.</p>
+<p>What&rsquo;s so different about a <code>lister</code>?
+Let&rsquo;s look at a <code>lister</code> in CA codebase used to list pods to understand this:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// File: cluster-autoscaler/core/static_autoscaler.go
+</span><span class="c1"></span><span class="mi">286</span><span class="p">:</span> 	<span class="nx">originalScheduledPods</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">scheduledPodLister</span><span class="p">.</span><span class="nf">List</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/kubernetes/autoscaler/blob/7a1668ef124fe98e8643cb6e8c2d0734fa72914e/cluster-autoscaler/core/static_autoscaler.go#L286">source</a></p>
+<p><code>List</code> is defined here:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// File: cluster-autoscaler/utils/kubernetes/listers.go
+</span><span class="c1"></span><span class="mi">239</span><span class="p">:</span> <span class="c1">// List returns all scheduled pods.
+</span><span class="c1"></span><span class="mi">240</span><span class="p">:</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">lister</span> <span class="o">*</span><span class="nx">ScheduledPodLister</span><span class="p">)</span> <span class="nf">List</span><span class="p">()</span> <span class="p">([]</span><span class="o">*</span><span class="nx">apiv1</span><span class="p">.</span><span class="nx">Pod</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+<span class="mi">241</span><span class="p">:</span> 	<span class="k">return</span> <span class="nx">lister</span><span class="p">.</span><span class="nx">podLister</span><span class="p">.</span><span class="nf">List</span><span class="p">(</span><span class="nx">labels</span><span class="p">.</span><span class="nf">Everything</span><span class="p">())</span>
+<span class="mi">242</span><span class="p">:</span> <span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/kubernetes/autoscaler/blob/f8438b15074a8fdc39d68883995ef26a8540817c/cluster-autoscaler/utils/kubernetes/listers.go#L239-L242">source</a></p>
+<p>Notice the name <code>ScheduledPodLister</code> and how it is a wrapper around another internal lister called <code>podLister</code>.</p>
+<p><code>podLister.List()</code> is defined here:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// File: cluster-autoscaler/listers/core/v1/pod.go
+</span><span class="c1"></span><span class="mi">49</span><span class="p">:</span> <span class="c1">// List lists all Pods in the indexer.
+</span><span class="c1"></span><span class="mi">50</span><span class="p">:</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">podLister</span><span class="p">)</span> <span class="nf">List</span><span class="p">(</span><span class="nx">selector</span> <span class="nx">labels</span><span class="p">.</span><span class="nx">Selector</span><span class="p">)</span> <span class="p">(</span><span class="nx">ret</span> <span class="p">[]</span><span class="o">*</span><span class="nx">v1</span><span class="p">.</span><span class="nx">Pod</span><span class="p">,</span> <span class="nx">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+<span class="mi">51</span><span class="p">:</span> 	<span class="nx">err</span> <span class="p">=</span> <span class="nx">cache</span><span class="p">.</span><span class="nf">ListAll</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">indexer</span><span class="p">,</span> <span class="nx">selector</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">m</span> <span class="kd">interface</span><span class="p">{})</span> <span class="p">{</span>
+<span class="mi">52</span><span class="p">:</span> 		<span class="nx">ret</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">ret</span><span class="p">,</span> <span class="nx">m</span><span class="p">.(</span><span class="o">*</span><span class="nx">v1</span><span class="p">.</span><span class="nx">Pod</span><span class="p">))</span>
+<span class="mi">53</span><span class="p">:</span> 	<span class="p">})</span>
+<span class="mi">54</span><span class="p">:</span> 	<span class="k">return</span> <span class="nx">ret</span><span class="p">,</span> <span class="nx">err</span>
+<span class="mi">55</span><span class="p">:</span> <span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/kubernetes/client-go/blob/0382bf0f53b2294d4ac448203718f0ba774a477d/listers/core/v1/pod.go#L49-L55">source</a><br>
+Notice how <code>List</code> function above is not making an http request to the api-server. It&rsquo;s requesting the data from a Cache.</p>
+<p><code>s.indexer</code> is of the type <code>cache.Indexer</code>. Think of <code>cache.Indexer</code> as Cache to store pods.</p>
+<p><em>Note: I am going to use &ldquo;Cache&rdquo; with a capital C to denote the concept while <code>cache</code> or <a href="">cache</a> to denote the go package with the same name.</em></p>
+<!-- [`cache.Indexer` is a wrapper around `cache.Store`](https://github.com/kubernetes/autoscaler/blob/ab2cc2fb8aebb3ece3c5b1f888657924fee968b3/cluster-autoscaler/vendor/k8s.io/client-go/tools/cache/index.go#L35-L56); I like to think of `cache.Indexer` as a higher level interface exposed to work with `cache.Store` (`cache.Indexer` implements the `cache.Store` interface).  -->
+<!-- The parameters passed to `ListAll` after `s.indexer`:
+1. `selector`: I will come to this in a bit
+2. `appender fn`: This function is used to tell `ListAll` how to append the objects (pods in our case) to the list of pods. If you want to do something before appending, this is the place to do it e.g., add an annotation on every pod before adding it to the list. 
+
+Let's zoom in on the `ListAll` function a bit. `cache.ListAll()` is defined here:
+```go
+// File: tools/cache/listers.go
+33: // ListAll calls appendFn with each value retrieved from store which matches the selector.
+34: func ListAll(store Store, selector labels.Selector, appendFn AppendFunc) error {
+35: 	selectAll := selector.Empty()
+36: 	for _, m := range store.List() {
+37: 		if selectAll {
+38: 			// Avoid computing labels of the objects to speed up common flows
+39: 			// of listing all objects.
+40: 			appendFn(m)
+41: 			continue
+42: 		}
+43: 		metadata, err := meta.Accessor(m)
+44: 		if err != nil {
+45: 			return err
+46: 		}
+47: 		if selector.Matches(labels.Set(metadata.GetLabels())) {
+48: 			appendFn(m)
+49: 		}
+50: 	}
+51: 	return nil
+52: }
+
+```
+[source](https://github.com/kubernetes/client-go/blob/f549acf3ce47b3d705477552d86a5f452bbfac3a/tools/cache/listers.go#L33-L52)
+
+Looking at the code for `podLister.List()` and `cache.ListAll()`:
+Let's look at the arguments first:
+1. `store`: This is a go interface of type `cache.Store`. Think of it as a struct which holds the actual cache of our objects (think of it as the lowest level store backing the `cache`). 
+2. `selector`: to filter the pods e.g., you want to list all the pods matching the label `env: dev`. You can use the `selector` to tell `ListAll` to filter on the `env: dev` label. Note that you can use `append fn` to achieve similar results (albeit you'd have to write logic to check if the `env:dev` label is present on all the pods)
+3. `appender fn`: I have already explained this above.
+
+Let's look at the code now:
+[`selector.Empty()`](https://github.com/kubernetes/autoscaler/blob/7f4d18a3a6ec51eaae1db6518af94e0d4825e620/cluster-autoscaler/vendor/k8s.io/apimachinery/pkg/labels/selector.go#L53-L54) returns a `bool` if the selector is empty (i.e., select all pods). The code loops over the objects in the `store.List` and checks if selector is empty. If it is, it doesn't bother to check the pod labels. If the selector is not empty, it gets the pod metadata using [`meta.Accessor()`](https://github.com/kubernetes/autoscaler/blob/69755bb90913f18e9117cc6c77ac91e421f46938/cluster-autoscaler/vendor/k8s.io/apimachinery/pkg/api/meta/meta.go#L96-L108). [`selector.Matches()`](https://github.com/kubernetes/autoscaler/blob/7f4d18a3a6ec51eaae1db6518af94e0d4825e620/cluster-autoscaler/vendor/k8s.io/apimachinery/pkg/labels/selector.go#L50-L51) checks if the labels specified in the selector are present on the pod metadata. In `labels.Set(metadata.GetLabels())`, [`metadata.GetLabels()`](https://github.com/kubernetes/autoscaler/blob/69755bb90913f18e9117cc6c77ac91e421f46938/cluster-autoscaler/vendor/k8s.io/apimachinery/pkg/apis/meta/v1/meta.go#L165) gets the labels which are of type `map[string]string` and `labels.Set` converts the map[string]string to `labels.Set` type because `selector.Matches` understands [`labels.Set`](https://github.com/kubernetes/autoscaler/blob/f8c558eefd4141dddcb76e803041913ad2511d25/cluster-autoscaler/vendor/k8s.io/apimachinery/pkg/labels/labels.go#L36-L37) better than `map[string]string`. -->
+<p>From all of this, it can be inferred that <code>lister</code> allows you to list pods without actually hitting the api-server, thereby reducing the load on the api-server</p>
+<p>But, how is the Cache above filled in the first place?<br>
+This is where <code>Reflector</code> comes into the picture. Think of <code>Reflector</code> as a loop that runs forever in the background to populate our Cache. How does this help?</p>
+<p>Well, let&rsquo;s look at where <code>ScheduledPodLister</code> and <code>podLister</code> are initialized to understand this better:</p>
+<!-- ```go
+// File: utils/kubernetes/listers.go
+206: // NewScheduledPodLister builds ScheduledPodLister
+207: func NewScheduledPodLister(kubeClient client.Interface, stopchannel <-chan struct{}) PodLister {
+208: 	// watch unscheduled pods
+209: 	selector := fields.ParseSelectorOrDie("spec.nodeName!=" + "" + ",status.phase!=" +
+210: 		string(apiv1.PodSucceeded) + ",status.phase!=" + string(apiv1.PodFailed))
+211: 	podListWatch := cache.NewListWatchFromClient(kubeClient.CoreV1().RESTClient(), "pods", apiv1.NamespaceAll, selector)
+212: 	store, reflector := cache.NewNamespaceKeyedIndexerAndReflector(podListWatch, &apiv1.Pod{}, time.Hour)
+213: 	podLister := v1lister.NewPodLister(store)
+214: 	go reflector.Run(stopchannel)
+215: 
+216: 	return &ScheduledPodLister{
+217: 		podLister: podLister,
+218: 	}
+219: }
+
+``` -->
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// File: cluster-autoscaler/utils/kubernetes/listers.go
+</span><span class="c1"></span><span class="mi">206</span><span class="p">:</span> <span class="c1">// NewScheduledPodLister builds ScheduledPodLister
+</span><span class="c1"></span><span class="mi">207</span><span class="p">:</span> <span class="kd">func</span> <span class="nf">NewScheduledPodLister</span><span class="p">(</span><span class="nx">kubeClient</span> <span class="nx">client</span><span class="p">.</span><span class="nx">Interface</span><span class="p">,</span> <span class="nx">stopchannel</span> <span class="o">&lt;-</span><span class="kd">chan</span> <span class="kd">struct</span><span class="p">{})</span> <span class="nx">PodLister</span> <span class="p">{</span>
+<span class="o">...</span>
+<span class="mi">211</span><span class="p">:</span> 	<span class="nx">podListWatch</span> <span class="o">:=</span> <span class="nx">cache</span><span class="p">.</span><span class="nf">NewListWatchFromClient</span><span class="p">(</span><span class="nx">kubeClient</span><span class="p">.</span><span class="nf">CoreV1</span><span class="p">().</span><span class="nf">RESTClient</span><span class="p">(),</span> <span class="s">&#34;pods&#34;</span><span class="p">,</span> <span class="nx">apiv1</span><span class="p">.</span><span class="nx">NamespaceAll</span><span class="p">,</span> <span class="nx">selector</span><span class="p">)</span>
+<span class="mi">212</span><span class="p">:</span> 	<span class="nx">store</span><span class="p">,</span> <span class="nx">reflector</span> <span class="o">:=</span> <span class="nx">cache</span><span class="p">.</span><span class="nf">NewNamespaceKeyedIndexerAndReflector</span><span class="p">(</span><span class="nx">podListWatch</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">apiv1</span><span class="p">.</span><span class="nx">Pod</span><span class="p">{},</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Hour</span><span class="p">)</span>
+<span class="mi">213</span><span class="p">:</span> 	<span class="nx">podLister</span> <span class="o">:=</span> <span class="nx">v1lister</span><span class="p">.</span><span class="nf">NewPodLister</span><span class="p">(</span><span class="nx">store</span><span class="p">)</span>
+<span class="mi">214</span><span class="p">:</span> 	<span class="k">go</span> <span class="nx">reflector</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="nx">stopchannel</span><span class="p">)</span>
+<span class="mi">215</span><span class="p">:</span> 
+<span class="mi">216</span><span class="p">:</span> 	<span class="k">return</span> <span class="o">&amp;</span><span class="nx">ScheduledPodLister</span><span class="p">{</span>
+<span class="mi">217</span><span class="p">:</span> 		<span class="nx">podLister</span><span class="p">:</span> <span class="nx">podLister</span><span class="p">,</span>
+<span class="mi">218</span><span class="p">:</span> 	<span class="p">}</span>
+<span class="mi">219</span><span class="p">:</span> <span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/kubernetes/autoscaler/blob/a0fcc364011ed33421104b55b0d804b6ce379fd5/cluster-autoscaler/utils/kubernetes/listers.go#L206-L219">source</a></p>
+<p>I have skipped some lines in the code which seemed irrelevant. You can check the <code>source</code> link above to see the skipped lines).</p>
+<p>Let&rsquo;s dissect it line-by-line</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="mi">207</span><span class="p">:</span> <span class="kd">func</span> <span class="nf">NewScheduledPodLister</span><span class="p">(</span><span class="nx">kubeClient</span> <span class="nx">client</span><span class="p">.</span><span class="nx">Interface</span><span class="p">,</span> <span class="nx">stopchannel</span> <span class="o">&lt;-</span><span class="kd">chan</span> <span class="kd">struct</span><span class="p">{})</span> <span class="nx">PodLister</span> <span class="p">{</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Let&rsquo;s look at the arguments:</p>
+<ol>
+<li><code>kubeClient</code>: Interface of type <a href="https://github.com/kubernetes/autoscaler/blob/658e50d702b86cf0f8c2ab1a9f86b5d39c3fce62/cluster-autoscaler/vendor/k8s.io/client-go/kubernetes/clientset.go#L75-L122">client.Interface</a> which can be used to query in-built Kubernetes resources.</li>
+<li><code>stopChannel</code>: This is used to stop the reflector from running. Sending a message on the channel would stop the reflector from running (we will get to where this happens in a bit).</li>
+</ol>
+<p>Return type <code>PodLister</code> is an interface with only one function in it which looks like <code>List() ([]*apiv1.Pod, error)</code> (remember <code>ScheduledPodLister</code> implements this function with <code>List()</code> and calls <code>podLister</code> internally). The interface is defined <a href="https://github.com/kubernetes/autoscaler/blob/a0fcc364011ed33421104b55b0d804b6ce379fd5/cluster-autoscaler/utils/kubernetes/listers.go#L151-L154">here</a>.</p>
+<!-- Moving on to the next line. 
+```go
+208: 	// watch unscheduled pods
+209: 	selector := fields.ParseSelectorOrDie("spec.nodeName!=" + "" + ",status.phase!=" +
+210: 		string(apiv1.PodSucceeded) + ",status.phase!=" + string(apiv1.PodFailed))
+```
+*Note: The comment `watch unscheduled pods` is not correct.* (TODO: create an issue and a PR for this)
+
+This code creates a label selector for scheduled pods which are pods which:
+1. have a `nodeName` set in their `spec`
+2. don't have the phase `Succeeded` or `Failed`  (i.e., the pod is still running) -->
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="mi">211</span><span class="p">:</span> 	<span class="nx">podListWatch</span> <span class="o">:=</span> <span class="nx">cache</span><span class="p">.</span><span class="nf">NewListWatchFromClient</span><span class="p">(</span><span class="nx">kubeClient</span><span class="p">.</span><span class="nf">CoreV1</span><span class="p">().</span><span class="nf">RESTClient</span><span class="p">(),</span> <span class="s">&#34;pods&#34;</span><span class="p">,</span> <span class="nx">apiv1</span><span class="p">.</span><span class="nx">NamespaceAll</span><span class="p">,</span> <span class="nx">selector</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>This is an interesting piece of code. We are asking <a href="https://github.com/kubernetes/autoscaler/blob/07870d830c4c787670f147c2972c085dd02172b7/cluster-autoscaler/vendor/k8s.io/client-go/tools/cache/listwatch.go#L69-L75">NewListWatchFromClient</a> (a function <code>cache</code> package provides us for convenience) to give us a <a href="https://github.com/kubernetes/autoscaler/blob/07870d830c4c787670f147c2972c085dd02172b7/cluster-autoscaler/vendor/k8s.io/client-go/tools/cache/listwatch.go#L54-L62">cache.ListWatch</a> struct if the correct <a href="https://github.com/kubernetes/autoscaler/blob/f8c558eefd4141dddcb76e803041913ad2511d25/cluster-autoscaler/vendor/k8s.io/client-go/rest/client.go#L40-L50">RESTClient</a> (in this case, the <code>RESTClient</code> is returned by <code>kubeClient.CoreV1().RESTClient()</code>), resource kind (in this case, <code>pods</code>), namespace (in this case, <code>&quot;&quot;</code> which denotes all pods) and selector (read label selector) is passed to it.</p>
+<p><code>cache.ListWatch</code> is a struct which contains a list and a watch function. This is what helps us fill our cache. We run the reflector which calls the list function to list pods at the beginning and then the watch function forever to watch for new updates from the API Server (note that watch function is a streaming connection i.e., the API Server sends updates to the watch function; I will get to what this means in a moment). e.g., (let&rsquo;s assume we start our reflector at 10:00AM)</p>
+<ol>
+<li>10:00AM: list func gets a lists of pods from the API Server. It finds pods A,B,C. It adds the pods to Cache | Cache: [A,B,C]</li>
+<li>10:00AM: watch func starts | Cache: [A,B,C]</li>
+<li>10:03AM: user creates a new pod D | Cache: [A,B,C]</li>
+<li>10:03AM: API Server informs watch func about D | Cache: [A,B,C]</li>
+<li>10:03AM: watch func updates the Cache with new pod D | Cache: [A,B,C,D]</li>
+<li>10:12AM: user creates a new pod E | Cache: [A,B,C,D]</li>
+<li>10:12AM: API Server informs watch func about E | Cache: [A,B,C,D]</li>
+<li>10:12AM: watch func updates the Cache with new pod E | Cache: [A,B,C,D,E]</li>
+<li>10:20AM: some problem happens with watch (we get an error)</li>
+<li>10:20AM: start from 1 again</li>
+</ol>
+<p>I have over-simplified things here. It is assumed that</p>
+<ul>
+<li>watch func receives updates from the API Server immediately</li>
+<li>Cache looks like an array of pods (which is not actually true; it&rsquo;s more like a hash map)</li>
+</ul>
+<p>The benefit of doing 1-10 instead of directly querying the API server using client-go:</p>
+<ol>
+<li>We don&rsquo;t have to list pods every couple of seconds like we would do in polling</li>
+<li>We let API Server tell us about new pods</li>
+</ol>
+<p>This saves load on the API Server. What happens if the process/controller doing list and watch dies? when a new process/controller comes up again, <code>list func</code> is called first which helps the Cache to catch up and the watch function runs again.</p>
+<blockquote>
+<p>When you send a <strong>watch</strong> request, the API server responds with a stream of changes. These changes itemize the outcome of operations (such as <strong>create</strong>, <strong>delete</strong>, and <strong>update</strong>) that occurred after the resourceVersion you specified as a parameter to the <strong>watch</strong> request. The overall <strong>watch</strong> mechanism allows a client to fetch the current state and then subscribe to subsequent changes, without missing any events.</p>
+</blockquote>
+<blockquote>
+<p>If a client <strong>watch</strong> is disconnected then that client can start a new <strong>watch</strong> from the last returned resourceVersion; the client could also perform a fresh <strong>get</strong> / <strong>list</strong> request and begin again. <a href="https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions">See Resource Version Semantics</a> for more detail.</p>
+</blockquote>
+<p><a href="https://kubernetes.io/docs/reference/using-api/api-concepts/#efficient-detection-of-changes">https://kubernetes.io/docs/reference/using-api/api-concepts/#efficient-detection-of-changes</a></p>
+<p>Let&rsquo;s take a closer look at <code>cache.ListWatch</code>. It looks like this in the code:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// File: client-go/tools/cache/listwatch.go
+</span><span class="c1"></span><span class="mi">54</span><span class="p">:</span> <span class="c1">// ListWatch knows how to list and watch a set of apiserver resources.  It satisfies the ListerWatcher interface.
+</span><span class="c1"></span><span class="mi">55</span><span class="p">:</span> <span class="c1">// It is a convenience function for users of NewReflector, etc.
+</span><span class="c1"></span><span class="mi">56</span><span class="p">:</span> <span class="c1">// ListFunc and WatchFunc must not be nil
+</span><span class="c1"></span><span class="mi">57</span><span class="p">:</span> <span class="kd">type</span> <span class="nx">ListWatch</span> <span class="kd">struct</span> <span class="p">{</span>
+<span class="mi">58</span><span class="p">:</span> 	<span class="nx">ListFunc</span>  <span class="nx">ListFunc</span>
+<span class="mi">59</span><span class="p">:</span> 	<span class="nx">WatchFunc</span> <span class="nx">WatchFunc</span>
+<span class="mi">60</span><span class="p">:</span> 	<span class="c1">// DisableChunking requests no chunking for this list watcher.
+</span><span class="c1"></span><span class="mi">61</span><span class="p">:</span> 	<span class="nx">DisableChunking</span> <span class="kt">bool</span>
+<span class="mi">62</span><span class="p">:</span> <span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/kubernetes/autoscaler/blob/07870d830c4c787670f147c2972c085dd02172b7/cluster-autoscaler/vendor/k8s.io/client-go/tools/cache/listwatch.go#L54-L62">source</a><br>
+Let&rsquo;s ignore <code>DisableChunking</code> for now.</p>
+<p>If we look at what <code>ListFunc</code> and <code>WatchFunc</code> refer to:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// File: client-go/tools/cache/listwatch.go
+</span><span class="c1"></span><span class="mi">48</span><span class="p">:</span> <span class="c1">// ListFunc knows how to list resources
+</span><span class="c1"></span><span class="mi">49</span><span class="p">:</span> <span class="kd">type</span> <span class="nx">ListFunc</span> <span class="kd">func</span><span class="p">(</span><span class="nx">options</span> <span class="nx">metav1</span><span class="p">.</span><span class="nx">ListOptions</span><span class="p">)</span> <span class="p">(</span><span class="nx">runtime</span><span class="p">.</span><span class="nx">Object</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+<span class="mi">50</span><span class="p">:</span> 
+<span class="mi">51</span><span class="p">:</span> <span class="c1">// WatchFunc knows how to watch resources
+</span><span class="c1"></span><span class="mi">52</span><span class="p">:</span> <span class="kd">type</span> <span class="nx">WatchFunc</span> <span class="kd">func</span><span class="p">(</span><span class="nx">options</span> <span class="nx">metav1</span><span class="p">.</span><span class="nx">ListOptions</span><span class="p">)</span> <span class="p">(</span><span class="nx">watch</span><span class="p">.</span><span class="nx">Interface</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/kubernetes/autoscaler/blob/07870d830c4c787670f147c2972c085dd02172b7/cluster-autoscaler/vendor/k8s.io/client-go/tools/cache/listwatch.go#L48-L52">source</a></p>
+<p><code>ListFunc</code> returns a <code>runtime.Object</code> which accepts an optional <a href="https://github.com/kubernetes/autoscaler/blob/69755bb90913f18e9117cc6c77ac91e421f46938/cluster-autoscaler/vendor/k8s.io/apimachinery/pkg/apis/meta/v1/types.go#L326">metav1.ListOptions</a> (I say optional because you can pass <code>metav1.ListOptions{}</code> and the function will work). Note that <a href="https://github.com/kubernetes/autoscaler/blob/4e184a981bf8d3c94dc96742eee61272383a9ad1/cluster-autoscaler/vendor/k8s.io/apimachinery/pkg/runtime/interfaces.go#L319-L326">runtime.Object</a> here is an interface implemented by both <code>Pod</code> (<a href="https://github.com/kubernetes/autoscaler/blob/658e50d702b86cf0f8c2ab1a9f86b5d39c3fce62/cluster-autoscaler/vendor/k8s.io/api/core/v1/types.go#L3893-L3918">ref1</a>, <a href="https://github.com/kubernetes/autoscaler/blob/658e50d702b86cf0f8c2ab1a9f86b5d39c3fce62/cluster-autoscaler/vendor/k8s.io/api/core/v1/zz_generated.deepcopy.go#L3298-L3324">ref2</a>, <a href="https://github.com/kubernetes/autoscaler/blob/69755bb90913f18e9117cc6c77ac91e421f46938/cluster-autoscaler/vendor/k8s.io/apimachinery/pkg/apis/meta/v1/meta.go#L119">ref3</a>) and <code>PodList</code>(<a href="https://github.com/kubernetes/autoscaler/blob/658e50d702b86cf0f8c2ab1a9f86b5d39c3fce62/cluster-autoscaler/vendor/k8s.io/api/core/v1/types.go#L3922-L3933">ref1</a>, <a href="https://github.com/kubernetes/autoscaler/blob/658e50d702b86cf0f8c2ab1a9f86b5d39c3fce62/cluster-autoscaler/vendor/k8s.io/api/core/v1/zz_generated.deepcopy.go#L3560-L3591">ref2</a>, <a href="https://github.com/kubernetes/autoscaler/blob/69755bb90913f18e9117cc6c77ac91e421f46938/cluster-autoscaler/vendor/k8s.io/apimachinery/pkg/apis/meta/v1/meta.go#L119">ref3</a>) object. In this particular case <code>runtime.Object</code> refers to <code>PodList</code> object.</p>
+<p><code>WatchFunc</code> also accepts an optional <code>metav1.ListOptions</code> and returns a <a href="https://github.com/kubernetes/autoscaler/blob/4e184a981bf8d3c94dc96742eee61272383a9ad1/cluster-autoscaler/vendor/k8s.io/apimachinery/pkg/watch/watch.go#L28-L38">watch.Interface</a>.</p>
+<p>Let&rsquo;s look at an actual implementation of <code>ListFunc</code> and <code>WatchFunc</code> to understand it better.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// File: client-go/tools/cache/listwatch.go
+</span><span class="c1"></span><span class="mi">81</span><span class="p">:</span> 	<span class="nx">listFunc</span> <span class="o">:=</span> <span class="kd">func</span><span class="p">(</span><span class="nx">options</span> <span class="nx">metav1</span><span class="p">.</span><span class="nx">ListOptions</span><span class="p">)</span> <span class="p">(</span><span class="nx">runtime</span><span class="p">.</span><span class="nx">Object</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+<span class="mi">82</span><span class="p">:</span> 		<span class="nf">optionsModifier</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">options</span><span class="p">)</span>
+<span class="mi">83</span><span class="p">:</span> 		<span class="k">return</span> <span class="nx">c</span><span class="p">.</span><span class="nf">Get</span><span class="p">().</span>
+<span class="mi">84</span><span class="p">:</span> 			<span class="nf">Namespace</span><span class="p">(</span><span class="nx">namespace</span><span class="p">).</span>
+<span class="mi">85</span><span class="p">:</span> 			<span class="nf">Resource</span><span class="p">(</span><span class="nx">resource</span><span class="p">).</span>
+<span class="mi">86</span><span class="p">:</span> 			<span class="nf">VersionedParams</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">options</span><span class="p">,</span> <span class="nx">metav1</span><span class="p">.</span><span class="nx">ParameterCodec</span><span class="p">).</span>
+<span class="mi">87</span><span class="p">:</span> 			<span class="nf">Do</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">()).</span> <span class="c1">// &lt;- Notice this
+</span><span class="c1"></span><span class="mi">88</span><span class="p">:</span> 			<span class="nf">Get</span><span class="p">()</span>
+<span class="mi">89</span><span class="p">:</span> 	<span class="p">}</span>
+<span class="mi">90</span><span class="p">:</span> 	<span class="nx">watchFunc</span> <span class="o">:=</span> <span class="kd">func</span><span class="p">(</span><span class="nx">options</span> <span class="nx">metav1</span><span class="p">.</span><span class="nx">ListOptions</span><span class="p">)</span> <span class="p">(</span><span class="nx">watch</span><span class="p">.</span><span class="nx">Interface</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+<span class="mi">91</span><span class="p">:</span> 		<span class="nx">options</span><span class="p">.</span><span class="nx">Watch</span> <span class="p">=</span> <span class="kc">true</span>
+<span class="mi">92</span><span class="p">:</span> 		<span class="nf">optionsModifier</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">options</span><span class="p">)</span>
+<span class="mi">93</span><span class="p">:</span> 		<span class="k">return</span> <span class="nx">c</span><span class="p">.</span><span class="nf">Get</span><span class="p">().</span>
+<span class="mi">94</span><span class="p">:</span> 			<span class="nf">Namespace</span><span class="p">(</span><span class="nx">namespace</span><span class="p">).</span>
+<span class="mi">95</span><span class="p">:</span> 			<span class="nf">Resource</span><span class="p">(</span><span class="nx">resource</span><span class="p">).</span>
+<span class="mi">96</span><span class="p">:</span> 			<span class="nf">VersionedParams</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">options</span><span class="p">,</span> <span class="nx">metav1</span><span class="p">.</span><span class="nx">ParameterCodec</span><span class="p">).</span>
+<span class="mi">97</span><span class="p">:</span> 			<span class="nf">Watch</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">())</span> <span class="c1">// &lt;- Notice this
+</span><span class="c1"></span><span class="mi">98</span><span class="p">:</span> 	<span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/kubernetes/autoscaler/blob/07870d830c4c787670f147c2972c085dd02172b7/cluster-autoscaler/vendor/k8s.io/client-go/tools/cache/listwatch.go#L81-L98">source</a></p>
+<p><code>listFunc</code> makes a normal HTTP call to get a list of pods:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// File: client-go/rest/request.go
+</span><span class="c1"></span><span class="mi">1014</span><span class="p">:</span> <span class="c1">// Do formats and executes the request. Returns a Result object for easy response
+</span><span class="c1"></span><span class="mi">1015</span><span class="p">:</span> <span class="c1">// processing.
+</span><span class="c1"></span><span class="mi">1016</span><span class="p">:</span> <span class="c1">//
+</span><span class="c1"></span><span class="mi">1017</span><span class="p">:</span> <span class="c1">// Error type:
+</span><span class="c1"></span><span class="mi">1018</span><span class="p">:</span> <span class="c1">//   - If the server responds with a status: *errors.StatusError or *errors.UnexpectedObjectError
+</span><span class="c1"></span><span class="mi">1019</span><span class="p">:</span> <span class="c1">//   - http.Client.Do errors are returned directly.
+</span><span class="c1"></span><span class="mi">1020</span><span class="p">:</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">r</span> <span class="o">*</span><span class="nx">Request</span><span class="p">)</span> <span class="nf">Do</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="nx">Result</span> <span class="p">{</span>
+<span class="mi">1021</span><span class="p">:</span> 	<span class="kd">var</span> <span class="nx">result</span> <span class="nx">Result</span>
+<span class="mi">1022</span><span class="p">:</span> 	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">req</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span> <span class="nx">resp</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span> <span class="p">{</span>
+<span class="mi">1023</span><span class="p">:</span> 		<span class="nx">result</span> <span class="p">=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">transformResponse</span><span class="p">(</span><span class="nx">resp</span><span class="p">,</span> <span class="nx">req</span><span class="p">)</span>
+<span class="mi">1024</span><span class="p">:</span> 	<span class="p">})</span>
+<span class="mi">1025</span><span class="p">:</span> 	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+<span class="mi">1026</span><span class="p">:</span> 		<span class="k">return</span> <span class="nx">Result</span><span class="p">{</span><span class="nx">err</span><span class="p">:</span> <span class="nx">err</span><span class="p">}</span>
+<span class="mi">1027</span><span class="p">:</span> 	<span class="p">}</span>
+<span class="mi">1028</span><span class="p">:</span> 	<span class="k">if</span> <span class="nx">result</span><span class="p">.</span><span class="nx">err</span> <span class="o">==</span> <span class="kc">nil</span> <span class="o">||</span> <span class="nb">len</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">body</span><span class="p">)</span> <span class="p">&gt;</span> <span class="mi">0</span> <span class="p">{</span>
+<span class="mi">1029</span><span class="p">:</span> 		<span class="nx">metrics</span><span class="p">.</span><span class="nx">ResponseSize</span><span class="p">.</span><span class="nf">Observe</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">r</span><span class="p">.</span><span class="nx">verb</span><span class="p">,</span> <span class="nx">r</span><span class="p">.</span><span class="nf">URL</span><span class="p">().</span><span class="nx">Host</span><span class="p">,</span> <span class="nb">float64</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">body</span><span class="p">)))</span>
+<span class="mi">1030</span><span class="p">:</span> 	<span class="p">}</span>
+<span class="mi">1031</span><span class="p">:</span> 	<span class="k">return</span> <span class="nx">result</span>
+<span class="mi">1032</span><span class="p">:</span> <span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/kubernetes/autoscaler/blob/c35eb6491d3c6b65dab5ad9ee3468cb439630ecd/cluster-autoscaler/vendor/k8s.io/client-go/rest/request.go#L1014-L1032">source</a></p>
+<p><code>watchFunc</code> creates a streaming HTTP connection to receive updates from the API Server. Here&rsquo;s a simplified version of code for <code>Watch</code> (check <code>source</code> below for the actual code):</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// File: vendor/k8s.io/client-go/rest/request.go
+</span><span class="c1"></span><span class="mi">694</span><span class="p">:</span> <span class="c1">// Watch attempts to begin watching the requested location.
+</span><span class="c1"></span><span class="mi">695</span><span class="p">:</span> <span class="c1">// Returns a watch.Interface, or an error.
+</span><span class="c1"></span><span class="mi">696</span><span class="p">:</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">r</span> <span class="o">*</span><span class="nx">Request</span><span class="p">)</span> <span class="nf">Watch</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">(</span><span class="nx">watch</span><span class="p">.</span><span class="nx">Interface</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+<span class="mi">697</span><span class="p">:</span> 	<span class="o">...</span>
+<span class="mi">716</span><span class="p">:</span> 	<span class="nx">retry</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">retryFn</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">maxRetries</span><span class="p">)</span>
+<span class="mi">717</span><span class="p">:</span> 	<span class="nx">url</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">URL</span><span class="p">().</span><span class="nf">String</span><span class="p">()</span>
+<span class="mi">718</span><span class="p">:</span> 	<span class="k">for</span> <span class="p">{</span>
+<span class="mi">719</span><span class="p">:</span> 		<span class="o">...</span>
+<span class="mi">722</span><span class="p">:</span> 
+<span class="mi">723</span><span class="p">:</span> 		<span class="nx">req</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">newHTTPRequest</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
+<span class="mi">724</span><span class="p">:</span> 		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+<span class="mi">725</span><span class="p">:</span> 			<span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">err</span>
+<span class="mi">726</span><span class="p">:</span> 		<span class="p">}</span>
+<span class="mi">727</span><span class="p">:</span> 
+<span class="mi">728</span><span class="p">:</span> 		<span class="nx">resp</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Do</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span>
+            <span class="o">...</span>
+<span class="mi">730</span><span class="p">:</span> 		<span class="nx">retry</span><span class="p">.</span><span class="nf">After</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">r</span><span class="p">,</span> <span class="nx">resp</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+<span class="mi">731</span><span class="p">:</span> 		<span class="k">if</span> <span class="nx">err</span> <span class="o">==</span> <span class="kc">nil</span> <span class="o">&amp;&amp;</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">StatusCode</span> <span class="o">==</span> <span class="nx">http</span><span class="p">.</span><span class="nx">StatusOK</span> <span class="p">{</span>
+<span class="mi">732</span><span class="p">:</span> 			<span class="k">return</span> <span class="nx">r</span><span class="p">.</span><span class="nf">newStreamWatcher</span><span class="p">(</span><span class="nx">resp</span><span class="p">)</span>
+<span class="mi">733</span><span class="p">:</span> 		<span class="p">}</span>
+<span class="mi">734</span><span class="p">:</span> 
+<span class="mi">735</span><span class="p">:</span> 		<span class="o">...</span>
+<span class="mi">762</span><span class="p">:</span> 	<span class="p">}</span>
+<span class="mi">763</span><span class="p">:</span> <span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/kubernetes/autoscaler/blob/c35eb6491d3c6b65dab5ad9ee3468cb439630ecd/cluster-autoscaler/vendor/k8s.io/client-go/rest/request.go#L694-L763">source</a></p>
+<p>Note how <code>newHTTPRequest</code> is called on line <code>:723</code>. Now, you might have the following questions:</p>
+<ol>
+<li>What is the <code>for</code> loop for?<br>
+Notice the <code>r.maxRetries</code>. The <code>for</code> loop runs continuously but <code>retry.After</code> adds a sleep in between and exponential backoff if <code>client.Do</code> on line <code>:728</code> errors. It does this until <code>maxRetries</code> are breached. If <code>client.Do</code> is successful, it means we are successful in creating a streaming connection. Return <code>r.newStreamWatcher</code> which would be used to reading contents sent by the api-server.</li>
+<li>Isn&rsquo;t this an HTTP request? What&rsquo;s so special about it?
+To answer this question, let&rsquo;s look at the following code from above again:</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// File: client-go/tools/cache/listwatch.go
+</span><span class="c1"></span><span class="mi">81</span><span class="p">:</span> 	<span class="nx">listFunc</span> <span class="o">:=</span> <span class="kd">func</span><span class="p">(</span><span class="nx">options</span> <span class="nx">metav1</span><span class="p">.</span><span class="nx">ListOptions</span><span class="p">)</span> <span class="p">(</span><span class="nx">runtime</span><span class="p">.</span><span class="nx">Object</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+<span class="mi">82</span><span class="p">:</span> 		<span class="nf">optionsModifier</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">options</span><span class="p">)</span>
+<span class="mi">83</span><span class="p">:</span> 		<span class="k">return</span> <span class="nx">c</span><span class="p">.</span><span class="nf">Get</span><span class="p">().</span>
+<span class="mi">84</span><span class="p">:</span> 			<span class="nf">Namespace</span><span class="p">(</span><span class="nx">namespace</span><span class="p">).</span>
+<span class="mi">85</span><span class="p">:</span> 			<span class="nf">Resource</span><span class="p">(</span><span class="nx">resource</span><span class="p">).</span>
+<span class="mi">86</span><span class="p">:</span> 			<span class="nf">VersionedParams</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">options</span><span class="p">,</span> <span class="nx">metav1</span><span class="p">.</span><span class="nx">ParameterCodec</span><span class="p">).</span>
+<span class="mi">87</span><span class="p">:</span> 			<span class="nf">Do</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">()).</span>
+<span class="mi">88</span><span class="p">:</span> 			<span class="nf">Get</span><span class="p">()</span>
+<span class="mi">89</span><span class="p">:</span> 	<span class="p">}</span>
+<span class="mi">90</span><span class="p">:</span> 	<span class="nx">watchFunc</span> <span class="o">:=</span> <span class="kd">func</span><span class="p">(</span><span class="nx">options</span> <span class="nx">metav1</span><span class="p">.</span><span class="nx">ListOptions</span><span class="p">)</span> <span class="p">(</span><span class="nx">watch</span><span class="p">.</span><span class="nx">Interface</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+<span class="mi">91</span><span class="p">:</span> 		<span class="nx">options</span><span class="p">.</span><span class="nx">Watch</span> <span class="p">=</span> <span class="kc">true</span> <span class="c1">// &lt;- Notice this
+</span><span class="c1"></span><span class="mi">92</span><span class="p">:</span> 		<span class="nf">optionsModifier</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">options</span><span class="p">)</span>
+<span class="mi">93</span><span class="p">:</span> 		<span class="k">return</span> <span class="nx">c</span><span class="p">.</span><span class="nf">Get</span><span class="p">().</span>
+<span class="mi">94</span><span class="p">:</span> 			<span class="nf">Namespace</span><span class="p">(</span><span class="nx">namespace</span><span class="p">).</span>
+<span class="mi">95</span><span class="p">:</span> 			<span class="nf">Resource</span><span class="p">(</span><span class="nx">resource</span><span class="p">).</span>
+<span class="mi">96</span><span class="p">:</span> 			<span class="nf">VersionedParams</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">options</span><span class="p">,</span> <span class="nx">metav1</span><span class="p">.</span><span class="nx">ParameterCodec</span><span class="p">).</span>
+<span class="mi">97</span><span class="p">:</span> 			<span class="nf">Watch</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">())</span>
+<span class="mi">98</span><span class="p">:</span> 	<span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/kubernetes/autoscaler/blob/07870d830c4c787670f147c2972c085dd02172b7/cluster-autoscaler/vendor/k8s.io/client-go/tools/cache/listwatch.go#L81-L98">source</a></p>
+<p>Notice <code>options.Watch = true</code> on line <code>:91</code> (we don&rsquo;t see any such thing for <code>listFunc</code>). This is important. Why? Because this instructs the client to initiate a streaming watch connection.</p>
+<p><img src="./images/2023-02-17-11-49-53.png" alt="">
+<a href="https://kubernetes.io/docs/reference/using-api/api-concepts/#efficient-detection-of-changes">https://kubernetes.io/docs/reference/using-api/api-concepts/#efficient-detection-of-changes</a></p>
+<p>Note that <code>Watch = true</code> is actually converted to <code>?watch=true</code> in the query parameters. The screenshot above says <code>watch=1</code> which is not correct. <code>watch</code> is defined as a boolean in the Kubernetes open-api spec <a href="https://github.com/kubernetes/kubernetes/blob/3d536bd14bba0586f20d1d96560073e5d9e82f97/api/openapi-spec/v3/api__v1_openapi.json#L14965-L14970">here</a>. Check the API reference for watch <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#watch-pod-v1-core">here</a></p>
+<p>Going back to the code for definition a lister:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// File: utils/kubernetes/listers.go
+</span><span class="c1"></span><span class="mi">206</span><span class="p">:</span> <span class="c1">// NewScheduledPodLister builds ScheduledPodLister
+</span><span class="c1"></span><span class="mi">207</span><span class="p">:</span> <span class="kd">func</span> <span class="nf">NewScheduledPodLister</span><span class="p">(</span><span class="nx">kubeClient</span> <span class="nx">client</span><span class="p">.</span><span class="nx">Interface</span><span class="p">,</span> <span class="nx">stopchannel</span> <span class="o">&lt;-</span><span class="kd">chan</span> <span class="kd">struct</span><span class="p">{})</span> <span class="nx">PodLister</span> <span class="p">{</span>
+<span class="o">...</span>
+<span class="mi">211</span><span class="p">:</span> 	<span class="nx">podListWatch</span> <span class="o">:=</span> <span class="nx">cache</span><span class="p">.</span><span class="nf">NewListWatchFromClient</span><span class="p">(</span><span class="nx">kubeClient</span><span class="p">.</span><span class="nf">CoreV1</span><span class="p">().</span><span class="nf">RESTClient</span><span class="p">(),</span> <span class="s">&#34;pods&#34;</span><span class="p">,</span> <span class="nx">apiv1</span><span class="p">.</span><span class="nx">NamespaceAll</span><span class="p">,</span> <span class="nx">selector</span><span class="p">)</span>
+<span class="mi">212</span><span class="p">:</span> 	<span class="nx">store</span><span class="p">,</span> <span class="nx">reflector</span> <span class="o">:=</span> <span class="nx">cache</span><span class="p">.</span><span class="nf">NewNamespaceKeyedIndexerAndReflector</span><span class="p">(</span><span class="nx">podListWatch</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">apiv1</span><span class="p">.</span><span class="nx">Pod</span><span class="p">{},</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Hour</span><span class="p">)</span>
+<span class="mi">213</span><span class="p">:</span> 	<span class="nx">podLister</span> <span class="o">:=</span> <span class="nx">v1lister</span><span class="p">.</span><span class="nf">NewPodLister</span><span class="p">(</span><span class="nx">store</span><span class="p">)</span>
+<span class="mi">214</span><span class="p">:</span> 	<span class="k">go</span> <span class="nx">reflector</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="nx">stopchannel</span><span class="p">)</span>
+<span class="mi">215</span><span class="p">:</span> 
+<span class="mi">216</span><span class="p">:</span> 	<span class="k">return</span> <span class="o">&amp;</span><span class="nx">ScheduledPodLister</span><span class="p">{</span>
+<span class="mi">217</span><span class="p">:</span> 		<span class="nx">podLister</span><span class="p">:</span> <span class="nx">podLister</span><span class="p">,</span>
+<span class="mi">218</span><span class="p">:</span> 	<span class="p">}</span>
+<span class="mi">219</span><span class="p">:</span> <span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/kubernetes/autoscaler/blob/a0fcc364011ed33421104b55b0d804b6ce379fd5/cluster-autoscaler/utils/kubernetes/listers.go#L206-L219">source</a></p>
+<p>I hope line <code>:211</code> makes more sense now.</p>
+<p>Looking at line <code>:212</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="mi">212</span><span class="p">:</span> 	<span class="nx">store</span><span class="p">,</span> <span class="nx">reflector</span> <span class="o">:=</span> <span class="nx">cache</span><span class="p">.</span><span class="nf">NewNamespaceKeyedIndexerAndReflector</span><span class="p">(</span><span class="nx">podListWatch</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">apiv1</span><span class="p">.</span><span class="nx">Pod</span><span class="p">{},</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Hour</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>cache.NewNamespaceKeyedIndexerAndReflector</code> is a convenience function from the <code>cache</code> package which given the <code>listwatch</code> struct, object and resync duration (you can ignore resync duration for now), it gives us a <code>cache.Store</code> (<code>cache.Indexer</code> <a href="https://github.com/kubernetes/autoscaler/blob/ab2cc2fb8aebb3ece3c5b1f888657924fee968b3/cluster-autoscaler/vendor/k8s.io/client-go/tools/cache/index.go#L36">embeds <code>cache.Store</code></a>) and a <code>reflector</code>.</p>
+<p><em>Note: re-list and re-sync are two different things. re-list only happens once (unless there is an error or the reflector&rsquo;s Run() function exits for some reason: <a href="https://github.com/kubernetes/autoscaler/blob/c35eb6491d3c6b65dab5ad9ee3468cb439630ecd/cluster-autoscaler/vendor/k8s.io/client-go/tools/cache/reflector.go#L281-L285">ref1</a>, <a href="https://github.com/kubernetes/autoscaler/blob/c35eb6491d3c6b65dab5ad9ee3468cb439630ecd/cluster-autoscaler/vendor/k8s.io/client-go/tools/cache/reflector.go#L352-L411">ref2</a>). re-sync makes a lot more sense in context of informers (I am ignoring this interesting construct for now because it is not relevant in this blogpost). You might find <a href="https://groups.google.com/g/kubernetes-sig-api-machinery/c/PbSCXdLDno0?pli=1">this google group</a> thread interesting.</em></p>
+<p><code>cache.Store</code> is used to create our lister (which we use to query pods instead of directly hitting the API Server)</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="mi">213</span><span class="p">:</span> 	<span class="nx">podLister</span> <span class="o">:=</span> <span class="nx">v1lister</span><span class="p">.</span><span class="nf">NewPodLister</span><span class="p">(</span><span class="nx">store</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>while the <code>reflector</code> is the thing which runs continuously to populate the Cache with new pod objects.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="mi">214</span><span class="p">:</span> 	<span class="k">go</span> <span class="nx">reflector</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="nx">stopchannel</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Since we have already looked at listers, let&rsquo;s take a closer look at <code>reflector.Run</code> above.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// File: client-go/tools/cache/reflector.go
+</span><span class="c1"></span><span class="mi">276</span><span class="p">:</span> <span class="c1">// Run repeatedly uses the reflector&#39;s ListAndWatch to fetch all the
+</span><span class="c1"></span><span class="mi">277</span><span class="p">:</span> <span class="c1">// objects and subsequent deltas.
+</span><span class="c1"></span><span class="mi">278</span><span class="p">:</span> <span class="c1">// Run will exit when stopCh is closed.
+</span><span class="c1"></span><span class="mi">279</span><span class="p">:</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">r</span> <span class="o">*</span><span class="nx">Reflector</span><span class="p">)</span> <span class="nf">Run</span><span class="p">(</span><span class="nx">stopCh</span> <span class="o">&lt;-</span><span class="kd">chan</span> <span class="kd">struct</span><span class="p">{})</span> <span class="p">{</span>
+<span class="mi">280</span><span class="p">:</span> 	<span class="nx">klog</span><span class="p">.</span><span class="nf">V</span><span class="p">(</span><span class="mi">3</span><span class="p">).</span><span class="nf">Infof</span><span class="p">(</span><span class="s">&#34;Starting reflector %s (%s) from %s&#34;</span><span class="p">,</span> <span class="nx">r</span><span class="p">.</span><span class="nx">typeDescription</span><span class="p">,</span> <span class="nx">r</span><span class="p">.</span><span class="nx">resyncPeriod</span><span class="p">,</span> <span class="nx">r</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span>
+<span class="mi">281</span><span class="p">:</span> 	<span class="nx">wait</span><span class="p">.</span><span class="nf">BackoffUntil</span><span class="p">(</span><span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+<span class="mi">282</span><span class="p">:</span> 		<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">ListAndWatch</span><span class="p">(</span><span class="nx">stopCh</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+<span class="mi">283</span><span class="p">:</span> 			<span class="nx">r</span><span class="p">.</span><span class="nf">watchErrorHandler</span><span class="p">(</span><span class="nx">r</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+<span class="mi">284</span><span class="p">:</span> 		<span class="p">}</span>
+<span class="mi">285</span><span class="p">:</span> 	<span class="p">},</span> <span class="nx">r</span><span class="p">.</span><span class="nx">backoffManager</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">stopCh</span><span class="p">)</span>
+<span class="mi">286</span><span class="p">:</span> 	<span class="nx">klog</span><span class="p">.</span><span class="nf">V</span><span class="p">(</span><span class="mi">3</span><span class="p">).</span><span class="nf">Infof</span><span class="p">(</span><span class="s">&#34;Stopping reflector %s (%s) from %s&#34;</span><span class="p">,</span> <span class="nx">r</span><span class="p">.</span><span class="nx">typeDescription</span><span class="p">,</span> <span class="nx">r</span><span class="p">.</span><span class="nx">resyncPeriod</span><span class="p">,</span> <span class="nx">r</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span>
+<span class="mi">287</span><span class="p">:</span> <span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/kubernetes/autoscaler/blob/c35eb6491d3c6b65dab5ad9ee3468cb439630ecd/cluster-autoscaler/vendor/k8s.io/client-go/tools/cache/reflector.go#L276-L287">source</a></p>
+<p><code>BackoffUntil</code> is called if <code>ListAndWatch</code> exits for some reason.
+Let&rsquo;s look at <code>ListAndWatch</code> (I have removed anything but the bare bones of the function to easily see what&rsquo;s happening)</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// File: client-go/tools/cache/reflector.go
+</span><span class="c1"></span><span class="mi">312</span><span class="p">:</span> <span class="c1">// ListAndWatch first lists all items and get the resource version at the moment of call,
+</span><span class="c1"></span><span class="mi">313</span><span class="p">:</span> <span class="c1">// and then use the resource version to watch.
+</span><span class="c1"></span><span class="mi">314</span><span class="p">:</span> <span class="c1">// It returns error if ListAndWatch didn&#39;t even try to initialize watch.
+</span><span class="c1"></span><span class="mi">315</span><span class="p">:</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">r</span> <span class="o">*</span><span class="nx">Reflector</span><span class="p">)</span> <span class="nf">ListAndWatch</span><span class="p">(</span><span class="nx">stopCh</span> <span class="o">&lt;-</span><span class="kd">chan</span> <span class="kd">struct</span><span class="p">{})</span> <span class="kt">error</span> <span class="p">{</span>
+<span class="o">...</span> 
+<span class="mi">318</span><span class="p">:</span> 	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">list</span><span class="p">(</span><span class="nx">stopCh</span><span class="p">)</span>
+<span class="mi">319</span><span class="p">:</span> 	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+<span class="mi">320</span><span class="p">:</span> 		<span class="k">return</span> <span class="nx">err</span>
+<span class="mi">321</span><span class="p">:</span> 	<span class="p">}</span>
+<span class="mi">322</span><span class="p">:</span> 
+<span class="o">...</span>
+<span class="mi">352</span><span class="p">:</span> 	<span class="k">for</span> <span class="p">{</span>
+<span class="mi">353</span><span class="p">:</span> 		<span class="c1">// give the stopCh a chance to stop the loop, even in case of continue statements further down on errors
+</span><span class="c1"></span><span class="mi">354</span><span class="p">:</span> 		<span class="k">select</span> <span class="p">{</span>
+<span class="mi">355</span><span class="p">:</span> 		<span class="k">case</span> <span class="o">&lt;-</span><span class="nx">stopCh</span><span class="p">:</span>
+<span class="mi">356</span><span class="p">:</span> 			<span class="k">return</span> <span class="kc">nil</span>
+<span class="mi">357</span><span class="p">:</span> 		<span class="k">default</span><span class="p">:</span>
+<span class="mi">358</span><span class="p">:</span> 		<span class="p">}</span>
+
+<span class="o">...</span>
+<span class="mi">374</span><span class="p">:</span> 		<span class="nx">w</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nx">listerWatcher</span><span class="p">.</span><span class="nf">Watch</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span>
+<span class="mi">375</span><span class="p">:</span> 		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+<span class="o">...</span>
+<span class="mi">385</span><span class="p">:</span> 			<span class="k">return</span> <span class="nx">err</span>
+<span class="mi">386</span><span class="p">:</span> 		<span class="p">}</span>
+<span class="mi">387</span><span class="p">:</span> 
+<span class="mi">388</span><span class="p">:</span> 		<span class="nx">err</span> <span class="p">=</span> <span class="nf">watchHandler</span><span class="p">(</span><span class="nx">start</span><span class="p">,</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">r</span><span class="p">.</span><span class="nx">store</span><span class="p">,</span> <span class="nx">r</span><span class="p">.</span><span class="nx">expectedType</span><span class="p">,</span> <span class="nx">r</span><span class="p">.</span><span class="nx">expectedGVK</span><span class="p">,</span> <span class="nx">r</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="nx">r</span><span class="p">.</span><span class="nx">typeDescription</span><span class="p">,</span> <span class="nx">r</span><span class="p">.</span><span class="nx">setLastSyncResourceVersion</span><span class="p">,</span> <span class="nx">r</span><span class="p">.</span><span class="nx">clock</span><span class="p">,</span> <span class="nx">resyncerrc</span><span class="p">,</span> <span class="nx">stopCh</span><span class="p">)</span>
+
+<span class="o">...</span>
+<span class="mi">411</span><span class="p">:</span>	<span class="p">}</span>
+<span class="mi">412</span><span class="p">:}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/kubernetes/autoscaler/blob/c35eb6491d3c6b65dab5ad9ee3468cb439630ecd/cluster-autoscaler/vendor/k8s.io/client-go/tools/cache/reflector.go#L312-L412">source</a><br>
+As you can see, <code>list</code> (<a href="https://github.com/kubernetes/autoscaler/blob/c35eb6491d3c6b65dab5ad9ee3468cb439630ecd/cluster-autoscaler/vendor/k8s.io/client-go/tools/cache/reflector.go#L416"><code>list</code> here is a wrapper function</a> which internally <a href="https://github.com/kubernetes/autoscaler/blob/c35eb6491d3c6b65dab5ad9ee3468cb439630ecd/cluster-autoscaler/vendor/k8s.io/client-go/tools/cache/reflector.go#L435-L437">calls <code>r.listerWatcher.List()</code></a>) is called at the beginning and <code>watch</code> takes over. Notice how <code>stopCh</code> can be used to stop the reflector because we keep watching for it from line <code>:354</code> to line <code>:358</code>. <a href="https://github.com/kubernetes/autoscaler/blob/c35eb6491d3c6b65dab5ad9ee3468cb439630ecd/cluster-autoscaler/vendor/k8s.io/client-go/tools/cache/reflector.go#L531-L620"><code>watchHandler</code> is what reads the content from watch that api-server sends and updates the cache</a>.</p>
+<p>The last line creates and returns a <code>ScheduledPodLister</code>.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="mi">216</span><span class="p">:</span> 	<span class="k">return</span> <span class="o">&amp;</span><span class="nx">ScheduledPodLister</span><span class="p">{</span>
+<span class="mi">217</span><span class="p">:</span> 		<span class="nx">podLister</span><span class="p">:</span> <span class="nx">podLister</span><span class="p">,</span>
+<span class="mi">218</span><span class="p">:</span> 	<span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="to-recap">To recap,</h2>
+<ol>
+<li>Querying API Server directly using client-go in a loop puts load on the API Server</li>
+<li>To get around this we use listers. Listers use a Cache internally to query resources (like pods) instead of hitting the API Server directly</li>
+<li>The Cache is updated by <code>reflector</code> using <code>list</code> and <code>watch</code> function.</li>
+</ol>
+<h2 id="conclusion">Conclusion</h2>
+<p>I hope that gives you an understanding of listers, reflectors, list/watch functions and how they work together. I haven&rsquo;t covered <code>Informers</code> or delved too deep into things like <code>cache.Store</code>, <code>cache.Indexer</code>. I think they are interesting topics in their own right and deserve a separate blogpost.</p>
+<h2 id="feedback">Feedback</h2>
+<p>I appreciate any sort (good and bad) of constructive feedback. Feel free to mail me at <code>surajrbanakar@gmail.com</code>.</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">vadasambar</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2023-02-17
+        <a href="https://github.com/vadafoss/vadasambar.github.io/commit/0d432fd05631ba4ad7e3db0add5fe7a43588da91" title="add blogpost `Understanding listers and reflectors in client-go...`">(0d432fd)</a>
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content">© Suraj Banakar 2022 <a rel='license' href='http://creativecommons.org/licenses/by-nc-sa/4.0/'' target='_blank'>CC BY-NC-SA 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/kubernetes/">kubernetes</a>
+          <a href="/tags/client-go/">client-go</a>
+          <a href="/tags/go/">go</a>
+          <a href="/tags/listers/">listers</a>
+          <a href="/tags/reflectors/">reflectors</a>
+          <a href="/tags/cluster-autoscaler/">cluster-autoscaler</a>
+          <a href="/tags/ca/">ca</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/kubernetes/notes-for-executing-script-on-all-nodes/">
+            <span class="next-text nav-default">Notes around my failed idea of `Patching Kubernetes nodes with fixes without restarting the nodes`</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:surajrbanakar@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/6874596/vadasambar" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/_vadasambar" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.linkedin.com/in/suraj-banakar-97b4b4141/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/vadasambar" class="iconfont icon-github" title="github"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2020 - 
+    2023<span class="heart"><i class="iconfont icon-heart"></i></span><span>vadasambar</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-178170176-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

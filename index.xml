@@ -6,7 +6,16 @@
     <description>Recent content on In Search of Lost Time</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 10 Jan 2023 11:11:00 +0530</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 17 Feb 2023 23:22:00 +0530</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Understanding client-go listers and reflectors in the context of cluster-autoscaler</title>
+      <link>/post/kubernetes/understanding-listers-and-reflectors-in-client-go/</link>
+      <pubDate>Fri, 17 Feb 2023 23:22:00 +0530</pubDate>
+      
+      <guid>/post/kubernetes/understanding-listers-and-reflectors-in-client-go/</guid>
+      <description>What are listers and reflectors in client-go? I am going to talk about the above problem in the context of cluster-autoscaler.</description>
+    </item>
+    
     <item>
       <title>Notes around my failed idea of `Patching Kubernetes nodes with fixes without restarting the nodes`</title>
       <link>/post/kubernetes/notes-for-executing-script-on-all-nodes/</link>
