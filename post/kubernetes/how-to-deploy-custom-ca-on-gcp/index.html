@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>How to install a custom cluster-autoscaler on a GKE/GCP cluster - In Search of Lost Time</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="vadasambar" /><meta name="description" content="Context If you are using GKE to create your Kubernetes cluster, you can add cluster-autoscaler by checking the Enable cluster auto-scaler option while creating the cluster (this is a Standard GKE cluster and not Autopilot GKE cluster) Problem If you want to tweak this cluster-autoscaler e.g., change some flag) or deploy your own image of cluster-autoscaler (which I wanted to do to test https://github.com/kubernetes/autoscaler/pull/5419), it&amp;rsquo;s hard to do (StackOverflow question around this)." /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
+
+
+<link rel="canonical" href="/post/kubernetes/how-to-deploy-custom-ca-on-gcp/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b5a744db6de49a86cadafb3b70f555ab443f83c307a483402259e94726b045ff.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="How to install a custom cluster-autoscaler on a GKE/GCP cluster" />
+<meta property="og:description" content="Context If you are using GKE to create your Kubernetes cluster, you can add cluster-autoscaler by checking the Enable cluster auto-scaler option while creating the cluster (this is a Standard GKE cluster and not Autopilot GKE cluster) Problem If you want to tweak this cluster-autoscaler e.g., change some flag) or deploy your own image of cluster-autoscaler (which I wanted to do to test https://github.com/kubernetes/autoscaler/pull/5419), it&rsquo;s hard to do (StackOverflow question around this)." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/kubernetes/how-to-deploy-custom-ca-on-gcp/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2023-03-17T10:00:00+05:30" />
+<meta property="article:modified_time" content="2023-03-17T10:05:49+05:30" />
+
+<meta itemprop="name" content="How to install a custom cluster-autoscaler on a GKE/GCP cluster">
+<meta itemprop="description" content="Context If you are using GKE to create your Kubernetes cluster, you can add cluster-autoscaler by checking the Enable cluster auto-scaler option while creating the cluster (this is a Standard GKE cluster and not Autopilot GKE cluster) Problem If you want to tweak this cluster-autoscaler e.g., change some flag) or deploy your own image of cluster-autoscaler (which I wanted to do to test https://github.com/kubernetes/autoscaler/pull/5419), it&rsquo;s hard to do (StackOverflow question around this)."><meta itemprop="datePublished" content="2023-03-17T10:00:00+05:30" />
+<meta itemprop="dateModified" content="2023-03-17T10:05:49+05:30" />
+<meta itemprop="wordCount" content="1683">
+<meta itemprop="keywords" content="kubernetes,cluster-autoscaler,gcp,gke," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="How to install a custom cluster-autoscaler on a GKE/GCP cluster"/>
+<meta name="twitter:description" content="Context If you are using GKE to create your Kubernetes cluster, you can add cluster-autoscaler by checking the Enable cluster auto-scaler option while creating the cluster (this is a Standard GKE cluster and not Autopilot GKE cluster) Problem If you want to tweak this cluster-autoscaler e.g., change some flag) or deploy your own image of cluster-autoscaler (which I wanted to do to test https://github.com/kubernetes/autoscaler/pull/5419), it&rsquo;s hard to do (StackOverflow question around this)."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">In Search of Lost Time</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/about">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">In Search of Lost Time</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">How to install a custom cluster-autoscaler on a GKE/GCP cluster</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2023-03-17 </span>
+        
+          <span class="more-meta"> 1683 words </span>
+          <span class="more-meta"> 8 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#context">Context</a></li>
+        <li><a href="#problem">Problem</a></li>
+        <li><a href="#solution">Solution</a>
+          <ul>
+            <li><a href="#1-create-a-cluster-without-gke-cluster-autoscaler">1. Create a cluster without GKE cluster-autoscaler</a></li>
+            <li><a href="#2-check-gke-cluster-autoscaler-has-not-been-enabled">2. Check GKE cluster-autoscaler has not been enabled</a></li>
+            <li><a href="#3-add-permissions-for-cluster-autoscaler-to-manage-instance-groupshttpscloudgooglecomcomputedocsinstance-groups">3. Add permissions for cluster-autoscaler to manage <a href="https://cloud.google.com/compute/docs/instance-groups">Instance Groups</a></a></li>
+            <li><a href="#4-deploy-your-own-cluster-autoscaler">4. Deploy your own cluster-autoscaler</a></li>
+          </ul>
+        </li>
+        <li><a href="#conclusion">Conclusion</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="context">Context</h2>
+<p>If you are using GKE to create your Kubernetes cluster, you can add cluster-autoscaler by checking the <code>Enable cluster auto-scaler</code> option while creating the cluster (this is a <code>Standard</code> GKE cluster <a href="https://cloud.google.com/kubernetes-engine/docs/resources/autopilot-standard-feature-comparison#feature-comparison">and not <code>Autopilot</code> GKE cluster</a>)
+<img src="./images/2023-02-03-09-50-53.png" alt=""></p>
+<h2 id="problem">Problem</h2>
+<p>If you want to tweak this cluster-autoscaler e.g., <a href="https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md#what-are-the-parameters-to-ca">change some flag</a>) or deploy your own image of cluster-autoscaler (which I wanted to do to test <a href="https://github.com/kubernetes/autoscaler/pull/5419)">https://github.com/kubernetes/autoscaler/pull/5419)</a>, <a href="https://github.com/kubernetes/autoscaler/issues/966">it&rsquo;s hard to do</a> (<a href="https://stackoverflow.com/questions/48963625/where-to-config-the-kubernetes-cluster-autoscaler-on-google-cloud">StackOverflow question around this</a>). You can tweak <a href="https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-autoscaler">some parameters of the GKE deployed cluster-autoscaler but it&rsquo;s quite limited</a>. You can&rsquo;t access the cluster-autoscaler deployment as a user using <code>kubectl get deployment cluster-autoscaler -nkube-system</code>. GKE hides it from you.</p>
+<p>How do you tweak cluster-autoscaler on GKE?</p>
+<h2 id="solution">Solution</h2>
+<p>One of the ways to solve this problem is to disable GKE cluster-autoscaler while creating the cluster and deploy your own cluster-autoscaler. Here&rsquo;s a step-by-step guide to to do that:</p>
+<h3 id="1-create-a-cluster-without-gke-cluster-autoscaler">1. Create a cluster without GKE cluster-autoscaler</h3>
+<p>Refer to <a href="https://cloud.google.com/kubernetes-engine/docs/how-to/creating-a-zonal-cluster#console">this</a> guide to create a <code>Standard</code> GKE cluster (please create the cluster after reading this section completely). When you are configuring nodepools in <code>NODE POOLS</code> section, <strong>don&rsquo;t enable</strong> cluster-autscaler.
+<img src="./images/2023-02-03-09-50-53.png" alt=""></p>
+<p><strong>Make sure you check <code>Enable Workload Identity</code> (more info <a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#enable">here</a>; We need this later)</strong>
+<img src="./images/2023-02-03-11-28-55.png" alt=""></p>
+<h3 id="2-check-gke-cluster-autoscaler-has-not-been-enabled">2. Check GKE cluster-autoscaler has not been enabled</h3>
+<p>Here&rsquo;s my cluster for example:
+<img src="./images/2023-02-03-10-10-30.png" alt="">
+Connect to your cluster (if you don&rsquo;t know how, check <a href="https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl">the official guide</a>).</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">$ gcloud container clusters describe cluster-1 --region<span class="o">=</span>us-central1-c <span class="p">|</span> grep <span class="s2">&#34;nodePools:&#34;</span> -A <span class="m">5</span>
+nodePools:
+- autoscaling: <span class="o">{}</span>
+  ...
+</code></pre></td></tr></table>
+</div>
+</div><p><code>autoscaling</code> is empty which means GKE cluster-autoscaler is disabled.</p>
+<h3 id="3-add-permissions-for-cluster-autoscaler-to-manage-instance-groupshttpscloudgooglecomcomputedocsinstance-groups">3. Add permissions for cluster-autoscaler to manage <a href="https://cloud.google.com/compute/docs/instance-groups">Instance Groups</a></h3>
+<p>(I like to think of Instance Groups as AWS AutoScalingGroups in GCP world.)</p>
+<p>To let cluster-autoscaler scale the nodes, we need to give it permission to manage Instance Groups.</p>
+<h4 id="1-create-a-new-gcp-service-account-for-cluster-autoscaler"><strong>1. Create a new GCP Service Account for cluster-autoscaler</strong></h4>
+<p>Refer the <a href="https://cloud.google.com/iam/docs/creating-managing-service-accounts#creating">official docs</a> for detailed instructions.
+<img src="./images/2023-02-03-10-46-28.png" alt=""><br>
+You can skip (2) and (3) and directly click <code>DONE</code> button.</p>
+<p><img src="./images/2023-02-03-10-47-57.png" alt=""></p>
+<h4 id="2-attach-an-iam-role-to-your-gcp-service-account"><strong>2. Attach an IAM role to your GCP Service Account</strong></h4>
+<p>I will be using <code>Compute Instance Admin (v1)</code> role which might not be the best role.<br>
+<img src="./images/2023-02-03-10-52-19.png" alt=""><br>
+Ref: <a href="https://cloud.google.com/iam/docs/understanding-roles#compute.instanceAdmin.v1">https://cloud.google.com/iam/docs/understanding-roles#compute.instanceAdmin.v1</a></p>
+<p>You can define your own role for granular control by adding a new role
+<img src="./images/2023-02-03-10-54-36.png" alt=""></p>
+<p>Click on <code>CREATE ROLE</code>:
+<img src="./images/2023-02-03-10-55-10.png" alt=""></p>
+<p>Define your role:<br>
+<img src="./images/2023-02-03-10-55-26.png" alt=""></p>
+<p>Once the role is created/decided we need to link it to the IAM Service Account. To do this, go to <code>IAM and admin</code> -&gt; <code>IAM</code><br>
+<img src="./images/2023-02-03-10-58-17.png" alt=""></p>
+<p>Click on <code>GRANT ACCESS</code><br>
+<img src="./images/2023-02-03-11-00-17.png" alt=""><br>
+Select our Service Account from the drop-down list<br>
+<img src="./images/2023-02-03-11-01-44.png" alt=""><br>
+And assign the role<br>
+<img src="./images/2023-02-03-11-02-14.png" alt=""><br>
+Click on <code>SAVE</code>.</p>
+<p>Our GCP Service Account now has permissions to manage Instance Groups.</p>
+<h4 id="3-deploy-resourcequota-resource"><strong>3. Deploy <code>ResourceQuota</code> resource</strong></h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">suraj@suraj:~/sandbox$ k explain resourcequota
+KIND:     ResourceQuota
+VERSION:  v1
+
+DESCRIPTION:
+     ResourceQuota sets aggregate quota restrictions enforced per namespace
+</code></pre></td></tr></table>
+</div>
+</div><p>Think of <code>ResourceQuota</code> as per-namespace limits on pod creation. Refer to the official docs for more info: <a href="https://v1-24.docs.kubernetes.io/docs/concepts/policy/resource-quotas/">https://v1-24.docs.kubernetes.io/docs/concepts/policy/resource-quotas/</a></p>
+<p>Why are we talking about this?</p>
+<p>cluster-autoscaler Deployment uses <code>system-cluster-critical</code> PriorityClass (<a href="https://github.com/kubernetes/autoscaler/blob/7d5b4729664d0e89828adb59932d950a8923bfa2/charts/cluster-autoscaler/values.yaml#L270">ref</a>).</p>
+<p>If you deploy cluster-autoscaler in non-<code>kube-system</code> namespace you will see cluster-autoscaler ReplicaSet unable to create the pods</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">  Warning  FailedCreate  9s (x15 over 92s)  replicaset-controller  Error creating: insufficient quota to match these scopes: [{PriorityClass In [system-node-critical system-cluster-critical]}]
+</code></pre></td></tr></table>
+</div>
+</div><p>GKE by default creates <code>gcp-critical-pods</code> ResourceQuota for <code>kube-system</code> namespace and <code>gke-resource-quotas</code> ResourceQuota for all other namespaces.</p>
+<blockquote>
+<p>A set of resource quotas is automatically applied to clusters with 100 nodes or fewer and to namespaces on those clusters. These quotas, which cannot be removed, protect the cluster&rsquo;s control plane from instability caused by potential bugs in applications deployed to the cluster.</p>
+</blockquote>
+<p><a href="https://cloud.google.com/kubernetes-engine/quotas#resource_quotas">https://cloud.google.com/kubernetes-engine/quotas#resource_quotas</a></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">$ kubectl get resourcequota -A
+NAMESPACE         NAME                  AGE   REQUEST                                                                                                                               LIMIT
+default           gke-resource-quotas   57m   count/ingresses.extensions: 0/100, count/ingresses.networking.k8s.io: 0/100, count/jobs.batch: 0/5k, pods: 0/1500, services: 2/500    
+kube-node-lease   gke-resource-quotas   57m   count/ingresses.extensions: 0/100, count/ingresses.networking.k8s.io: 0/100, count/jobs.batch: 0/5k, pods: 0/1500, services: 0/500    
+kube-public       gke-resource-quotas   57m   count/ingresses.extensions: 0/100, count/ingresses.networking.k8s.io: 0/100, count/jobs.batch: 0/5k, pods: 0/1500, services: 0/500    
+kube-system       gcp-critical-pods     64m   pods: 9/1G                                                                                                                            
+kube-system       gke-resource-quotas   57m   count/ingresses.extensions: 0/100, count/ingresses.networking.k8s.io: 0/100, count/jobs.batch: 0/5k, pods: 11/1500, services: 3/500 
+</code></pre></td></tr></table>
+</div>
+</div><p>Looking at <code>gcp-critical-pods</code> ResourceQuota,</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="l">$ kubectl get resourcequota gcp-critical-pods -oyaml -nkube-system </span><span class="w">
+</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ResourceQuota</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">addonmanager.kubernetes.io/mode</span><span class="p">:</span><span class="w"> </span><span class="l">Reconcile</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gcp-critical-pods</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">kube-system</span><span class="w">
+</span><span class="w">  </span><span class="l">...</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">hard</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">pods</span><span class="p">:</span><span class="w"> </span><span class="l">1G</span><span class="w">
+</span><span class="w">  </span><span class="nt">scopeSelector</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">matchExpressions</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l">In</span><span class="w">
+</span><span class="w">      </span><span class="nt">scopeName</span><span class="p">:</span><span class="w"> </span><span class="l">PriorityClass</span><span class="w">
+</span><span class="w">      </span><span class="nt">values</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="l">system-node-critical</span><span class="w">
+</span><span class="w">      </span>- <span class="l">system-cluster-critical</span><span class="w">
+</span><span class="w"></span><span class="nt">status</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">hard</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">pods</span><span class="p">:</span><span class="w"> </span><span class="l">1G</span><span class="w">
+</span><span class="w">  </span><span class="nt">used</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">pods</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;9&#34;</span><span class="w">
+</span><span class="w"></span><span class="nn">...</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>As you can see, <code>gcp-critical-pods</code> ResourceQuota places a hard limit of 10 pods for pods using <code>system-node-critical</code> and <code>system-cluster-critical</code> PriorityClass. Since the quota isn&rsquo;t filled up yet (<code>used</code> is 9 pods), we won&rsquo;t see any problems in <code>kube-system</code> namespace if we deploy our cluster-autoscaler there. The only problem is, we can&rsquo;t deploy our cluster-autoscaler in <code>kube-system</code> namespace (I will get to the why in a moment).</p>
+<p>Now, if we look at the <code>gke-resource-quotas</code> in a non-<code>kube-system</code> namespace e.g., <code>default</code> namespace</p>
+<p>ResourceQuota in the <code>default</code> namespace</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="l">$ kubectl get resourcequota gke-resource-quotas -oyaml</span><span class="w">
+</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ResourceQuota</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gke-resource-quotas</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">default</span><span class="w">
+</span><span class="w">  </span><span class="l">...</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">hard</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">count/ingresses.extensions</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;100&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">count/ingresses.networking.k8s.io</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;100&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">count/jobs.batch</span><span class="p">:</span><span class="w"> </span><span class="l">5k</span><span class="w">
+</span><span class="w">    </span><span class="nt">pods</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;1500&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">services</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;500&#34;</span><span class="w">
+</span><span class="w"></span><span class="nt">status</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">hard</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">count/ingresses.extensions</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;100&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">count/ingresses.networking.k8s.io</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;100&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">count/jobs.batch</span><span class="p">:</span><span class="w"> </span><span class="l">5k</span><span class="w">
+</span><span class="w">    </span><span class="nt">pods</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;1500&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">services</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;500&#34;</span><span class="w">
+</span><span class="w">  </span><span class="nt">used</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">count/ingresses.networking.k8s.io</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;0&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">count/jobs.batch</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;0&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">pods</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;0&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">services</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;2&#34;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>Notice the hard limit on pods (<code>spec.hard.pods</code>) is 1500 and the current <code>status.used.pods</code> is 0. Why are we not able to create new cluster-autoscaler pods?<br>
+I think it&rsquo;s because GKE sets a limit on Priority Class consumption for certain Priority Classes. What does that mean?</p>
+<blockquote>
+<p>It may be desired that pods at a particular priority, eg. &ldquo;cluster-services&rdquo;, should be allowed in a namespace, if and only if, a matching quota object exists.</p>
+<p>With this mechanism, operators are able to restrict usage of certain high priority classes to a limited number of namespaces and not every namespace will be able to consume these priority classes by default.</p>
+</blockquote>
+<p>Ref: <a href="https://v1-24.docs.kubernetes.io/docs/concepts/policy/resource-quotas/#limit-priority-class-consumption-by-default">https://v1-24.docs.kubernetes.io/docs/concepts/policy/resource-quotas/#limit-priority-class-consumption-by-default</a></p>
+<p>Because we can&rsquo;t rely on the <code>gke-resource-quotas</code> ResourceQuota for cluster-autoscaler, we have to create our own.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ResourceQuota</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">addonmanager.kubernetes.io/mode</span><span class="p">:</span><span class="w"> </span><span class="l">Reconcile</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gcp-critical-pods</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">default</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">hard</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">pods</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="c"># 2 because we need it only for cluster-autoscaler</span><span class="w">
+</span><span class="w">  </span><span class="nt">scopeSelector</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">matchExpressions</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l">In</span><span class="w">
+</span><span class="w">      </span><span class="nt">scopeName</span><span class="p">:</span><span class="w"> </span><span class="l">PriorityClass</span><span class="w">
+</span><span class="w">      </span><span class="nt">values</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="l">system-cluster-critical</span><span class="w"> </span><span class="c"># cluster-autoscaler priority class</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>Save the above yaml in a file and <code>kubectl apply -f &lt;file&gt;.yaml</code>.
+<img src="./images/2023-03-10-11-49-59.png" alt=""></p>
+<h3 id="4-deploy-your-own-cluster-autoscaler">4. Deploy your own cluster-autoscaler</h3>
+<h4 id="41-before-installing"><strong>4.1. Before Installing</strong></h4>
+<p>To install the chart we first need to add the helm repo:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">helm repo add autoscaler https://kubernetes.github.io/autoscaler
+helm repo update
+</code></pre></td></tr></table>
+</div>
+</div><p>ref: <a href="https://artifacthub.io/packages/helm/cluster-autoscaler/cluster-autoscaler/9.25.0#tl-dr">https://artifacthub.io/packages/helm/cluster-autoscaler/cluster-autoscaler/9.25.0#tl-dr</a></p>
+<p>To check all the available chart versions, do</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">helm search repo cluster-autoscaler --versions
+NAME                               	CHART VERSION	APP VERSION	DESCRIPTION                                       
+autoscaler/cluster-autoscaler      	9.25.0       	1.24.0     	Scales Kubernetes worker nodes within autoscali...
+autoscaler/cluster-autoscaler      	9.24.0       	1.23.0     	Scales Kubernetes worker nodes within autoscali...
+autoscaler/cluster-autoscaler      	9.23.2       	1.23.0     	Scales Kubernetes worker nodes within autoscali...
+...
+</code></pre></td></tr></table>
+</div>
+</div><p><code>APP VERSION</code> above is the Kubernetes version supported by the chart.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">$ kubectl version --short
+...
+Client Version: v1.24.4
+Kustomize Version: v4.5.4
+Server Version: v1.24.9-gke.3200
+
+</code></pre></td></tr></table>
+</div>
+</div><p>Since I am on 1.24.x version of Kubernetes, I will be installing <code>9.25.0</code> version of the helm chart.</p>
+<p>We can install the chart in any namespace as long as it&rsquo;s not <code>kube-system</code>. Why? If you deploy the chart in <code>kube-system</code> namespace you will see the following issue when you check your cluster-autoscaler pod logs:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">I0125 05:50:05.187469       1 leaderelection.go:253] failed to acquire lease kube-system/cluster-autoscaler
+I0125 05:50:07.915634       1 leaderelection.go:352] lock is held by gke-20e46577c7cf4842bc69-6353-ac86-vm and has not yet expired
+I0125 05:50:07.915663       1 leaderelection.go:253] failed to acquire lease kube-system/cluster-autoscaler
+I0125 05:50:11.162260       1 leaderelection.go:352] lock is held by gke-20e46577c7cf4842bc69-6353-ac86-vm and has not yet expired
+I0125 05:50:11.162323       1 leaderelection.go:253] failed to acquire lease kube-system/cluster-autoscaler
+</code></pre></td></tr></table>
+</div>
+</div><p>More info: <a href="https://github.com/kubernetes/autoscaler/issues/5277">https://github.com/kubernetes/autoscaler/issues/5277</a></p>
+<h4 id="42-install-the-chart"><strong>4.2. Install the chart</strong></h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">$ helm install custom-ca autoscaler/cluster-autoscaler <span class="se">\
+</span><span class="se"></span>--set <span class="s2">&#34;autoscalingGroupsnamePrefix[0].name=gke-cluster-1,autoscalingGroupsnamePrefix[0].maxSize=10,autoscalingGroupsnamePrefix[0].minSize=1&#34;</span> <span class="se">\
+</span><span class="se"></span>--set autoDiscovery.clusterName<span class="o">=</span>cluster-1 <span class="se">\
+</span><span class="se"></span>--set <span class="s2">&#34;rbac.serviceAccount.annotations.iam\.gke\.io\/gcp-service-account=cluster-autoscaler@my-project-123456.iam.gserviceaccount.com&#34;</span> <span class="se">\
+</span><span class="se"></span>--set <span class="nv">cloudProvider</span><span class="o">=</span>gce <span class="se">\
+</span><span class="se"></span>--version<span class="o">=</span>9.25.0 <span class="se">\
+</span><span class="se"></span>--namespace<span class="o">=</span>default
+NAME: custom-ca
+LAST DEPLOYED: Fri Mar <span class="m">10</span> 11:55:49 <span class="m">2023</span>
+NAMESPACE: default
+STATUS: deployed
+REVISION: <span class="m">1</span>
+TEST SUITE: None
+NOTES:
+To verify that cluster-autoscaler has started, run:
+
+  kubectl --namespace<span class="o">=</span>default get pods -l <span class="s2">&#34;app.kubernetes.io/name=gce-cluster-autoscaler,app.kubernetes.io/instance=custom-ca&#34;</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p>ref1: <a href="https://artifacthub.io/packages/helm/cluster-autoscaler/cluster-autoscaler/9.25.0#gce">https://artifacthub.io/packages/helm/cluster-autoscaler/cluster-autoscaler/9.25.0#gce</a><br>
+ref2: <a href="https://artifacthub.io/packages/helm/cluster-autoscaler/cluster-autoscaler/9.25.0?modal=values&amp;path=rbac.serviceAccount.annotations">https://artifacthub.io/packages/helm/cluster-autoscaler/cluster-autoscaler/9.25.0?modal=values&amp;path=rbac.serviceAccount.annotations</a></p>
+<p><code>your-ig-prefix</code> is the prefix of Instance Groups you want to let cluster-autoscaler manage. If you want to target all the Instance Groups, you can specify a short prefix like <code>gke-&lt;your-cluster-name&gt;</code>. For example, in my case since I created a cluster called <code>cluster-1</code>, it would be <code>gke-cluster-1</code>.</p>
+<p>Note that <a href="https://artifacthub.io/packages/helm/cluster-autoscaler/cluster-autoscaler/9.25.0?modal=values&amp;path=autoscalingGroupsnamePrefix"><code>autoscalingGroupsnamePrefix</code> is an array</a> because you can specify multiple Instance Groups to match using multiple prefixes (check line 74 to 78 <a href="https://artifacthub.io/packages/helm/cluster-autoscaler/cluster-autoscaler/9.25.0?modal=template&amp;template=deployment.yaml">here</a>). In the above command we are only specifying one prefix to match all the nodepools.</p>
+<p><img src="./images/2023-02-03-10-30-34.png" alt=""></p>
+<h4 id="43-create-kubernetes-service-account-to-gcp-iam-service-account-binding"><strong>4.3. Create Kubernetes Service Account to GCP IAM Service Account binding</strong></h4>
+<blockquote>
+<p>Allow the Kubernetes service account to impersonate the IAM service account by adding an <a href="https://cloud.google.com/sdk/gcloud/reference/iam/service-accounts/add-iam-policy-binding">IAM policy binding</a> between the two service accounts. This binding allows the Kubernetes service account to act as the IAM service account.</p>
+</blockquote>
+<p><a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#authenticating_to">https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#authenticating_to</a></p>
+<p>We have to link our Kubernetes Service Account with GCP IAM Service Account binding.
+The command looks like this:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">$ gcloud iam service-accounts add-iam-policy-binding cluster-autoscaler@&lt;GCP-project-ID&gt;.iam.gserviceaccount.com \
+    --role roles/iam.workloadIdentityUser \
+    --member &#34;serviceAccount:&lt;GCP-project-ID&gt;.svc.id.goog[&lt;Kubernetes-namespace&gt;/&lt;Kubernetes-Service-Account-name&gt;]&#34;
+</code></pre></td></tr></table>
+</div>
+</div><p>To find out your cluster-autoscaler&rsquo;s Kubernetes Service Account,</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">$ kubectl get pod custom-ca-gce-cluster-autoscaler-5989f4d65c-trbmm -o=jsonpath=&#39;{.spec.serviceAccountName}&#39;
+custom-ca-gce-cluster-autoscaler
+</code></pre></td></tr></table>
+</div>
+</div><p>Replace <code>custom-ca-gce-cluster-autoscaler-5989f4d65c-trbmm</code> with name of your cluster-autoscaler pod.</p>
+<p>Let&rsquo;s say if the GCP project ID is <code>my-project-123456</code>, GCP Service account is <code>cluster-autoscaler@my-project-123456.iam.gserviceaccount.com</code>, Kubernetes Service Account is in the <code>default</code> namespace and it is called <code>custom-ca-gce-cluster-autoscaler</code> you can do:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">$ gcloud iam service-accounts add-iam-policy-binding cluster-autoscaler@my-project-123456.iam.gserviceaccount.com \
+    --role roles/iam.workloadIdentityUser \
+    --member &#34;serviceAccount:my-project-123456.svc.id.goog[default/custom-ca-gce-cluster-autoscaler]&#34;
+Updated IAM policy for serviceAccount [cluster-autoscaler@my-project-123456.iam.gserviceaccount.com].
+bindings:
+- members:
+  - serviceAccount:my-project-123456.svc.id.goog[default/custom-ca-gce-cluster-autoscaler]
+  role: roles/iam.workloadIdentityUser
+etag: CoB1hlRFPq0=
+version: 1
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="44-use-the-gcp-service-account-in-kubernetes"><strong>4.4. Use the GCP Service Account in Kubernetes</strong></h4>
+<p>Go to <code>IAM and admin</code> -&gt; <code>Service accounts</code>
+<img src="./images/2023-02-03-11-03-59.png" alt=""><br>
+Click on our Service Account
+<img src="./images/2023-02-03-11-06-40.png" alt=""></p>
+<p>Note that GCP doesn&rsquo;t recommend downloading Service Account json:</p>
+<blockquote>
+<p>Service account keys could pose a security risk if compromised. We recommend that you avoid downloading service account keys and instead use the <a href="https://cloud.google.com/iam/docs/workload-identity-federation?authuser=1&amp;_ga=2.63553071.-127385436.1673589403&amp;_gac=1.258503928.1673589583.Cj0KCQiA_P6dBhD1ARIsAAGI7HAJiD0sx0yk2ILgtHlHReM9i3g4m9sZIv0ebcrl9-m0MJqBRxSm3z4aAo6QEALw_wcB">Workload Identity Federation</a>. You can learn more about the best way to authenticate service accounts on Google Cloud <a href="https://cloud.google.com/blog/products/identity-security/how-to-authenticate-service-accounts-to-help-keep-applications-secure?authuser=1&amp;_ga=2.63553071.-127385436.1673589403&amp;_gac=1.258503928.1673589583.Cj0KCQiA_P6dBhD1ARIsAAGI7HAJiD0sx0yk2ILgtHlHReM9i3g4m9sZIv0ebcrl9-m0MJqBRxSm3z4aAo6QEALw_wcB">here</a>.</p>
+</blockquote>
+<p>To use the Service Account, we have to add the following annotation to the Kubernetes Service Account for our cluster-autoscaler:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">iam.gke.io/gcp-service-account: &lt;GCP-Service-Account-name&gt;@&lt;GCP-Project-Id&gt;.iam.gserviceaccount.com
+</code></pre></td></tr></table>
+</div>
+</div><p>Ref: <a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#authenticating_to">https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#authenticating_to</a></p>
+<p>For example,</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">kubectl annotate sa custom-ca-gce-cluster-autoscaler iam.gke.io/gcp-service-account=cluster-autoscaler@my-project-123456.iam.gserviceaccount.com
+serviceaccount/custom-ca-gce-cluster-autoscaler annotated
+
+</code></pre></td></tr></table>
+</div>
+</div><p>You should start seeing your cluster-autoscaler pod running
+<img src="./images/2023-03-10-12-02-28.png" alt=""></p>
+<h2 id="conclusion">Conclusion</h2>
+<p>That&rsquo;s all. If you have any sort of constructive feedback for me, feel free to mail me at <a href="mailto:surajrbanakar@gmail.com">surajrbanakar@gmail.com</a>.</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">vadasambar</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2023-03-17
+        <a href="https://github.com/vadafoss/vadasambar.github.io/commit/b2d48a3d06c4bc08ebc2d31aff39712fa401a921" title="add blogpost `How to install a custom cluster-autoscaler on a GKE...`">(b2d48a3)</a>
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content">© Suraj Banakar 2022 <a rel='license' href='http://creativecommons.org/licenses/by-nc-sa/4.0/'' target='_blank'>CC BY-NC-SA 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/kubernetes/">kubernetes</a>
+          <a href="/tags/cluster-autoscaler/">cluster-autoscaler</a>
+          <a href="/tags/gcp/">gcp</a>
+          <a href="/tags/gke/">gke</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/kubernetes/understanding-listers-and-reflectors-in-client-go/">
+            <span class="next-text nav-default">Understanding client-go listers and reflectors in the context of cluster-autoscaler</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:surajrbanakar@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/6874596/vadasambar" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/_vadasambar" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.linkedin.com/in/suraj-banakar-97b4b4141/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/vadasambar" class="iconfont icon-github" title="github"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2020 - 
+    2023<span class="heart"><i class="iconfont icon-heart"></i></span><span>vadasambar</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-178170176-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

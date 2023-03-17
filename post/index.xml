@@ -6,7 +6,16 @@
     <description>Recent content in Posts on In Search of Lost Time</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 17 Feb 2023 23:22:00 +0530</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 17 Mar 2023 10:00:00 +0530</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to install a custom cluster-autoscaler on a GKE/GCP cluster</title>
+      <link>/post/kubernetes/how-to-deploy-custom-ca-on-gcp/</link>
+      <pubDate>Fri, 17 Mar 2023 10:00:00 +0530</pubDate>
+      
+      <guid>/post/kubernetes/how-to-deploy-custom-ca-on-gcp/</guid>
+      <description>Context If you are using GKE to create your Kubernetes cluster, you can add cluster-autoscaler by checking the Enable cluster auto-scaler option while creating the cluster (this is a Standard GKE cluster and not Autopilot GKE cluster) Problem If you want to tweak this cluster-autoscaler e.g., change some flag) or deploy your own image of cluster-autoscaler (which I wanted to do to test https://github.com/kubernetes/autoscaler/pull/5419), it&amp;rsquo;s hard to do (StackOverflow question around this).</description>
+    </item>
+    
     <item>
       <title>Understanding client-go listers and reflectors in the context of cluster-autoscaler</title>
       <link>/post/kubernetes/understanding-listers-and-reflectors-in-client-go/</link>
