@@ -6,7 +6,16 @@
     <description>Recent content in kubernetes on In Search of Lost Time</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 17 Mar 2023 10:00:00 +0530</lastBuildDate><atom:link href="/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 31 Mar 2023 11:46:00 +0530</lastBuildDate><atom:link href="/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Would cluster-autoscaler consider my soft constraints?</title>
+      <link>/post/kubernetes/would-ca-consider-my-soft-constraints/</link>
+      <pubDate>Fri, 31 Mar 2023 11:46:00 +0530</pubDate>
+      
+      <guid>/post/kubernetes/would-ca-consider-my-soft-constraints/</guid>
+      <description>Is there a way to identify if cluster-autoscaler would consider scheduling constraints you have set?</description>
+    </item>
+    
     <item>
       <title>How to install a custom cluster-autoscaler on a GKE/GCP cluster</title>
       <link>/post/kubernetes/how-to-deploy-custom-ca-on-gcp/</link>

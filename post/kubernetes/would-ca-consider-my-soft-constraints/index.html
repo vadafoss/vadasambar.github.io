@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Would cluster-autoscaler consider my soft constraints? - In Search of Lost Time</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="vadasambar" /><meta name="description" content="Is there a way to identify if cluster-autoscaler would consider scheduling constraints you have set?" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
+
+
+<link rel="canonical" href="/post/kubernetes/would-ca-consider-my-soft-constraints/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b5a744db6de49a86cadafb3b70f555ab443f83c307a483402259e94726b045ff.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Would cluster-autoscaler consider my soft constraints?" />
+<meta property="og:description" content="Is there a way to identify if cluster-autoscaler would consider scheduling constraints you have set?" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/kubernetes/would-ca-consider-my-soft-constraints/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2023-03-31T11:46:00+05:30" />
+<meta property="article:modified_time" content="2023-03-31T11:47:24+05:30" />
+
+<meta itemprop="name" content="Would cluster-autoscaler consider my soft constraints?">
+<meta itemprop="description" content="Is there a way to identify if cluster-autoscaler would consider scheduling constraints you have set?"><meta itemprop="datePublished" content="2023-03-31T11:46:00+05:30" />
+<meta itemprop="dateModified" content="2023-03-31T11:47:24+05:30" />
+<meta itemprop="wordCount" content="2170">
+<meta itemprop="keywords" content="kubernetes,cluster-autoscaler,go," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Would cluster-autoscaler consider my soft constraints?"/>
+<meta name="twitter:description" content="Is there a way to identify if cluster-autoscaler would consider scheduling constraints you have set?"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">In Search of Lost Time</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/about">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">In Search of Lost Time</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Would cluster-autoscaler consider my soft constraints?</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2023-03-31 </span>
+        
+          <span class="more-meta"> 2170 words </span>
+          <span class="more-meta"> 11 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#problem">Problem</a>
+          <ul>
+            <li><a href="#1-why-does-ca-not-support-preferredduringschedulingignoredduringexecution-or-scheduleanyway-pod-topology-spread-constraint">1. Why does CA not support <code>preferredDuringSchedulingIgnoredDuringExecution</code> or <code>ScheduleAnyway</code> pod topology spread constraint?</a></li>
+            <li><a href="#2-is-there-a-way-to-identify-what-constraint-is-supportednot-supported">2. Is there a way to identify what constraint is supported/not supported?</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="problem">Problem</h2>
+<p>CA (cluster-autoscaler) considers scheduling constraints like <code>nodeSelector</code>, <code>requiredDuringSchedulingIgnoredDuringExecution</code> node affinity but it doesn&rsquo;t consider &ldquo;soft&rdquo; constraints like <code>preferredDuringSchedulingIgnoredDuringExecution</code> <a href="https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity">node affinity</a> or <code>ScheduleAnyway</code> pod topology spread (<a href="https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/">ref1</a>, <a href="https://kubernetes.io/blog/2020/05/introducing-podtopologyspread/">ref2</a>) constraint.</p>
+<blockquote>
+<p>However, CA does not consider &ldquo;soft&rdquo; constraints like <code>preferredDuringSchedulingIgnoredDuringExecution</code> when selecting node groups. That means that if CA has two or more node groups available for expansion, it will not use soft constraints to pick one node group over another.</p>
+</blockquote>
+<p><a href="https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md#does-ca-respect-node-affinity-when-selecting-node-groups-to-scale-up">Source</a></p>
+<ol>
+<li>Why does CA not support <code>preferredDuringSchedulingIgnoredDuringExecution</code> or <code>ScheduleAnyway</code> pod topology spread constraint?</li>
+<li>Is there a way to identify what constraint is supported/not supported?</li>
+</ol>
+<p>Answer for 1 is already available in pieces in the cluster-autoscaler&rsquo;s github issue comments. This blogpost</p>
+<ol>
+<li>paraphrases the comments so that they&rsquo;re easier to understand</li>
+<li>attempts to tie all the pieces together</li>
+</ol>
+<p>Answer for 2 might not completely answer the question but I hope it puts you in a better position to answer the question yourself.</p>
+<h3 id="1-why-does-ca-not-support-preferredduringschedulingignoredduringexecution-or-scheduleanyway-pod-topology-spread-constraint">1. Why does CA not support <code>preferredDuringSchedulingIgnoredDuringExecution</code> or <code>ScheduleAnyway</code> pod topology spread constraint?</h3>
+<blockquote>
+<p>Cluster autoscaler only works with default scheduler, any form of custom scheduling is not supported.</p>
+<p>The reason for this is CA works by importing kubernetes scheduler code, running it internally and expecting that the result will be exactly what scheduler will do.</p>
+</blockquote>
+<p><a href="https://github.com/kubernetes/kubernetes/issues/71070#issuecomment-439051879">Source</a></p>
+<p>What does this mean?<br>
+During scale-up, CA creates a fake node in the code and simulates scheduling the <code>Pending</code> pods on it (<a href="https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/core/scale_up.go#L87">ref</a>). If the <code>Pending</code> pods can be scheduled, CA creates an actual node based on the fake node i.e., scale-up happens.
+Similarly, during scale-down, when CA wants to scale-down a node, it simulates scheduling the pods on this node to other nodes in the cluster (<a href="https://github.com/kubernetes/autoscaler/blob/b6fa1f5bc80e453ad3fa94c423eb0df0d9e9fc24/cluster-autoscaler/simulator/scheduling/hinting_simulator.go#L116">ref</a>). If it&rsquo;s able to successfully do it, the node can be considered for scale-down.</p>
+<p>What does <code>simulates scheduling</code> here mean? <code>CA works by importing kubernetes scheduler code, running it internally and expecting that the result will be exactly what scheduler will do</code></p>
+<p><em>But</em> it doesn&rsquo;t fully simulate the scheduler. It only simulates a part of it.</p>
+<p>Let&rsquo;s first take a detour and look at the scheduler:</p>
+<p><img src="2023-03-24-11-17-46.png" alt=""></p>
+<p><a href="https://kubernetes.io/docs/concepts/scheduling-eviction/scheduling-framework/#extension-points">Source</a></p>
+<blockquote>
+<p>The scheduling cycle selects a node for the Pod, and the binding cycle applies that decision to the cluster. Together, a scheduling cycle and binding cycle are referred to as a &ldquo;scheduling context&rdquo;.</p>
+<p>Scheduling cycles are run serially, while binding cycles may run concurrently.</p>
+</blockquote>
+<blockquote>
+<p>In this picture &ldquo;Filter&rdquo; is equivalent to &ldquo;Predicate&rdquo; and &ldquo;Scoring&rdquo; is equivalent to &ldquo;Priority function&rdquo;.</p>
+</blockquote>
+<p><a href="https://kubernetes.io/docs/concepts/scheduling-eviction/scheduling-framework">Source</a></p>
+<p><em>Note: I am going to ignore <code>Binding Cycle</code> phase + <code>Reserve</code> and <code>Permit</code> extension points since they aren&rsquo;t relevant here.</em></p>
+<p><code>Scheduling Cycle</code> of the scheduler can be divided into roughly 2 parts:<br>
+<strong>1. Filtering (Predicates)</strong><br>
+Filtering phase filters the nodes which can be used to schedule the <code>Pending</code> pod. <code>PreFilter</code>, <code>Filter</code> and <code>PostFilter</code> extension points above can be thought of as part of the Filtering phase.<br>
+<strong>2. Scoring (Priority Functions)</strong><br>
+Scoring phase decides which node gets to host the pod based on scores alloted to the node. <code>PreScore</code>, <code>Score</code>, <code>Normalize Score</code> can be thought of as a part of <code>Scoring</code> phase. This phase can be thought of as a way to rank the nodes we got from the Filtering phase so that we can choose one of them for our pod.</p>
+<p><img src="2023-03-24-11-03-45.png" alt=""></p>
+<p>CA only uses Filtering part in the simulations (<code>PreFilter</code> and <code>Filter</code> extension points to be precise)
+Looking at where the Filtering part of scheduler is called in the CA:</p>
+<ul>
+<li><code>CheckPredicates</code> function</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//simulator/predicatechecker/schedulerbased.go
+</span><span class="c1"></span><span class="mi">138</span><span class="p">:</span> <span class="c1">// CheckPredicates checks if the given pod can be placed on the given node.
+</span><span class="c1"></span><span class="mi">139</span><span class="p">:</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">p</span> <span class="o">*</span><span class="nx">SchedulerBasedPredicateChecker</span><span class="p">)</span> <span class="nf">CheckPredicates</span><span class="p">(</span><span class="nx">clusterSnapshot</span> <span class="nx">clustersnapshot</span><span class="p">.</span><span class="nx">ClusterSnapshot</span><span class="p">,</span> <span class="nx">pod</span> <span class="o">*</span><span class="nx">apiv1</span><span class="p">.</span><span class="nx">Pod</span><span class="p">,</span> <span class="nx">nodeName</span> <span class="kt">string</span><span class="p">)</span> <span class="o">*</span><span class="nx">PredicateError</span> <span class="p">{</span>
+<span class="o">...</span>
+<span class="mi">153</span><span class="p">:</span> 	<span class="nx">_</span><span class="p">,</span> <span class="nx">preFilterStatus</span> <span class="o">:=</span> <span class="nx">p</span><span class="p">.</span><span class="nx">framework</span><span class="p">.</span><span class="nf">RunPreFilterPlugins</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">(),</span> <span class="nx">state</span><span class="p">,</span> <span class="nx">pod</span><span class="p">)</span> <span class="c1">// `PreFilter` plugins are called here
+</span><span class="c1"></span><span class="o">...</span>
+<span class="mi">162</span><span class="p">:</span> 
+<span class="mi">163</span><span class="p">:</span> 	<span class="nx">filterStatus</span> <span class="o">:=</span> <span class="nx">p</span><span class="p">.</span><span class="nx">framework</span><span class="p">.</span><span class="nf">RunFilterPlugins</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">(),</span> <span class="nx">state</span><span class="p">,</span> <span class="nx">pod</span><span class="p">,</span> <span class="nx">nodeInfo</span><span class="p">)</span> <span class="c1">// `Filter` plugins are called here
+</span><span class="c1"></span><span class="o">...</span>
+<span class="mi">185</span><span class="p">:</span> <span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/kubernetes/autoscaler/blob/32c6bbc0c9eced9c756525e15dfb3cfb00a52226/cluster-autoscaler/simulator/predicatechecker/schedulerbased.go#L138-L185">Source</a></p>
+<ul>
+<li><code>FitsAnyNodeMatching</code> function</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// simulator/predicatechecker/schedulerbased.go
+</span><span class="c1"></span><span class="mi">089</span><span class="p">:</span> <span class="c1">// FitsAnyNodeMatching checks if the given pod can be placed on any of the given nodes matching the provided function.
+</span><span class="c1"></span><span class="mi">090</span><span class="p">:</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">p</span> <span class="o">*</span><span class="nx">SchedulerBasedPredicateChecker</span><span class="p">)</span> <span class="nf">FitsAnyNodeMatching</span><span class="p">(</span><span class="nx">clusterSnapshot</span> <span class="nx">clustersnapshot</span><span class="p">.</span><span class="nx">ClusterSnapshot</span><span class="p">,</span> <span class="nx">pod</span> <span class="o">*</span><span class="nx">apiv1</span><span class="p">.</span><span class="nx">Pod</span><span class="p">,</span> <span class="nx">nodeMatches</span> <span class="kd">func</span><span class="p">(</span><span class="o">*</span><span class="nx">schedulerframework</span><span class="p">.</span><span class="nx">NodeInfo</span><span class="p">)</span> <span class="kt">bool</span><span class="p">)</span> <span class="p">(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+<span class="o">...</span>
+<span class="mi">109</span><span class="p">:</span> 	<span class="nx">preFilterResult</span><span class="p">,</span> <span class="nx">preFilterStatus</span> <span class="o">:=</span> <span class="nx">p</span><span class="p">.</span><span class="nx">framework</span><span class="p">.</span><span class="nf">RunPreFilterPlugins</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">(),</span> <span class="nx">state</span><span class="p">,</span> <span class="nx">pod</span><span class="p">)</span> <span class="c1">// `PreFilter` plugins are called here 
+</span><span class="c1"></span><span class="o">...</span>
+<span class="mi">129</span><span class="p">:</span> 		<span class="nx">filterStatus</span> <span class="o">:=</span> <span class="nx">p</span><span class="p">.</span><span class="nx">framework</span><span class="p">.</span><span class="nf">RunFilterPlugins</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">(),</span> <span class="nx">state</span><span class="p">,</span> <span class="nx">pod</span><span class="p">,</span> <span class="nx">nodeInfo</span><span class="p">)</span><span class="c1">// `Filter` plugins are called here
+</span><span class="c1"></span><span class="o">...</span>
+<span class="mi">136</span><span class="p">:</span> <span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/kubernetes/autoscaler/blob/32c6bbc0c9eced9c756525e15dfb3cfb00a52226/cluster-autoscaler/simulator/predicatechecker/schedulerbased.go#L89-L136">Source</a></p>
+<p><code>framework</code> in both the code snippets above is of type <code>schedulerframework.Framework</code>. You can find it defined <a href="https://github.com/kubernetes/autoscaler/blob/32c6bbc0c9eced9c756525e15dfb3cfb00a52226/cluster-autoscaler/simulator/predicatechecker/schedulerbased.go#L39">here</a>. <code>schedulerframework</code> is a part of scheduler code among other libraries imported in the CA code <a href="https://github.com/kubernetes/autoscaler/blob/32c6bbc0c9eced9c756525e15dfb3cfb00a52226/cluster-autoscaler/simulator/predicatechecker/schedulerbased.go#L31-L33">here</a>.</p>
+<blockquote>
+<p>Anything that changes the behavior of scheduler predicate functions breaks CA.</p>
+</blockquote>
+<p><a href="https://github.com/kubernetes/kubernetes/issues/71070#issuecomment-439051879">Source</a></p>
+<p><code>Predicate functions</code> here stand for <code>Filtering</code> phase extension points (as explained above). To elaborate, say you change something in the <a href="https://kubernetes.io/docs/reference/scheduling/config/">scheduler config</a> that might change the behavior of the <code>PreFilter</code> and <code>Filter</code> extension points of your cluster&rsquo;s scheduler (which runs as a part of your cluster&rsquo;s control plane).</p>
+<p>CA imports the <code>PreFilter</code> and <code>Filter</code> part of the <em>default</em> scheduler code i.e., it doesn&rsquo;t allow making any changes to the <em>default</em> behavior. Because of this CA&rsquo;s simulation of the scheduler won&rsquo;t accurately reflect the actual scheduler running in your cluster since your cluster/control plane scheduler&rsquo;s behavior would be different than CA&rsquo;s simulated scheduler. This would create problems because CA&rsquo;s autoscaling won&rsquo;t accurately match the needs of your cluster.</p>
+<p>Well, why can&rsquo;t we do something about it so that CA considers the customizations done in the cluster&rsquo;s scheduler?</p>
+<blockquote>
+<p>There were many discussions of this in the past. The problem is CA doesn&rsquo;t actually know anything about scheduling. It&rsquo;s built around importing scheduler code and using it as a sort of black box oracle. All CA decisions are based on simulations, performed by creating in memory node objects and feeding them to scheduler to see if currently pending pods would be able to schedule if a new node was added.</p>
+<p>There were some discussions about exposing a &lsquo;dry run&rsquo; API in scheduler. The problem is we need to run a ton of those scenarios, using some imaginary nodes, pretending some nodes don&rsquo;t exist or pretending some pods are running on different pods than they really are. Scheduler doesn&rsquo;t support any of that and even if it did we believe the performance impact of serializing all those objects and sending them to scheduler is prohibitive (we would need to make thousands of such requests per loop).</p>
+<p>To sum up full support for custom scheduling would require massive changes in both scheduler and CA and we don&rsquo;t think it would work anyway. I think it&rsquo;s safe to say it&rsquo;s not likely to happen for general case.</p>
+</blockquote>
+<p><a href="https://github.com/kubernetes/autoscaler/issues/1406#issuecomment-439066582">Source</a></p>
+<p>Now to answer the original question, why does CA not support <code>preferredDuringSchedulingIgnoredDuringExecution</code> or <code>ScheduleAnyway</code> pod topology spread constraint?</p>
+<p>CA doesn&rsquo;t consider <code>preferredDuringSchedulingIgnoredDuringExecution</code> because it is a part of Scoring phase of <code>NodeAffinity</code> scheduler plugin (comes in-built). Every scheduler plugin can act on multiple extension points. <code>NodeAffinity</code> acts on extension points in both Filtering and Scoring phases. The only problem is, it considers <code>preferredDuringSchedulingIgnoredDuringExecution</code> only in Scoring phase (<code>PreSCore</code> and <code>Score</code> extension points to be precise) and not in Filtering phase. Let&rsquo;s look at the <code>NodeAffinity</code> plugin code which acts during <code>PreScore</code> and <code>Score</code> phase:</p>
+<ul>
+<li><code>PreScore</code>:</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// vendor/k8s.io/kubernetes/pkg/scheduler/framework/plugins/nodeaffinity/node_affinity.go
+</span><span class="c1"></span><span class="mi">187</span><span class="p">:</span> <span class="c1">// PreScore builds and writes cycle state used by Score and NormalizeScore.
+</span><span class="c1"></span><span class="mi">188</span><span class="p">:</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">pl</span> <span class="o">*</span><span class="nx">NodeAffinity</span><span class="p">)</span> <span class="nf">PreScore</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">cycleState</span> <span class="o">*</span><span class="nx">framework</span><span class="p">.</span><span class="nx">CycleState</span><span class="p">,</span> <span class="nx">pod</span> <span class="o">*</span><span class="nx">v1</span><span class="p">.</span><span class="nx">Pod</span><span class="p">,</span> <span class="nx">nodes</span> <span class="p">[]</span><span class="o">*</span><span class="nx">v1</span><span class="p">.</span><span class="nx">Node</span><span class="p">)</span> <span class="o">*</span><span class="nx">framework</span><span class="p">.</span><span class="nx">Status</span> <span class="p">{</span>
+<span class="o">...</span>
+<span class="mi">192</span><span class="p">:</span> 	<span class="nx">preferredNodeAffinity</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nf">getPodPreferredNodeAffinity</span><span class="p">(</span><span class="nx">pod</span><span class="p">)</span>
+<span class="mi">193</span><span class="p">:</span> 	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+<span class="mi">194</span><span class="p">:</span> 		<span class="k">return</span> <span class="nx">framework</span><span class="p">.</span><span class="nf">AsStatus</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="mi">195</span><span class="p">:</span> 	<span class="p">}</span>
+<span class="o">...</span>
+<span class="mi">201</span><span class="p">:</span> <span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/kubernetes/autoscaler/blob/c35eb6491d3c6b65dab5ad9ee3468cb439630ecd/cluster-autoscaler/vendor/k8s.io/kubernetes/pkg/scheduler/framework/plugins/nodeaffinity/node_affinity.go#L187-L201">Source</a></p>
+<ul>
+<li><code>Score</code>:</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// vendor/k8s.io/kubernetes/pkg/scheduler/framework/plugins/nodeaffinity/node_affinity.go
+</span><span class="c1"></span><span class="mi">203</span><span class="p">:</span> <span class="c1">// Score returns the sum of the weights of the terms that match the Node.
+</span><span class="c1"></span><span class="mi">204</span><span class="p">:</span> <span class="c1">// Terms came from the Pod .spec.affinity.nodeAffinity and from the plugin&#39;s
+</span><span class="c1"></span><span class="mi">205</span><span class="p">:</span> <span class="c1">// default affinity.
+</span><span class="c1"></span><span class="mi">206</span><span class="p">:</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">pl</span> <span class="o">*</span><span class="nx">NodeAffinity</span><span class="p">)</span> <span class="nf">Score</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">state</span> <span class="o">*</span><span class="nx">framework</span><span class="p">.</span><span class="nx">CycleState</span><span class="p">,</span> <span class="nx">pod</span> <span class="o">*</span><span class="nx">v1</span><span class="p">.</span><span class="nx">Pod</span><span class="p">,</span> <span class="nx">nodeName</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="kt">int64</span><span class="p">,</span> <span class="o">*</span><span class="nx">framework</span><span class="p">.</span><span class="nx">Status</span><span class="p">)</span> <span class="p">{</span>
+<span class="o">...</span>
+<span class="mi">219</span><span class="p">:</span> 	<span class="nx">s</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nf">getPreScoreState</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span>
+<span class="mi">220</span><span class="p">:</span> 	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+<span class="mi">221</span><span class="p">:</span> 		<span class="c1">// Fallback to calculate preferredNodeAffinity here when PreScore is disabled.
+</span><span class="c1"></span><span class="mi">222</span><span class="p">:</span> 		<span class="nx">preferredNodeAffinity</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nf">getPodPreferredNodeAffinity</span><span class="p">(</span><span class="nx">pod</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="mi">229</span><span class="p">:</span> 	<span class="p">}</span>
+<span class="o">...</span>
+<span class="mi">236</span><span class="p">:</span> <span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/kubernetes/autoscaler/blob/c35eb6491d3c6b65dab5ad9ee3468cb439630ecd/cluster-autoscaler/vendor/k8s.io/kubernetes/pkg/scheduler/framework/plugins/nodeaffinity/node_affinity.go#L203-L236">Source</a></p>
+<p>Similarly, <code>ScheduleAnyway</code> is a part of scoring phase of the <code>PodTopologySpread</code> plugin</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// vendor/k8s.io/kubernetes/pkg/scheduler/framework/plugins/podtopologyspread/scoring.go
+</span><span class="c1"></span><span class="mo">054</span><span class="p">:</span> <span class="c1">// initPreScoreState iterates &#34;filteredNodes&#34; to filter out the nodes which
+</span><span class="c1"></span><span class="mo">055</span><span class="p">:</span> <span class="c1">// don&#39;t have required topologyKey(s), and initialize:
+</span><span class="c1"></span><span class="mo">056</span><span class="p">:</span> <span class="c1">// 1) s.TopologyPairToPodCounts: keyed with both eligible topology pair and node names.
+</span><span class="c1"></span><span class="mo">057</span><span class="p">:</span> <span class="c1">// 2) s.IgnoredNodes: the set of nodes that shouldn&#39;t be scored.
+</span><span class="c1"></span><span class="mo">05</span><span class="mi">8</span><span class="p">:</span> <span class="c1">// 3) s.TopologyNormalizingWeight: The weight to be given to each constraint based on the number of values in a topology.
+</span><span class="c1"></span><span class="mo">05</span><span class="mi">9</span><span class="p">:</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">pl</span> <span class="o">*</span><span class="nx">PodTopologySpread</span><span class="p">)</span> <span class="nf">initPreScoreState</span><span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">preScoreState</span><span class="p">,</span> <span class="nx">pod</span> <span class="o">*</span><span class="nx">v1</span><span class="p">.</span><span class="nx">Pod</span><span class="p">,</span> <span class="nx">filteredNodes</span> <span class="p">[]</span><span class="o">*</span><span class="nx">v1</span><span class="p">.</span><span class="nx">Node</span><span class="p">,</span> <span class="nx">requireAllTopologies</span> <span class="kt">bool</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+<span class="mo">060</span><span class="p">:</span> 	<span class="kd">var</span> <span class="nx">err</span> <span class="kt">error</span>
+<span class="mo">061</span><span class="p">:</span> 	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">pod</span><span class="p">.</span><span class="nx">Spec</span><span class="p">.</span><span class="nx">TopologySpreadConstraints</span><span class="p">)</span> <span class="p">&gt;</span> <span class="mi">0</span> <span class="p">{</span>
+<span class="mo">062</span><span class="p">:</span> 		<span class="nx">s</span><span class="p">.</span><span class="nx">Constraints</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">pl</span><span class="p">.</span><span class="nf">filterTopologySpreadConstraints</span><span class="p">(</span>
+<span class="mo">063</span><span class="p">:</span> 			<span class="nx">pod</span><span class="p">.</span><span class="nx">Spec</span><span class="p">.</span><span class="nx">TopologySpreadConstraints</span><span class="p">,</span>
+<span class="mo">064</span><span class="p">:</span> 			<span class="nx">pod</span><span class="p">.</span><span class="nx">Labels</span><span class="p">,</span>
+<span class="mo">065</span><span class="p">:</span> 			<span class="nx">v1</span><span class="p">.</span><span class="nx">ScheduleAnyway</span><span class="p">,</span>
+<span class="mo">066</span><span class="p">:</span> 		<span class="p">)</span>
+<span class="mo">067</span><span class="p">:</span> 		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+<span class="mo">06</span><span class="mi">8</span><span class="p">:</span> 			<span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;obtaining pod&#39;s soft topology spread constraints: %w&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+<span class="mo">06</span><span class="mi">9</span><span class="p">:</span> 		<span class="p">}</span>
+<span class="o">...</span>
+<span class="mi">109</span><span class="p">:</span> <span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/kubernetes/autoscaler/blob/bd2ff82aa1e369456022935591464d37f63881d6/cluster-autoscaler/vendor/k8s.io/kubernetes/pkg/scheduler/framework/plugins/podtopologyspread/scoring.go#L54-L109">Source</a></p>
+<p><code>initPreScoreState</code> is called in <code>PreScore</code> function <a href="https://github.com/kubernetes/autoscaler/blob/bd2ff82aa1e369456022935591464d37f63881d6/cluster-autoscaler/vendor/k8s.io/kubernetes/pkg/scheduler/framework/plugins/podtopologyspread/scoring.go#L136">here</a>.</p>
+<p>While <code>DoNotSchedule</code> is a part of the Filtering phase of the <code>PodTopologySpread</code> plugin</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// vendor/k8s.io/kubernetes/pkg/scheduler/framework/plugins/podtopologyspread/filtering.go
+</span><span class="c1"></span><span class="mi">237</span><span class="p">:</span> <span class="c1">// calPreFilterState computes preFilterState describing how pods are spread on topologies.
+</span><span class="c1"></span><span class="mi">238</span><span class="p">:</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">pl</span> <span class="o">*</span><span class="nx">PodTopologySpread</span><span class="p">)</span> <span class="nf">calPreFilterState</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">pod</span> <span class="o">*</span><span class="nx">v1</span><span class="p">.</span><span class="nx">Pod</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">preFilterState</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+<span class="o">...</span>
+<span class="mi">243</span><span class="p">:</span> 	<span class="kd">var</span> <span class="nx">constraints</span> <span class="p">[]</span><span class="nx">topologySpreadConstraint</span>
+<span class="mi">244</span><span class="p">:</span> 	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">pod</span><span class="p">.</span><span class="nx">Spec</span><span class="p">.</span><span class="nx">TopologySpreadConstraints</span><span class="p">)</span> <span class="p">&gt;</span> <span class="mi">0</span> <span class="p">{</span>
+<span class="o">...</span>
+<span class="mi">247</span><span class="p">:</span> 		<span class="nx">constraints</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">pl</span><span class="p">.</span><span class="nf">filterTopologySpreadConstraints</span><span class="p">(</span>
+<span class="mi">248</span><span class="p">:</span> 			<span class="nx">pod</span><span class="p">.</span><span class="nx">Spec</span><span class="p">.</span><span class="nx">TopologySpreadConstraints</span><span class="p">,</span>
+<span class="mi">249</span><span class="p">:</span> 			<span class="nx">pod</span><span class="p">.</span><span class="nx">Labels</span><span class="p">,</span>
+<span class="mi">250</span><span class="p">:</span> 			<span class="nx">v1</span><span class="p">.</span><span class="nx">DoNotSchedule</span><span class="p">,</span>
+<span class="mi">251</span><span class="p">:</span> 		<span class="p">)</span>
+<span class="mi">252</span><span class="p">:</span> 		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+<span class="mi">253</span><span class="p">:</span> 			<span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;obtaining pod&#39;s hard topology spread constraints: %w&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+<span class="mi">254</span><span class="p">:</span> 		<span class="p">}</span>
+<span class="o">...</span>
+<span class="mi">331</span><span class="p">:</span> <span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/kubernetes/autoscaler/blob/bd2ff82aa1e369456022935591464d37f63881d6/cluster-autoscaler/vendor/k8s.io/kubernetes/pkg/scheduler/framework/plugins/podtopologyspread/filtering.go#L237-L331">Source</a></p>
+<p><code>calPreFilterState</code> is called in <code>PreFilter</code> function <a href="https://github.com/kubernetes/autoscaler/blob/bd2ff82aa1e369456022935591464d37f63881d6/cluster-autoscaler/vendor/k8s.io/kubernetes/pkg/scheduler/framework/plugins/podtopologyspread/filtering.go#L152">here</a>.</p>
+<p>Related: <a href="https://github.com/kubernetes/autoscaler/issues/3879#issuecomment-1480661410">https://github.com/kubernetes/autoscaler/issues/3879#issuecomment-1480661410</a></p>
+<h3 id="2-is-there-a-way-to-identify-what-constraint-is-supportednot-supported">2. Is there a way to identify what constraint is supported/not supported?</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// File: vendor/k8s.io/kubernetes/pkg/scheduler/framework/plugins/registry.go
+</span><span class="c1"></span><span class="mi">60</span><span class="p">:</span> 	<span class="nx">registry</span> <span class="o">:=</span> <span class="nx">runtime</span><span class="p">.</span><span class="nx">Registry</span><span class="p">{</span>
+<span class="mi">61</span><span class="p">:</span> 		<span class="nx">dynamicresources</span><span class="p">.</span><span class="nx">Name</span><span class="p">:</span>                <span class="nx">runtime</span><span class="p">.</span><span class="nf">FactoryAdapter</span><span class="p">(</span><span class="nx">fts</span><span class="p">,</span> <span class="nx">dynamicresources</span><span class="p">.</span><span class="nx">New</span><span class="p">),</span>
+<span class="mi">62</span><span class="p">:</span> 		<span class="nx">selectorspread</span><span class="p">.</span><span class="nx">Name</span><span class="p">:</span>                  <span class="nx">selectorspread</span><span class="p">.</span><span class="nx">New</span><span class="p">,</span>
+<span class="mi">63</span><span class="p">:</span> 		<span class="nx">imagelocality</span><span class="p">.</span><span class="nx">Name</span><span class="p">:</span>                   <span class="nx">imagelocality</span><span class="p">.</span><span class="nx">New</span><span class="p">,</span>
+<span class="mi">64</span><span class="p">:</span> 		<span class="nx">tainttoleration</span><span class="p">.</span><span class="nx">Name</span><span class="p">:</span>                 <span class="nx">tainttoleration</span><span class="p">.</span><span class="nx">New</span><span class="p">,</span>
+<span class="mi">65</span><span class="p">:</span> 		<span class="nx">nodename</span><span class="p">.</span><span class="nx">Name</span><span class="p">:</span>                        <span class="nx">nodename</span><span class="p">.</span><span class="nx">New</span><span class="p">,</span>
+<span class="mi">66</span><span class="p">:</span> 		<span class="nx">nodeports</span><span class="p">.</span><span class="nx">Name</span><span class="p">:</span>                       <span class="nx">nodeports</span><span class="p">.</span><span class="nx">New</span><span class="p">,</span>
+<span class="mi">67</span><span class="p">:</span> 		<span class="nx">nodeaffinity</span><span class="p">.</span><span class="nx">Name</span><span class="p">:</span>                    <span class="nx">nodeaffinity</span><span class="p">.</span><span class="nx">New</span><span class="p">,</span>
+<span class="mi">68</span><span class="p">:</span> 		<span class="nx">podtopologyspread</span><span class="p">.</span><span class="nx">Name</span><span class="p">:</span>               <span class="nx">runtime</span><span class="p">.</span><span class="nf">FactoryAdapter</span><span class="p">(</span><span class="nx">fts</span><span class="p">,</span> <span class="nx">podtopologyspread</span><span class="p">.</span><span class="nx">New</span><span class="p">),</span>
+<span class="mi">69</span><span class="p">:</span> 		<span class="nx">nodeunschedulable</span><span class="p">.</span><span class="nx">Name</span><span class="p">:</span>               <span class="nx">nodeunschedulable</span><span class="p">.</span><span class="nx">New</span><span class="p">,</span>
+<span class="mi">70</span><span class="p">:</span> 		<span class="nx">noderesources</span><span class="p">.</span><span class="nx">Name</span><span class="p">:</span>                   <span class="nx">runtime</span><span class="p">.</span><span class="nf">FactoryAdapter</span><span class="p">(</span><span class="nx">fts</span><span class="p">,</span> <span class="nx">noderesources</span><span class="p">.</span><span class="nx">NewFit</span><span class="p">),</span>
+<span class="mi">71</span><span class="p">:</span> 		<span class="nx">noderesources</span><span class="p">.</span><span class="nx">BalancedAllocationName</span><span class="p">:</span> <span class="nx">runtime</span><span class="p">.</span><span class="nf">FactoryAdapter</span><span class="p">(</span><span class="nx">fts</span><span class="p">,</span> <span class="nx">noderesources</span><span class="p">.</span><span class="nx">NewBalancedAllocation</span><span class="p">),</span>
+<span class="mi">72</span><span class="p">:</span> 		<span class="nx">volumebinding</span><span class="p">.</span><span class="nx">Name</span><span class="p">:</span>                   <span class="nx">runtime</span><span class="p">.</span><span class="nf">FactoryAdapter</span><span class="p">(</span><span class="nx">fts</span><span class="p">,</span> <span class="nx">volumebinding</span><span class="p">.</span><span class="nx">New</span><span class="p">),</span>
+<span class="mi">73</span><span class="p">:</span> 		<span class="nx">volumerestrictions</span><span class="p">.</span><span class="nx">Name</span><span class="p">:</span>              <span class="nx">runtime</span><span class="p">.</span><span class="nf">FactoryAdapter</span><span class="p">(</span><span class="nx">fts</span><span class="p">,</span> <span class="nx">volumerestrictions</span><span class="p">.</span><span class="nx">New</span><span class="p">),</span>
+<span class="mi">74</span><span class="p">:</span> 		<span class="nx">volumezone</span><span class="p">.</span><span class="nx">Name</span><span class="p">:</span>                      <span class="nx">volumezone</span><span class="p">.</span><span class="nx">New</span><span class="p">,</span>
+<span class="mi">75</span><span class="p">:</span> 		<span class="nx">nodevolumelimits</span><span class="p">.</span><span class="nx">CSIName</span><span class="p">:</span>             <span class="nx">runtime</span><span class="p">.</span><span class="nf">FactoryAdapter</span><span class="p">(</span><span class="nx">fts</span><span class="p">,</span> <span class="nx">nodevolumelimits</span><span class="p">.</span><span class="nx">NewCSI</span><span class="p">),</span>
+<span class="mi">76</span><span class="p">:</span> 		<span class="nx">nodevolumelimits</span><span class="p">.</span><span class="nx">EBSName</span><span class="p">:</span>             <span class="nx">runtime</span><span class="p">.</span><span class="nf">FactoryAdapter</span><span class="p">(</span><span class="nx">fts</span><span class="p">,</span> <span class="nx">nodevolumelimits</span><span class="p">.</span><span class="nx">NewEBS</span><span class="p">),</span>
+<span class="mi">77</span><span class="p">:</span> 		<span class="nx">nodevolumelimits</span><span class="p">.</span><span class="nx">GCEPDName</span><span class="p">:</span>           <span class="nx">runtime</span><span class="p">.</span><span class="nf">FactoryAdapter</span><span class="p">(</span><span class="nx">fts</span><span class="p">,</span> <span class="nx">nodevolumelimits</span><span class="p">.</span><span class="nx">NewGCEPD</span><span class="p">),</span>
+<span class="mi">78</span><span class="p">:</span> 		<span class="nx">nodevolumelimits</span><span class="p">.</span><span class="nx">AzureDiskName</span><span class="p">:</span>       <span class="nx">runtime</span><span class="p">.</span><span class="nf">FactoryAdapter</span><span class="p">(</span><span class="nx">fts</span><span class="p">,</span> <span class="nx">nodevolumelimits</span><span class="p">.</span><span class="nx">NewAzureDisk</span><span class="p">),</span>
+<span class="mi">79</span><span class="p">:</span> 		<span class="nx">nodevolumelimits</span><span class="p">.</span><span class="nx">CinderName</span><span class="p">:</span>          <span class="nx">runtime</span><span class="p">.</span><span class="nf">FactoryAdapter</span><span class="p">(</span><span class="nx">fts</span><span class="p">,</span> <span class="nx">nodevolumelimits</span><span class="p">.</span><span class="nx">NewCinder</span><span class="p">),</span>
+<span class="mi">80</span><span class="p">:</span> 		<span class="nx">interpodaffinity</span><span class="p">.</span><span class="nx">Name</span><span class="p">:</span>                <span class="nx">interpodaffinity</span><span class="p">.</span><span class="nx">New</span><span class="p">,</span>
+<span class="mi">81</span><span class="p">:</span> 		<span class="nx">queuesort</span><span class="p">.</span><span class="nx">Name</span><span class="p">:</span>                       <span class="nx">queuesort</span><span class="p">.</span><span class="nx">New</span><span class="p">,</span>
+<span class="mi">82</span><span class="p">:</span> 		<span class="nx">defaultbinder</span><span class="p">.</span><span class="nx">Name</span><span class="p">:</span>                   <span class="nx">defaultbinder</span><span class="p">.</span><span class="nx">New</span><span class="p">,</span>
+<span class="mi">83</span><span class="p">:</span> 		<span class="nx">defaultpreemption</span><span class="p">.</span><span class="nx">Name</span><span class="p">:</span>               <span class="nx">runtime</span><span class="p">.</span><span class="nf">FactoryAdapter</span><span class="p">(</span><span class="nx">fts</span><span class="p">,</span> <span class="nx">defaultpreemption</span><span class="p">.</span><span class="nx">New</span><span class="p">),</span>
+<span class="mi">84</span><span class="p">:</span> 		<span class="nx">schedulinggates</span><span class="p">.</span><span class="nx">Name</span><span class="p">:</span>                 <span class="nx">runtime</span><span class="p">.</span><span class="nf">FactoryAdapter</span><span class="p">(</span><span class="nx">fts</span><span class="p">,</span> <span class="nx">schedulinggates</span><span class="p">.</span><span class="nx">New</span><span class="p">),</span>
+<span class="mi">85</span><span class="p">:</span> 	<span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/kubernetes/autoscaler/blob/c35eb6491d3c6b65dab5ad9ee3468cb439630ecd/cluster-autoscaler/vendor/k8s.io/kubernetes/pkg/scheduler/framework/plugins/registry.go#L60-L85">Source</a></p>
+<p>CA supports the above scheduler plugins (these are the in-built plugins enabled in the scheduler by default).</p>
+<p>You can go to <a href="https://kubernetes.io/docs/reference/scheduling/config/#scheduling-plugins">https://kubernetes.io/docs/reference/scheduling/config/#scheduling-plugins</a> to identify which plugin acts on which extension points. e.g., Let&rsquo;s look at the documentation for <code>NodeAffinity</code> plugin:</p>
+<blockquote>
+<ul>
+<li><code>NodeAffinity</code>: Implements <a href="https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector">node selectors</a> and <a href="https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity">node affinity</a>. Extension points: <code>filter</code>, <code>score</code>.</li>
+</ul>
+</blockquote>
+<p><em>Note: Extension points are written in lower camel case in the docs above e.g., <code>PreFilter</code> is written as <code>preFilter</code> while <code>Filter</code> is written as <code>filter</code> etc.,.</em></p>
+<p>Note that <code>NodeAffinity</code> acts on both <code>Filter</code> and <code>Score</code> extension points of Filtering and Scoring phase respectively. CA would simulate this plugin partially i.e., only the <code>Filter</code> extension point. This means not all features supported by <code>NodeAffinity</code> would be considered by the CA.</p>
+<p>You might find some plugins <em>not</em> listed in <a href="https://kubernetes.io/docs/reference/scheduling/config/#scheduling-plugins">https://kubernetes.io/docs/reference/scheduling/config/#scheduling-plugins</a>. These plugins (at the time of writing this blogpost) are:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="o">...</span>
+<span class="mi">61</span><span class="p">:</span>		    <span class="nx">dynamicresources</span><span class="p">.</span><span class="nx">Name</span><span class="p">:</span>                <span class="nx">runtime</span><span class="p">.</span><span class="nf">FactoryAdapter</span><span class="p">(</span><span class="nx">fts</span><span class="p">,</span> <span class="nx">dynamicresources</span><span class="p">.</span><span class="nx">New</span><span class="p">),</span>
+<span class="mi">62</span><span class="p">:</span> 		<span class="nx">selectorspread</span><span class="p">.</span><span class="nx">Name</span><span class="p">:</span>                  <span class="nx">selectorspread</span><span class="p">.</span><span class="nx">New</span><span class="p">,</span>
+<span class="o">...</span>
+<span class="mi">84</span><span class="p">:</span> 		<span class="nx">schedulinggates</span><span class="p">.</span><span class="nx">Name</span><span class="p">:</span>                 <span class="nx">runtime</span><span class="p">.</span><span class="nf">FactoryAdapter</span><span class="p">(</span><span class="nx">fts</span><span class="p">,</span> <span class="nx">schedulinggates</span><span class="p">.</span><span class="nx">New</span><span class="p">),</span>
+<span class="o">...</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>To understand at which extension points they act, just go to the definition of <code>&lt;plugin-name&gt;.New</code> above. e.g., if you go to the definition of <code>dynamicresources.New</code> and scroll through the file:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// vendor/k8s.io/kubernetes/pkg/scheduler/framework/plugins/dynamicresources/dynamicresources.go
+</span><span class="c1"></span><span class="o">...</span>
+<span class="mi">306</span><span class="p">:</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">pl</span> <span class="o">*</span><span class="nx">dynamicResources</span><span class="p">)</span> <span class="nf">PreFilter</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">state</span> <span class="o">*</span><span class="nx">framework</span><span class="p">.</span><span class="nx">CycleState</span><span class="p">,</span> <span class="nx">pod</span> <span class="o">*</span><span class="nx">v1</span><span class="p">.</span><span class="nx">Pod</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">framework</span><span class="p">.</span><span class="nx">PreFilterResult</span><span class="p">,</span> <span class="o">*</span><span class="nx">framework</span><span class="p">.</span><span class="nx">Status</span><span class="p">)</span> <span class="p">{</span>
+<span class="o">...</span>
+<span class="mi">388</span><span class="p">:</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">pl</span> <span class="o">*</span><span class="nx">dynamicResources</span><span class="p">)</span> <span class="nf">Filter</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">cs</span> <span class="o">*</span><span class="nx">framework</span><span class="p">.</span><span class="nx">CycleState</span><span class="p">,</span> <span class="nx">pod</span> <span class="o">*</span><span class="nx">v1</span><span class="p">.</span><span class="nx">Pod</span><span class="p">,</span> <span class="nx">nodeInfo</span> <span class="o">*</span><span class="nx">framework</span><span class="p">.</span><span class="nx">NodeInfo</span><span class="p">)</span> <span class="o">*</span><span class="nx">framework</span><span class="p">.</span><span class="nx">Status</span> <span class="p">{</span>
+<span class="o">...</span>
+<span class="mi">485</span><span class="p">:</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">pl</span> <span class="o">*</span><span class="nx">dynamicResources</span><span class="p">)</span> <span class="nf">PostFilter</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">cs</span> <span class="o">*</span><span class="nx">framework</span><span class="p">.</span><span class="nx">CycleState</span><span class="p">,</span> <span class="nx">pod</span> <span class="o">*</span><span class="nx">v1</span><span class="p">.</span><span class="nx">Pod</span><span class="p">,</span> <span class="nx">filteredNodeStatusMap</span> <span class="nx">framework</span><span class="p">.</span><span class="nx">NodeToStatusMap</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">framework</span><span class="p">.</span><span class="nx">PostFilterResult</span><span class="p">,</span> <span class="o">*</span><span class="nx">framework</span><span class="p">.</span><span class="nx">Status</span><span class="p">)</span> <span class="p">{</span>
+<span class="o">...</span>
+<span class="mi">520</span><span class="p">:</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">pl</span> <span class="o">*</span><span class="nx">dynamicResources</span><span class="p">)</span> <span class="nf">PreScore</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">cs</span> <span class="o">*</span><span class="nx">framework</span><span class="p">.</span><span class="nx">CycleState</span><span class="p">,</span> <span class="nx">pod</span> <span class="o">*</span><span class="nx">v1</span><span class="p">.</span><span class="nx">Pod</span><span class="p">,</span> <span class="nx">nodes</span> <span class="p">[]</span><span class="o">*</span><span class="nx">v1</span><span class="p">.</span><span class="nx">Node</span><span class="p">)</span> <span class="o">*</span><span class="nx">framework</span><span class="p">.</span><span class="nx">Status</span> <span class="p">{</span>
+<span class="o">...</span>
+<span class="mi">602</span><span class="p">:</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">pl</span> <span class="o">*</span><span class="nx">dynamicResources</span><span class="p">)</span> <span class="nf">Reserve</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">cs</span> <span class="o">*</span><span class="nx">framework</span><span class="p">.</span><span class="nx">CycleState</span><span class="p">,</span> <span class="nx">pod</span> <span class="o">*</span><span class="nx">v1</span><span class="p">.</span><span class="nx">Pod</span><span class="p">,</span> <span class="nx">nodeName</span> <span class="kt">string</span><span class="p">)</span> <span class="o">*</span><span class="nx">framework</span><span class="p">.</span><span class="nx">Status</span> <span class="p">{</span>
+<span class="o">...</span>
+<span class="mi">712</span><span class="p">:</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">pl</span> <span class="o">*</span><span class="nx">dynamicResources</span><span class="p">)</span> <span class="nf">Unreserve</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">cs</span> <span class="o">*</span><span class="nx">framework</span><span class="p">.</span><span class="nx">CycleState</span><span class="p">,</span> <span class="nx">pod</span> <span class="o">*</span><span class="nx">v1</span><span class="p">.</span><span class="nx">Pod</span><span class="p">,</span> <span class="nx">nodeName</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+<span class="o">...</span>
+<span class="mi">753</span><span class="p">:</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">pl</span> <span class="o">*</span><span class="nx">dynamicResources</span><span class="p">)</span> <span class="nf">PostBind</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">cs</span> <span class="o">*</span><span class="nx">framework</span><span class="p">.</span><span class="nx">CycleState</span><span class="p">,</span> <span class="nx">pod</span> <span class="o">*</span><span class="nx">v1</span><span class="p">.</span><span class="nx">Pod</span><span class="p">,</span> <span class="nx">nodeName</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+<span class="o">...</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/kubernetes/autoscaler/blob/c35eb6491d3c6b65dab5ad9ee3468cb439630ecd/cluster-autoscaler/vendor/k8s.io/kubernetes/pkg/scheduler/framework/plugins/dynamicresources/dynamicresources.go">Source</a></p>
+<p>You will see it acts on many different extension points in both Filtering and Scoring phase.</p>
+<p>You can use one of the methods above (look at the docs or look at the code) for other plugins of interest. If the plugin acts only on Scoring phase&rsquo;s extension points, CA won&rsquo;t consider it. If it acts on both Filtering and Scoring phase, CA will only consider Filtering phase (only <code>PreFilter</code> and <code>Filter</code> extension points to be precise).</p>
+<p>As a general rule of thumb, &ldquo;soft&rdquo; constraints are usually a part of Scoring phase so CA most probably won&rsquo;t consider them.</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">vadasambar</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2023-03-31
+        <a href="https://github.com/vadafoss/vadasambar.github.io/commit/fd412f71079f6ad2b6d5120b2e7274efa3eb8aa5" title="remove `draft:true` for `Would cluster-autoscaler consider my soft...`">(fd412f7)</a>
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content">© Suraj Banakar 2022 <a rel='license' href='http://creativecommons.org/licenses/by-nc-sa/4.0/'' target='_blank'>CC BY-NC-SA 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/kubernetes/">kubernetes</a>
+          <a href="/tags/cluster-autoscaler/">cluster-autoscaler</a>
+          <a href="/tags/go/">go</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/kubernetes/how-to-deploy-custom-ca-on-gcp/">
+            <span class="next-text nav-default">How to install a custom cluster-autoscaler on a GKE/GCP cluster</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:surajrbanakar@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/6874596/vadasambar" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/_vadasambar" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.linkedin.com/in/suraj-banakar-97b4b4141/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/vadasambar" class="iconfont icon-github" title="github"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2020 - 
+    2023<span class="heart"><i class="iconfont icon-heart"></i></span><span>vadasambar</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-178170176-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

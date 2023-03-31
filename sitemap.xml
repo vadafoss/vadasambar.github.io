@@ -3,7 +3,49 @@
   
   <url>
     <loc>/tags/cluster-autoscaler/</loc>
-    <lastmod>2023-03-17T10:05:49+05:30</lastmod>
+    <lastmod>2023-03-31T11:47:24+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/go/</loc>
+    <lastmod>2023-03-31T11:47:24+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2023-03-31T11:47:24+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/kubernetes/</loc>
+    <lastmod>2023-03-31T11:47:24+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/post/</loc>
+    <lastmod>2023-03-31T11:47:24+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2023-03-31T11:47:24+05:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/post/kubernetes/would-ca-consider-my-soft-constraints/</loc>
+    <lastmod>2023-03-31T11:47:24+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -30,34 +72,6 @@
   </url>
   
   <url>
-    <loc>/</loc>
-    <lastmod>2023-03-17T10:05:49+05:30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/kubernetes/</loc>
-    <lastmod>2023-03-17T10:05:49+05:30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>/post/</loc>
-    <lastmod>2023-03-17T10:05:49+05:30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
-    <lastmod>2023-03-17T10:05:49+05:30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
     <loc>/tags/ca/</loc>
     <lastmod>2023-02-17T23:25:22+05:30</lastmod>
     <changefreq>weekly</changefreq>
@@ -66,13 +80,6 @@
   
   <url>
     <loc>/tags/client-go/</loc>
-    <lastmod>2023-02-17T23:25:22+05:30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/go/</loc>
     <lastmod>2023-02-17T23:25:22+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
